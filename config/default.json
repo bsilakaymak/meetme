@@ -1,3 +1,4 @@
 {
-  "mongoURI": ""
+  "mongoURI": "mongodb+srv://rabie:Damascus1311@meetme.4zdml.mongodb.net/test?retryWrites=true&w=majority"
+  
 }
