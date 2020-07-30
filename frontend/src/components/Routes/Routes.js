@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LandingPage from "../LandingPage/Landing";
-import Login from "../Auth/Login";
+import Auth from "../Auth/Auth";
 import SignUp from "../Auth/SignUp";
 import MeetingOverview from "../User/MeetingOverview";
 import CreateMeeting from "../Meetings/CreateMeeting";
@@ -12,7 +12,7 @@ const Routes = () => {
     <Router>
       <Switch>
         <Route to="/" component={LandingPage} />
-        <Route to="/login" component={Login} />
+        <Route to="/auth" component={Auth} />
         <Route to="/signup" component={SignUp} />
         <Route to="/meeting-overview" component={MeetingOverview} />
         <Route to="/create-meeting" component={CreateMeeting} />
