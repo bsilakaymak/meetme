@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
   },
   meetings: {
     type: mongoose.Types.ObjectId,
-    required: true,
     ref: "Meeting",
   },
 });
