@@ -17,14 +17,22 @@ export const Button = styled.button`
         color:white;
         border: 1px solid white;
         `;
+    } else {
+      return `background : #ffffff;
+        color:#206a5d;
+        border: 1px solid #206a5d;
+        `;
     }
   }};
-  width: ${(props) => (props.width ? props.width : "3rem")};
-  height: ${(props) => (props.height ? props.height : "1.5rem")};
+  font-size: ${(props) => (props.mdText ? "1.25rem" : "1rem")};
+  min-width: ${(props) => (props.width ? props.width : "3rem")};
+  min-height: ${(props) => (props.height ? props.height : "1.5rem")};
   border-radius: 5px;
   &:hover {
     opacity: 0.5;
+    cursor: pointer;
   }
+  padding: 0.25rem;
 `;
 
 export const Input = styled.input`
@@ -47,7 +55,5 @@ export const Form = styled.form`
 
 export const Label = styled.label`
   font-weight: 400;
-  color: ${(props) => props.color && props.color};
+  color: ${(props) => (props.color ? props.color : "#83868b")};
 `;
-
-
