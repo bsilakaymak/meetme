@@ -16,11 +16,10 @@ exports.getCurrentUser = exports.register = exports.login = void 0;
 const express_validator_1 = require("express-validator");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// const config = require('config');
-const User = require('../models/User');
+const User_1 = __importDefault(require("../models/User"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const secretJWT = process.env.jsonwebtoken;
+const secretJWT = process.env.jwtSecret;
 // Register
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = express_validator_1.validationResult(req);
@@ -30,12 +29,12 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     try {
         // If user exists
-        let user = yield User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ errors: [{ msg: 'UserAlready exists' }] });
+        const emailEx = yield User_1.default.findOne({ email });
+        if (emailEx) {
+            return res.status(400).json({ errors: [{ msg: "UserAlready exists" }] });
         }
         // create user
-        user = new User({
+        const user = new User_1.default({
             name,
             email,
             password,
@@ -46,11 +45,9 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield user.save();
         // return JWT
         const payload = {
-            user: {
-                id: user.id,
-            },
+            id: user.id,
         };
-        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: '10d' }, (err, token) => {
+        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
             if (err)
                 throw err;
             res.json({ token });
@@ -58,7 +55,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).send('Server Error!');
+        res.status(500).send({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.register = register;
@@ -71,22 +68,20 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
         // See if user exists
-        let user = yield User.findOne({ email });
+        let user = yield User_1.default.findOne({ email });
         if (!user) {
-            return res.status(400).json({ errors: [{ msg: 'Invalid credentials' }] });
+            return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
         }
         // If there is a user check his hashed password
         const isMatch = yield bcryptjs_1.default.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ errors: [{ msg: 'Invalid credentials' }] });
+            return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
         }
         // Return JWT
         const payload = {
-            user: {
-                id: user.id,
-            },
+            id: user.id,
         };
-        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: '1h' }, (err, token) => {
+        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: "1h" }, (err, token) => {
             if (err)
                 throw err;
             res.json({ token });
@@ -94,19 +89,21 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.log(error.message);
-        res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+        res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
 });
 exports.login = login;
 // get current user
 const getCurrentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log(req);
     try {
-        const user = yield User.findById(req.user.id).select('-password');
+        const user = yield User_1.default.findById(req.userId).select("-password");
+        // console.log(req);
         res.json(user);
     }
     catch (err) {
         console.log(err.message);
-        res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+        res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
 });
 exports.getCurrentUser = getCurrentUser;

@@ -36,6 +36,7 @@ const CreateMeeting = (props: Props) => {
       </Card>
     </Container>
   );
+
 };
 
 export default CreateMeeting;

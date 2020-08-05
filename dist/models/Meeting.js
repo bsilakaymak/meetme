@@ -22,7 +22,7 @@ const MeetingSchema = new mongoose_1.Schema({
     creator: {
         type: mongoose_1.Types.ObjectId,
         require: true,
-        ref: 'User',
+        ref: "User",
     },
 });
-exports.default = mongoose_1.model('Meeting', MeetingSchema);
+exports.default = mongoose_1.model("Meeting", MeetingSchema);

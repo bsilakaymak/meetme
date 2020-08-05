@@ -1,14 +1,11 @@
-import mongoose from 'mongoose';
-// import config from 'config';
-// const db: any = config.get('mongoURI');
-
-import dotenv from 'dotenv';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const mongoURI = process.env.mongoURI!;
+const mongoURI: string = process.env.mongoURI!;
 
-const connectDB = async () => {
+const connectDB: () => Promise<void> = async () => {
   try {
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
@@ -16,7 +13,7 @@ const connectDB = async () => {
       useCreateIndex: true,
     });
 
-    console.log('mongoDB connected...!');
+    console.log("mongoDB connected...!");
   } catch (error) {
     console.log(error.message);
 
