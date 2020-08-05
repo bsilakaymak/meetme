@@ -1,8 +1,6 @@
 import React from "react";
 
-interface Props {}
-
-const Landing = (props: Props) => {
+const Landing = () => {
   return <div></div>;
 };
 

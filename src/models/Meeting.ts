@@ -1,5 +1,5 @@
-import { Schema, model, Types } from 'mongoose';
-
+import { Schema, model, Types } from "mongoose";
+import { IMeeting } from "./types/meeting";
 const MeetingSchema = new Schema({
   title: {
     type: String,
@@ -21,8 +21,8 @@ const MeetingSchema = new Schema({
   creator: {
     type: Types.ObjectId,
     require: true,
-    ref: 'User',
+    ref: "User",
   },
 });
 
-export default model('Meeting', MeetingSchema);
+export default model<IMeeting>("Meeting", MeetingSchema);

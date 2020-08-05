@@ -6,16 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const secretJWT = process.env.jsonwebtoken;
-// @Todo Ali change the auth function parameter default type with typescript
+const secretJWT = process.env.jwtSecret;
 function default_1(req, res, next) {
     const token = req.header("x-auth-token");
     if (!token) {
         return res.status(401).json({ errors: [{ msg: "No token" }] });
     }
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, secretJWT);
-        req.user = decoded.user;
+        const payload = jsonwebtoken_1.default.verify(token, secretJWT);
+        req.userId = payload.id;
         next();
     }
     catch (err) {

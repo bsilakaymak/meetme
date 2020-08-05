@@ -1,5 +1,5 @@
-import { Schema, model, Types } from 'mongoose';
-
+import { Schema, model, Types } from "mongoose";
+import { IUser } from "./types/user";
 const userSchema = new Schema({
   name: {
     type: String,
@@ -21,8 +21,8 @@ const userSchema = new Schema({
   },
   meetings: {
     type: Types.ObjectId,
-    ref: 'Meeting',
+    ref: "Meeting",
   },
 });
 
-export default model('User', userSchema);
+export default model<IUser>("User", userSchema);

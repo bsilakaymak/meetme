@@ -12,23 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const mongoURI = process.env.mongoURI;
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
+exports.createMeeting = void 0;
+const express_validator_1 = require("express-validator");
+const Meeting_1 = __importDefault(require("../models/Meeting"));
+const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = express_validator_1.validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { title, description, start, end } = req.body;
+    const meeting = new Meeting_1.default({
+        title,
+        description,
+        start,
+        end,
+        creator: req.userId,
+    });
+    yield meeting.save();
     try {
-        yield mongoose_1.default.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useCreateIndex: true,
-        });
-        console.log("mongoDB connected...!");
     }
     catch (error) {
-        console.log(error.message);
-        //exit process with failure
-        process.exit(1);
+        console.error(error.message);
+        res.status(500).json({ errors: { msg: "Server Error!" } });
     }
 });
-exports.default = connectDB;
+exports.createMeeting = createMeeting;
