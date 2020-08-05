@@ -24,5 +24,7 @@ const MeetingSchema = new mongoose_1.Schema({
         require: true,
         ref: "User",
     },
+}, {
+    timestamps: true,
 });
 exports.default = mongoose_1.model("Meeting", MeetingSchema);
