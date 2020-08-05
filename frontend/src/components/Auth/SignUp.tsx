@@ -3,16 +3,19 @@ import { Input, Button, Form } from "../Shared/FormElements";
 
 interface Props {}
 
-const Login = (props: Props) => {
+const SignUp = (props: Props) => {
   return (
       <Form>
+        <Input placeholder="name" />
+        <Input placeholder="company" />
         <Input placeholder="email" />
         <Input placeholder="password" />
+        <Input placeholder="confirm password" />
         <Button light roundBorder>
-          LOGIN
+          SIGN UP
         </Button>
       </Form>
   );
 };
 
-export default Login;
+export default SignUp;
