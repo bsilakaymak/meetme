@@ -2,7 +2,12 @@ import express from "express";
 import { check } from "express-validator";
 import auth from "../../middleware/auth";
 
-import { createMeeting } from "../../controller/meeting-controller";
+import {
+  createMeeting,
+  getAllMeetings,
+  deleteMeeting,
+  getMeeting,
+} from "../../controller/meeting-controller";
 
 const router = express.Router();
 
@@ -22,4 +27,7 @@ router.post(
   createMeeting
 );
 
+router.get("/", auth, getAllMeetings);
+router.get("/:mId", auth, getMeeting);
+router.delete("/:mId", auth, deleteMeeting);
 module.exports = router;
