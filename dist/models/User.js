@@ -22,7 +22,10 @@ const userSchema = new mongoose_1.Schema({
     },
     meetings: {
         type: mongoose_1.Types.ObjectId,
-        ref: "Meeting",
+        ref: 'Meeting',
+    },
+    avatar: {
+        type: String,
     },
 });
-exports.default = mongoose_1.model("User", userSchema);
+exports.default = mongoose_1.model('User', userSchema);

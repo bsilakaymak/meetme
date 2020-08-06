@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
 
 export interface IUser extends Document {
   name: string;
@@ -6,4 +6,5 @@ export interface IUser extends Document {
   password: string;
   companyName: string;
   meeting: string;
+  avatar: string;
 }
