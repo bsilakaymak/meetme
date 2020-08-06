@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import {
   Container,
   Text,
@@ -8,13 +9,27 @@ import {
   Avatar,
   EmailLabel,
 } from "components/Shared/Layout";
-import { Button, Input } from "components/Shared/FormElements";
+import { Button, Input, Form } from "components/Shared/FormElements";
 import SendButton from "./SendButton";
+
+const PlusButton = styled.span`
+  font-size: 3rem;
+  font-weight: 600;
+  color: #84a9ac;
+  vertical-align:middle;
+  &:hover{
+    cursor:pointer;
+    opacity:0.5;
+  }
+`;
 
 interface Props {}
 const MeetingDetails = (props: Props) => {
   const [notesOpen, setNotesOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [invitedUsers, setInvitedUsers] = useState(["sila"]);
+  const [invitedUser, setInvitedUser] = useState("");
+
   return (
     <Container column justify="flex-start" padding="2rem">
       <SmallContainer display="flex" mColumn>
@@ -39,12 +54,31 @@ const MeetingDetails = (props: Props) => {
           {inviteOpen && (
             <>
               <SmallContainer>
-                <div>
-                  <Input light placeholder="Add an email" />
-                </div>
-                <EmailLabel>sila@gmail.com</EmailLabel>{" "}
-                <EmailLabel>sila@gmail.com</EmailLabel>
-                <EmailLabel>silaghfjhkjhkh@gmail.com</EmailLabel>
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setInvitedUsers([...invitedUsers, invitedUser]);
+                  }}
+                >
+                  <SmallContainer width='100%'>
+                    <Input
+                      light
+                      placeholder="Add an email"
+                      value={invitedUser}
+                      onChange={(e) => setInvitedUser(e.target.value)}
+                    />{" "}
+                    <PlusButton
+                      onClick={() =>
+                        setInvitedUsers([...invitedUsers, invitedUser])
+                      }
+                    >
+                      +
+                    </PlusButton>
+                  </SmallContainer>
+                </Form>
+                {invitedUsers.map((invitedUser) => (
+                  <EmailLabel>{invitedUser}</EmailLabel>
+                ))}
               </SmallContainer>
               <SendButton />{" "}
             </>
