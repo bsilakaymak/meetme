@@ -16,30 +16,39 @@ exports.deleteUser = exports.getCurrentUser = exports.register = exports.login =
 const express_validator_1 = require("express-validator");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const User_1 = __importDefault(require("../models/User"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const gravatar_1 = __importDefault(require("gravatar"));
+const normalize_url_1 = __importDefault(require("normalize-url"));
+const User_1 = __importDefault(require("../models/User"));
 const Meeting_1 = __importDefault(require("../models/Meeting"));
 dotenv_1.default.config();
 const secretJWT = process.env.jwtSecret;
 // Register
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password } = req.body;
+    const { name, email, password, company } = req.body;
     try {
         // If user exists
         const emailEx = yield User_1.default.findOne({ email });
         if (emailEx) {
             return res.status(400).json({ errors: [{ msg: 'UserAlready exists' }] });
         }
+        // user avatar
+        const avatar = normalize_url_1.default(gravatar_1.default.url(email, {
+            s: '200',
+            r: 'pg',
+            d: 'mm',
+        }), { forceHttps: true });
         // create user
         const user = new User_1.default({
             name,
             email,
             password,
+            company,
+            avatar,
         });
         // encrypt password
         const slat = yield bcryptjs_1.default.genSalt(10);
@@ -87,7 +96,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 throw err;
             res.json({ token });
-            console.log(token);
+            // console.log(token);
         });
     }
     catch (error) {
@@ -98,10 +107,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.login = login;
 // get current user
 const getCurrentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log(req);
     try {
         const user = yield User_1.default.findById(req.userId).select('-password');
-        // console.log(req);
         res.json(user);
     }
     catch (err) {

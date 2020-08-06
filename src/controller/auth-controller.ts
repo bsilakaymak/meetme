@@ -2,11 +2,14 @@ import { validationResult } from 'express-validator';
 import { Response, Request } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
-
 import dotenv from 'dotenv';
+import gravatar from 'gravatar';
+import normalize from 'normalize-url';
+
+import User from '../models/User';
 import { IUser } from '../models/types/user';
 import Meeting from '../models/Meeting';
+
 dotenv.config();
 const secretJWT: string = process.env.jwtSecret!;
 
@@ -16,13 +19,12 @@ type payloadType = {
 
 // Register
 const register = async (req: Request, res: Response): Promise<any> => {
-  console.log(req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, company } = req.body;
 
   try {
     // If user exists
@@ -31,11 +33,23 @@ const register = async (req: Request, res: Response): Promise<any> => {
       return res.status(400).json({ errors: [{ msg: 'UserAlready exists' }] });
     }
 
+    // user avatar
+    const avatar = normalize(
+      gravatar.url(email, {
+        s: '200',
+        r: 'pg',
+        d: 'mm',
+      }),
+      { forceHttps: true }
+    );
+
     // create user
     const user: IUser = new User({
       name,
       email,
       password,
+      company,
+      avatar,
     });
 
     // encrypt password
@@ -87,7 +101,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
       if (err) throw err;
 
       res.json({ token });
-      console.log(token);
+      // console.log(token);
     });
   } catch (error) {
     console.log(error.message);
@@ -97,10 +111,8 @@ const login = async (req: Request, res: Response): Promise<any> => {
 
 // get current user
 const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
-  // console.log(req);
   try {
     const user = await User.findById(req.userId).select('-password');
-    // console.log(req);
     res.json(user);
   } catch (err) {
     console.log(err.message);
