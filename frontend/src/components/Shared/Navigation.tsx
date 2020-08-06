@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 interface Props {}
 const Div = styled.div`
@@ -39,6 +39,8 @@ const Logo = styled.div`
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
+  color: #3b6978;
+  font-size: 8rem;
   &:focus,
   &:hover,
   &:visited,
@@ -54,21 +56,7 @@ const Navigation = (props: Props) => {
         <StyledLink to="/">
           <Logo>MeetMe</Logo>
         </StyledLink>
-        <StyledLink to="/create-meeting">
-          <svg
-            fill="#3B6978"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="4rem"
-            height="4rem"
-            strokeWidth="10"
-          >
-            <path
-              fillRule="evenodd"
-              d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-            />
-          </svg>{' '}
-        </StyledLink>
+        <StyledLink to="/create-meeting">+</StyledLink>
       </Div>
     </Nav>
   );

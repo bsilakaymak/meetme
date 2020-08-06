@@ -27,7 +27,7 @@ interface Props {}
 const MeetingDetails = (props: Props) => {
   const [notesOpen, setNotesOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
-  const [invitedUsers, setInvitedUsers] = useState(["sila"]);
+  const [invitedUsers, setInvitedUsers] = useState(["sila@gmail.com"]);
   const [invitedUser, setInvitedUser] = useState("");
 
   return (
