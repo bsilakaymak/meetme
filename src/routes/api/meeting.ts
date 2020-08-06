@@ -23,6 +23,8 @@ router.post(
     check("start", "Start is required").not().isEmpty(),
     check("end", "End is required").not().isEmpty(),
     check("creator", "creator is required").not().isEmpty(),
+    check("time", "time is required").not().isEmpty(),
+
   ],
   createMeeting
 );
