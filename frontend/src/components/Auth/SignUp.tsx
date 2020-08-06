@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Input, Button, Form } from '../Shared/FormElements';
 import { useForm } from '../Shared/hooks/useForm';
+import AuthContext from '../../context/authContext/authContext';
 
-interface Props {}
 // TODO: Control SignUp button
 // add validity to form data
 // Add Error message under the inputs (like incase password doesn't match)
-const SignUp = (props: Props) => {
+const SignUp = () => {
+  const { register } = useContext(AuthContext);
   const initialInputs = {
     name: { value: '', isValid: false },
     company: { value: '', isValid: false },
@@ -23,7 +24,12 @@ const SignUp = (props: Props) => {
       // TODO: make a call to backend to send form Data
       // call signUp function
       // Sending user to meeting overview page for now this should be in signUp function.
-      history.push('/meeting-overview');
+      if (formState.inputs.password !== formState.inputs.confirmPassword) {
+        alert('Password is not match');
+      } else {
+        await register(formState);
+        history.push('/meeting-overview');
+      }
     } catch (e) {}
   };
   const InputChangeHandler = (e) => {

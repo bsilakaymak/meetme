@@ -1,20 +1,19 @@
-import React, { useReducer } from "react";
-import AuthReducer from "./authReducer";
-import AuthContext from "./authContext";
+import React, { useReducer } from 'react';
+import AuthReducer from './authReducer';
+import AuthContext from './authContext';
 
-import axios from "axios";
-import {
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-} from "../types";
+import axios from 'axios';
+import { LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL } from '../types';
 
 interface AuthType {
-  name?: string;
-  email: string;
-  password: string;
-  companyName?: string;
+  inputs: {
+    name?: string;
+    email: string;
+    password: string;
+    confirmPassword?: string;
+    company?: string;
+  };
+  isValid: boolean;
 }
 
 export interface InitialStateType {
@@ -32,7 +31,7 @@ const AuthState = (props: any) => {
     user: null,
     isAuthenticated: false,
     loading: false,
-    token: localStorage.getItem("token"),
+    token: localStorage.getItem('token'),
     error: null,
   };
   const [state, dispatch] = useReducer(AuthReducer, initialState);
@@ -40,14 +39,10 @@ const AuthState = (props: any) => {
   const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {
-        "Type-content": "application/json",
+        'Type-content': 'application/json',
       },
     };
-    const data = await axios.post(
-      "http://localhost:5000/api/auth/login",
-      FormData,
-      config
-    );
+    const data = await axios.post('http://localhost:5000/api/auth/login', FormData.inputs, config);
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -65,14 +60,14 @@ const AuthState = (props: any) => {
     console.log(signUpForm);
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     };
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        signUpForm,
-        config
+        'http://localhost:5000/api/auth/register',
+        signUpForm.inputs,
+        config,
       );
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
       // loadUser();
