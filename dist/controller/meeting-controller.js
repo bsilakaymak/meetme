@@ -20,12 +20,12 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const { title, description } = req.body;
+    const { title, description, start, end } = req.body;
     const meeting = new Meeting_1.default({
         title,
         description,
-        start: Date.now(),
-        end: Date.now(),
+        start: new Date(start),
+        end: new Date(end),
         creator: req.userId,
     });
     yield meeting.save();
@@ -34,7 +34,7 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        res.status(500).json({ errors: { msg: 'Server Error!' } });
     }
 });
 exports.createMeeting = createMeeting;
@@ -42,12 +42,12 @@ const getAllMeetings = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const meetings = yield Meeting_1.default.find({
             creator: req.userId,
-        }).sort("createdAt -1");
+        }).sort('createdAt -1');
         res.json(meetings);
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        res.status(500).json({ errors: { msg: 'Server Error!' } });
     }
 });
 exports.getAllMeetings = getAllMeetings;
@@ -56,13 +56,13 @@ const getMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const meeting = yield Meeting_1.default.findById(mId);
         if (!meeting) {
-            return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
+            return res.status(404).json({ errors: [{ msg: 'There is no meeting' }] });
         }
         res.json(meeting);
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        res.status(500).json({ errors: { msg: 'Server Error!' } });
     }
 });
 exports.getMeeting = getMeeting;
@@ -71,14 +71,14 @@ const deleteMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const meeting = yield Meeting_1.default.findById(mId);
         if (!meeting) {
-            return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
+            return res.status(404).json({ errors: [{ msg: 'There is no meeting' }] });
         }
         yield meeting.remove();
         res.json({ msg: `${meeting.title} meeting deleted` });
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        res.status(500).json({ errors: { msg: 'Server Error!' } });
     }
 });
 exports.deleteMeeting = deleteMeeting;

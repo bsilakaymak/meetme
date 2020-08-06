@@ -29,7 +29,6 @@ function formReducer(state: State, action: Action): any {
           formIsValid = formIsValid && state.inputs[inputId].isValid;
         }
       }
-      console.log(state, 'state');
       return {
         ...state,
         inputs: {
