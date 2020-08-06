@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 import express from 'express';
 import connectDB from './config/db.js';
+=======
+import express from "express";
+import connectDB from "./config/db.js";
+import cors from "cors";
+>>>>>>> 8ec87cb5d329aa98f83d5af648da99e98af6f80e
 const app = express();
-
+app.use(cors());
 connectDB();
+
 // Parse incoming request bodies
 app.use(express.json());
 

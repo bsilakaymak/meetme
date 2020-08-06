@@ -23,6 +23,7 @@ dotenv_1.default.config();
 const secretJWT = process.env.jwtSecret;
 // Register
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -86,6 +87,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 throw err;
             res.json({ token });
+            console.log(token);
         });
     }
     catch (error) {

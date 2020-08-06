@@ -15,6 +15,8 @@ interface FormElementProps {
   bold?: boolean;
   authButton?: boolean;
   align?: string;
+  padding?: string;
+  background?: string;
 }
 
 //Button
@@ -23,7 +25,15 @@ export const Button = styled.button<FormElementProps>`
   box-sizing: border-box;
   font-size: 1.15rem;
   border-radius: ${(props) => (props.roundBorder ? "6px" : "0")};
-  padding: ${(props) => (props.sm ? "0.15%" : "1.5%")};
+  padding: ${(props) => {
+    if (props.sm) {
+      return `0.25rem`;
+    } else if (props.padding) {
+      return `${props.padding}`;
+    } else {
+      return `0.65rem`;
+    }
+  }};
   text-align: center;
   position: ${(props) => props.relative && "relative"};
   font-weight: ${(props) => (props.bold ? "600" : "400")};
@@ -37,6 +47,9 @@ export const Button = styled.button<FormElementProps>`
     } else if (props.lightBlue) {
       return `background: #84A9AC;
         color:#FFFFFF;
+        border:none;`;
+    } else if (props.background) {
+      return `background: ${props.background};
         border:none;`;
     } else {
       return `
@@ -58,7 +71,7 @@ export const Button = styled.button<FormElementProps>`
     }}
   }
   @media (max-width: 1200px) {
-    padding: ${(props) => (props.sm ? "0.5%" : "2%")};
+    padding: ${(props) => (props.sm ? "0.25rem" : "0.75rem")};
   }
 `;
 
@@ -85,7 +98,7 @@ export const Input = styled.input<FormElementProps>`
 `;
 
 //TextArea
-export const TextArea= styled.textarea<FormElementProps>`
+export const TextArea = styled.textarea<FormElementProps>`
   width: ${(props) => (props.width ? props.width : "40%")};
   background: #e0dede;
   border: none;

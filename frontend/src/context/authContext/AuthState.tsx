@@ -10,17 +10,25 @@ import {
   REGISTER_FAIL,
 } from "../types";
 
-interface MyContextType {
-  user?: any;
-  token?: any;
-  loading?: any;
-  error?: any;
-  isAuthenticated?: any;
-  login: (authForm: any) => Promise<void>;
-  register: (FormData: any) => Promise<void>;
+interface AuthType {
+  name?: string;
+  email: string;
+  password: string;
+  companyName?: string;
 }
-const AuthState = (props) => {
-  const initialState = {
+
+export interface InitialStateType {
+  user: string | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  token?: string | null;
+  error: string | null;
+  login?: (FormData: AuthType) => Promise<void>;
+  register?: (FormData: AuthType) => Promise<void>;
+}
+
+const AuthState = (props: any) => {
+  const initialState: InitialStateType = {
     user: null,
     isAuthenticated: false,
     loading: false,
@@ -29,16 +37,16 @@ const AuthState = (props) => {
   };
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-  const login = async (authForm) => {
+  const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {
         "Type-content": "application/json",
       },
     };
     const data = await axios.post(
-      "http://localhost:5000/api/auth/signup",
-      config,
-      authForm
+      "http://localhost:5000/api/auth/login",
+      FormData,
+      config
     );
 
     dispatch({
@@ -53,21 +61,26 @@ const AuthState = (props) => {
       });
     }
   };
-  const register = async (FormData) => {
+  const register = async (signUpForm: AuthType): Promise<void> => {
+    console.log(signUpForm);
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
-      const res = await axios.post("/api/users", FormData, config);
-
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        signUpForm,
+        config
+      );
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
       // loadUser();
     } catch (error) {
       dispatch({ type: REGISTER_FAIL, payload: error.response.data.msg });
     }
   };
+
   return (
     <AuthContext.Provider
       value={{
