@@ -24,10 +24,17 @@ const SignUp = () => {
       // TODO: make a call to backend to send form Data
       // call signUp function
       // Sending user to meeting overview page for now this should be in signUp function.
-      if (formState.inputs.password !== formState.inputs.confirmPassword) {
+      const { name, company, email, password, confirmPassword } = formState.inputs;
+      if (password.value !== confirmPassword.value) {
         alert('Password is not match');
       } else {
-        await register(formState);
+        const formData = {
+          name: name.value,
+          company: company.value,
+          email: email.value,
+          password: password.value,
+        };
+        await register(formData);
         history.push('/meeting-overview');
       }
     } catch (e) {}

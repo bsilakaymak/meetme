@@ -22,7 +22,11 @@ const Login = () => {
       // TODO: make a call to backend to send form Data
       // call login function
       // Sending user to meeting overview page for now this should be in login function.
-      await login(formState);
+      const formData = {
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value,
+      };
+      await login(formData);
       history.push('/meeting-overview');
     } catch (e) {}
   };

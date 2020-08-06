@@ -6,14 +6,10 @@ import axios from 'axios';
 import { LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL } from '../types';
 
 interface AuthType {
-  inputs: {
-    name?: string;
-    email: string;
-    password: string;
-    confirmPassword?: string;
-    company?: string;
-  };
-  isValid: boolean;
+  name?: string;
+  email: string;
+  password: string;
+  company?: string;
 }
 
 export interface InitialStateType {
@@ -42,7 +38,7 @@ const AuthState = (props: any) => {
         'Type-content': 'application/json',
       },
     };
-    const data = await axios.post('http://localhost:5000/api/auth/login', FormData.inputs, config);
+    const data = await axios.post('http://localhost:5000/api/auth/login', FormData, config);
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -64,11 +60,7 @@ const AuthState = (props: any) => {
       },
     };
     try {
-      const res = await axios.post(
-        'http://localhost:5000/api/auth/register',
-        signUpForm.inputs,
-        config,
-      );
+      const res = await axios.post('http://localhost:5000/api/auth/register', signUpForm, config);
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
       // loadUser();
     } catch (error) {
