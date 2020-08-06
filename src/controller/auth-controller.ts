@@ -1,11 +1,12 @@
-import { validationResult } from "express-validator";
-import { Response, Request } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/User";
+import { validationResult } from 'express-validator';
+import { Response, Request } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/User';
 
-import dotenv from "dotenv";
-import { IUser } from "../models/types/user";
+import dotenv from 'dotenv';
+import { IUser } from '../models/types/user';
+import Meeting from '../models/Meeting';
 dotenv.config();
 const secretJWT: string = process.env.jwtSecret!;
 
@@ -26,7 +27,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
     // If user exists
     const emailEx: IUser | null = await User.findOne({ email });
     if (emailEx) {
-      return res.status(400).json({ errors: [{ msg: "UserAlready exists" }] });
+      return res.status(400).json({ errors: [{ msg: 'UserAlready exists' }] });
     }
 
     // create user
@@ -46,13 +47,13 @@ const register = async (req: Request, res: Response): Promise<any> => {
     const payload: payloadType = {
       id: user.id,
     };
-    jwt.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
+    jwt.sign(payload, secretJWT, { expiresIn: '10d' }, (err, token) => {
       if (err) throw err;
       res.json({ token });
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send({ errors: [{ msg: "Server Error!" }] });
+    res.status(500).send({ errors: [{ msg: 'Server Error!' }] });
   }
 };
 
@@ -67,13 +68,13 @@ const login = async (req: Request, res: Response): Promise<any> => {
     // See if user exists
     let user: IUser | null = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
+      return res.status(400).json({ errors: [{ msg: 'Invalid credentials' }] });
     }
     // If there is a user check his hashed password
     const isMatch: boolean = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
+      return res.status(400).json({ errors: [{ msg: 'Invalid credentials' }] });
     }
     // Return JWT
 
@@ -81,14 +82,14 @@ const login = async (req: Request, res: Response): Promise<any> => {
       id: user.id,
     };
 
-    jwt.sign(payload, secretJWT, { expiresIn: "1h" }, (err, token) => {
+    jwt.sign(payload, secretJWT, { expiresIn: '1h' }, (err, token) => {
       if (err) throw err;
 
       res.json({ token });
     });
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ errors: [{ msg: "Server Error" }] });
+    res.status(500).json({ errors: [{ msg: 'Server Error' }] });
   }
 };
 
@@ -96,13 +97,25 @@ const login = async (req: Request, res: Response): Promise<any> => {
 const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
   // console.log(req);
   try {
-    const user = await User.findById(req.userId).select("-password");
+    const user = await User.findById(req.userId).select('-password');
     // console.log(req);
     res.json(user);
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ errors: [{ msg: "Server Error" }] });
+    res.status(500).json({ errors: [{ msg: 'Server Error' }] });
   }
 };
 
-export { login, register, getCurrentUser };
+// Delete User
+const deleteUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    await User.findOneAndDelete({ _id: req.userId });
+    await Meeting.deleteMany({ creator: req.userId });
+
+    res.json({ msg: 'User Deleted' });
+  } catch (error) {
+    res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+  }
+};
+
+export { login, register, getCurrentUser, deleteUser };

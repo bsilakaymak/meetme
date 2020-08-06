@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import User from '../models/User';
 import { IUser } from '../models/types/user';
+import Meeting from '../models/Meeting';
 
 // Get all users
 const getUsers = async (req: Request, res: Response) => {
@@ -17,7 +18,6 @@ const getUsers = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ errors: [{ msg: 'Server Error' }] });
   }
-  console.log('Test');
 };
 
 // Get user by Id
@@ -33,20 +33,4 @@ const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-// Delete User
-const deleteUser = async (req: Request, res: Response) => {
-  const user_id: string = req.params.user_id;
-
-  try {
-    const user: IUser | null = await User.findOneAndDelete({
-      user_id,
-    });
-    if (!user) return res.status(400).json({ msg: 'Profile not found' });
-
-    res.json({ msg: 'User Deleted' });
-  } catch (error) {
-    res.status(500).json({ errors: [{ msg: 'Server Error' }] });
-  }
-};
-
-export { getUsers, getUserById, deleteUser };
+export { getUsers, getUserById };

@@ -15,8 +15,4 @@ router.get('/', auth_1.default, usersControllers_1.getUsers);
 // @desc     GET User
 // @access   Private
 router.get('/:user_id', auth_1.default, usersControllers_1.getUserById);
-// @route    DELETE api/users
-// @desc     DELETE User + Meetings
-// @access   Private
-router.delete('/:user_id', auth_1.default, usersControllers_1.deleteUser);
 module.exports = router;

@@ -1,12 +1,13 @@
-import express from "express";
-import { check } from "express-validator";
+import express from 'express';
+import { check } from 'express-validator';
 
-import auth from "../../middleware/auth";
+import auth from '../../middleware/auth';
 import {
   login,
   register,
   getCurrentUser,
-} from "../../controller/auth-controller";
+  deleteUser,
+} from '../../controller/auth-controller';
 
 const router = express.Router();
 
@@ -14,10 +15,10 @@ const router = express.Router();
 // @desc     Login
 // @access   Public
 router.post(
-  "/login",
+  '/login',
   [
-    check("email", "Please include a valid email").isEmail(),
-    check("password", "Password is required").exists(),
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists(),
   ],
   login
 );
@@ -26,13 +27,13 @@ router.post(
 // @desc     Register user
 // @access   Public
 router.post(
-  "/register",
+  '/register',
   [
-    check("name", "Name is required").not().isEmpty(),
-    check("email", "Please include a valid email").isEmail(),
+    check('name', 'Name is required').not().isEmpty(),
+    check('email', 'Please include a valid email').isEmail(),
     check(
-      "password",
-      "please enter password with 6 or more characters"
+      'password',
+      'please enter password with 6 or more characters'
     ).isLength({ min: 6 }),
   ],
   register
@@ -41,6 +42,11 @@ router.post(
 // @route    GET api/auth/me
 // @desc     get current user
 // @access   private
-router.get("/me", auth, getCurrentUser);
+router.get('/me', auth, getCurrentUser);
+
+// @route    DELETE api/users
+// @desc     DELETE User + Meetings
+// @access   Private
+router.delete('/', auth, deleteUser);
 
 module.exports = router;

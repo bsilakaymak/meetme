@@ -1,9 +1,5 @@
 import express from 'express';
-import {
-  getUsers,
-  getUserById,
-  deleteUser,
-} from '../../controller/usersControllers';
+import { getUsers, getUserById } from '../../controller/usersControllers';
 import auth from '../../middleware/auth';
 
 const router = express.Router();
@@ -17,10 +13,5 @@ router.get('/', auth, getUsers);
 // @desc     GET User
 // @access   Private
 router.get('/:user_id', auth, getUserById);
-
-// @route    DELETE api/users
-// @desc     DELETE User + Meetings
-// @access   Private
-router.delete('/:user_id', auth, deleteUser);
 
 module.exports = router;
