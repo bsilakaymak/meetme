@@ -1,38 +1,41 @@
-import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { Input, Button, Form } from "../Shared/FormElements";
-import AuthContext from "../../context/authContext/authContext";
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Input, Button, Form } from '../Shared/FormElements';
+import { useForm } from '../Shared/hooks/useForm';
+import AuthContext from '../../context/authContext/authContext';
 
 // TODO: Control Login button
 // add validity to form data
 // Add Error model if the user not found
 const Login = () => {
   const { login } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const history = useHistory();
-
-  const { email, password } = formData;
+  const initialInputs = {
+    email: { value: '', isValid: false },
+    password: { value: '', isValid: false },
+  };
+  const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
+  let history = useHistory();
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-
-    login(formData);
-    history.push("/meeting-overview");
+    try {
+      // TODO: make a call to backend to send form Data
+      // call login function
+      // Sending user to meeting overview page for now this should be in login function.
+      await login(formState);
+      history.push('/meeting-overview');
+    } catch (e) {}
   };
   const InputChangeHandler = (e) => {
     const { value, name } = e.target;
-    setFormData({ ...formData, [name]: value });
+    inputHandler(name, value, true);
   };
   return (
     <Form onSubmit={formSubmitHandler}>
       <Input
         name="email"
         type="email"
-        value={email}
+        value={formState.inputs.email && formState.inputs.email.value}
         placeholder="email"
         onChange={InputChangeHandler}
         required
@@ -40,7 +43,7 @@ const Login = () => {
       <Input
         name="password"
         type="password"
-        value={password}
+        value={formState.inputs.password && formState.inputs.password.value}
         placeholder="password"
         onChange={InputChangeHandler}
         required

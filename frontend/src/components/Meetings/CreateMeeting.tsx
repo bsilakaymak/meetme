@@ -15,7 +15,7 @@ const CreateMeeting = (props: Props) => {
   return (
     <Container>
       <Card light borderedCard roundBorder height="80%" padding="0 2.5rem">
-        <Form align="flex-end">
+        <Form align="flex-start">
           <LabelAndInputHolder>
             <Label absolute> Title</Label>
             <Input width="40%" />
@@ -30,13 +30,18 @@ const CreateMeeting = (props: Props) => {
             <Label absolute> Time</Label>
             <Input width="40%" />
           </LabelAndInputHolder>
+          <Label>Beginning</Label>
+          <Input width="30%" type="date" />
+          <Label>End</Label>
+          <Input width="30%" type="date" />
 
-          <Button roundBorder bold>CREATE</Button>
+          <Button roundBorder bold>
+            CREATE
+          </Button>
         </Form>
       </Card>
     </Container>
   );
-
 };
 
 export default CreateMeeting;

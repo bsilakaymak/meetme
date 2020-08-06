@@ -1,34 +1,40 @@
-import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { Input, Button, Form } from "../Shared/FormElements";
-import AuthContext from "../../context/authContext/authContext";
-interface Props {}
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Input, Button, Form } from '../Shared/FormElements';
+import { useForm } from '../Shared/hooks/useForm';
+import AuthContext from '../../context/authContext/authContext';
+
 // TODO: Control SignUp button
 // add validity to form data
 // Add Error message under the inputs (like incase password doesn't match)
-const SignUp = (props: Props) => {
+const SignUp = () => {
   const { register } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    name: "",
-    company: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const history = useHistory();
-  const { name, company, password, confirmPassword, email } = formData;
+  const initialInputs = {
+    name: { value: '', isValid: false },
+    company: { value: '', isValid: false },
+    email: { value: '', isValid: false },
+    password: { value: '', isValid: false },
+    confirmPassword: { value: '', isValid: false },
+  };
+  const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
+  let history = useHistory();
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Password is not match");
-    } else {
-      register(formData);
-      history.push("/meeting-overview");
-    }
+    try {
+      // TODO: make a call to backend to send form Data
+      // call signUp function
+      // Sending user to meeting overview page for now this should be in signUp function.
+      if (formState.inputs.password !== formState.inputs.confirmPassword) {
+        alert('Password is not match');
+      } else {
+        await register(formState);
+        history.push('/meeting-overview');
+      }
+    } catch (e) {}
   };
   const InputChangeHandler = (e) => {
     const { value, name } = e.target;
-    setFormData({ ...formData, [name]: value });
+    inputHandler(name, value, true);
   };
   return (
     <Form onSubmit={formSubmitHandler}>
@@ -36,35 +42,35 @@ const SignUp = (props: Props) => {
         name="name"
         type="text"
         placeholder="name"
-        value={name}
+        value={formState.inputs.name && formState.inputs.name.value}
         onChange={InputChangeHandler}
       />
       <Input
         name="company"
         type="text"
         placeholder="company"
-        value={company}
+        value={formState.inputs.company && formState.inputs.company.value}
         onChange={InputChangeHandler}
       />
       <Input
         name="email"
         type="email"
         placeholder="email"
-        value={email}
+        value={formState.inputs.email && formState.inputs.email.value}
         onChange={InputChangeHandler}
       />
       <Input
         name="password"
         type="password"
         placeholder="password"
-        value={password}
+        value={formState.inputs.password && formState.inputs.password.value}
         onChange={InputChangeHandler}
       />
       <Input
         name="confirmPassword"
         type="password"
         placeholder="confirm password"
-        value={confirmPassword}
+        value={formState.inputs.confirmPassword && formState.inputs.confirmPassword.value}
         onChange={InputChangeHandler}
       />
       <Button type="submit" light roundBorder>

@@ -1,7 +1,6 @@
-import React, { Fragment } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { Button } from "./FormElements";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 interface Props {}
 const Div = styled.div`
@@ -38,25 +37,38 @@ const Logo = styled.div`
     font-size: 1.5rem;
   }
 `;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+  }
+`;
 const Navigation = (props: Props) => {
   return (
     <Nav>
-      {" "}
       <Div>
-        <Logo>MeetMe</Logo>
-        <svg
-          fill="#3B6978"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width="4rem"
-          height="4rem"
-          stroke-width="10"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-          />
-        </svg>{" "}
+        <StyledLink to="/">
+          <Logo>MeetMe</Logo>
+        </StyledLink>
+        <StyledLink to="/create-meeting">
+          <svg
+            fill="#3B6978"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="4rem"
+            height="4rem"
+            strokeWidth="10"
+          >
+            <path
+              fillRule="evenodd"
+              d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+            />
+          </svg>{' '}
+        </StyledLink>
       </Div>
     </Nav>
   );
