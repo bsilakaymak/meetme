@@ -4,13 +4,16 @@ import Landing from "../LandingPage/Landing";
 import MeetingOverview from "../User/MeetingOverview";
 import CreateMeeting from "../Meetings/CreateMeeting";
 import MeetingDetails from "../Meetings/MeetingDetails";
+
+import AuthState from "../../context/authContext/AuthState";
+
 import Navigation from "components/Shared/Navigation";
 
 interface Props {}
 
 const Routes = (props: Props) => {
   return (
-    <div>
+    <AuthState>
       <Navigation />
       <Router>
         <Switch>
@@ -20,7 +23,7 @@ const Routes = (props: Props) => {
           <Route path="/meeting-details" component={MeetingDetails} exact />
         </Switch>
       </Router>
-    </div>
+    </AuthState>
   );
 };
 

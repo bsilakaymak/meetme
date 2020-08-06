@@ -8,7 +8,14 @@ import {
   AUTH_ERROR,
 } from "../types";
 
-export default (state: any, action: any) => {
+import { InitialStateType } from "./AuthState";
+
+interface Actions {
+  type: string;
+  payload: any;
+}
+
+export default (state: InitialStateType, action: Actions) => {
   const { type, payload } = action;
   switch (type) {
     case USER_LOADED:
