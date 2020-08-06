@@ -14,6 +14,7 @@ import SendButton from "./SendButton";
 interface Props {}
 const MeetingDetails = (props: Props) => {
   const [notesOpen, setNotesOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
   return (
     <Container column justify="flex-start" padding="2rem">
       <SmallContainer display="flex" mColumn>
@@ -31,17 +32,23 @@ const MeetingDetails = (props: Props) => {
           </SmallContainer>
         </SmallContainer>
         <SmallContainer width="30%">
-          <Button margin="0">Invite</Button>
-          <SmallContainer>
-            {" "}
-            <div>
-              <Input light placeholder="Add an email" />
-            </div>
-            <EmailLabel>sila@gmail.com</EmailLabel>{" "}
-            <EmailLabel>sila@gmail.com</EmailLabel>
-            <EmailLabel>silaghfjhkjhkh@gmail.com</EmailLabel>
-          </SmallContainer>
-          <SendButton />
+          <Button margin="0" onClick={() => setInviteOpen(!inviteOpen)}>
+            Invite
+          </Button>
+
+          {inviteOpen && (
+            <>
+              <SmallContainer>
+                <div>
+                  <Input light placeholder="Add an email" />
+                </div>
+                <EmailLabel>sila@gmail.com</EmailLabel>{" "}
+                <EmailLabel>sila@gmail.com</EmailLabel>
+                <EmailLabel>silaghfjhkjhkh@gmail.com</EmailLabel>
+              </SmallContainer>
+              <SendButton />{" "}
+            </>
+          )}
         </SmallContainer>
       </SmallContainer>
 
