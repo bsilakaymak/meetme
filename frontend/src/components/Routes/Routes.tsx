@@ -7,6 +7,7 @@ import MeetingDetails from "../Meetings/MeetingDetails";
 import Navigation from "../Shared/Navigation";
 import authContext from "../../context/authContext/authContext";
 import AuthState from "../../context/authContext/AuthState";
+import PrivateRoute from "./PrivateRoute";
 
 interface Props {}
 
@@ -16,13 +17,24 @@ const Routes = (props: Props) => {
     <AuthState>
       <Router>
         {" "}
-        <Navigation />
         {auth && auth["isAuthenticated"] && <Navigation />}
         <Switch>
           <Route path="/" component={Landing} exact />
-          <Route path="/meeting-overview" component={MeetingOverview} exact />
-          <Route path="/create-meeting" component={CreateMeeting} exact />
-          <Route path="/meeting-details" component={MeetingDetails} exact />
+          <PrivateRoute
+            path="/meeting-overview"
+            component={MeetingOverview}
+            exact
+          />
+          <PrivateRoute
+            path="/create-meeting"
+            component={CreateMeeting}
+            exact
+          />
+          <PrivateRoute
+            path="/meeting-details"
+            component={MeetingDetails}
+            exact
+          />
         </Switch>
       </Router>
     </AuthState>

@@ -19,6 +19,7 @@ const createMeeting: (req: Request, res: Response) => Promise<Response<any> | un
     start: new Date(start),
     end: new Date(end),
     creator: req.userId,
+    participants: [req.userId],
   });
   await meeting.save();
   res.json(meeting);
@@ -57,6 +58,25 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
+  const mId: string = req.params.mId;
+  try {
+    const meeting: IMeeting | null = await Meeting.findById(mId);
+    if (!meeting) {
+      return res.status(404).json({ errors: [{ msg: 'There is no meeting' }] });
+    }
+    const newParticipants = [...meeting.participants, req.body.participants];
+    meeting.participants = [...new Set(newParticipants)];
+    // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
+    // again somewhere here we need to establish a relationship between users and meetings, so we would make sure each user invited would have
+    // this meeting on their meetings list
+    await meeting.save();
+    res.json({ msg: `Users are invited to the meeting` });
+  } catch (error) {
+    res.status(500).json({ errors: { msg: 'Server Error!' } });
+  }
+};
+
 const deleteMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: string = req.params.mId;
   try {
@@ -73,4 +93,4 @@ const deleteMeeting = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export { createMeeting, getAllMeetings, deleteMeeting, getMeeting };
+export { createMeeting, getAllMeetings, deleteMeeting, getMeeting, inviteToMeeting };

@@ -6,4 +6,6 @@ export interface IMeeting extends Document {
   start: Date;
   end: Date;
   creator: string;
+  participants: string[];
+  time: string;
 }
