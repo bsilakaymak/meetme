@@ -26,6 +26,7 @@ interface LayoutProps {
   textAlign?: string;
   mHeight?: string;
   mWidth?: string;
+  mColumn?: boolean;
 }
 
 //Global style
@@ -153,5 +154,15 @@ export const SmallContainer = styled.div<LayoutProps>`
   text-align: ${(props) => props.textAlign && props.textAlign};
   @media (max-width: 800px) {
     width: ${(props) => (props.sm ? "50%" : "90%")};
+    flex-direction: ${(props) => props.mColumn && "column"};
   }
+`;
+
+export const EmailLabel = styled.span<LayoutProps>`
+  background-color: #c4c4c4;
+  border-radius: 8px;
+  color: #3b6978;
+  padding: 0.35rem;
+  display:inline-block;
+  margin:0.25rem 0.25rem 0.25rem 0;
 `;

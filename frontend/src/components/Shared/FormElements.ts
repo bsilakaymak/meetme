@@ -16,6 +16,7 @@ interface FormElementProps {
   authButton?: boolean;
   align?: string;
   padding?: string;
+  background?: string;
 }
 
 //Button
@@ -46,6 +47,9 @@ export const Button = styled.button<FormElementProps>`
     } else if (props.lightBlue) {
       return `background: #84A9AC;
         color:#FFFFFF;
+        border:none;`;
+    } else if (props.background) {
+      return `background: ${props.background};
         border:none;`;
     } else {
       return `
