@@ -18,7 +18,7 @@ const MeetingOverviewItem = (props: Props) => {
       padding="2rem"
       justify="space-around"
       margin="2rem auto"
-      mHeight='10rem'
+      mHeight="10rem"
     >
       <SmallContainer display="block" width="70%">
         <Text color="#ffffff" fontSize="2rem" fontWeight="600">
@@ -34,17 +34,17 @@ const MeetingOverviewItem = (props: Props) => {
           <Text color="#ffffff" fontWeight="600">
             with
           </Text>
-          <div>
+          <SmallContainer margin='0.5rem'>
             <a href="#">
-              <Avatar />
+              <Avatar margin="0.25rem 0.5rem 0 0" />
             </a>
             <a href="#">
-              <Avatar />
+              <Avatar margin="0.25rem 0.5rem 0 0" />
             </a>
             <a href="#">
-              <Avatar />
+              <Avatar margin="0.25rem 0.5rem 0 0" />
             </a>
-          </div>
+          </SmallContainer>
         </SmallContainer>
       </SmallContainer>
       <SmallContainer display="block" width="30%" textAlign="right">

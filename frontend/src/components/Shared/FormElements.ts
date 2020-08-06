@@ -80,7 +80,9 @@ export const Input = styled.input<FormElementProps>`
   width: ${(props) => (props.width ? props.width : "70%")};
   background: ${(props) => (props.light ? "#F0F0F0" : "#e0dede")};
   border: ${(props) => (props.light ? "1px solid #3B6978" : "none")};
-  min-height: 1.75rem;
+  font-family: arial, sans-serif;
+  font-size: 18px;
+  color:#3B6978;
   margin: 2% 0;
   @media (max-width: 530px) {
     width: 90%;
