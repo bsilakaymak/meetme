@@ -32,7 +32,7 @@ const Logo = styled.div`
   border: 4px solid #3b6978;
   box-sizing: border-box;
   border-radius: 6px;
-  padding: 2%;
+  padding: 1rem;
   @media (max-width: 528px) {
     font-size: 1.5rem;
   }

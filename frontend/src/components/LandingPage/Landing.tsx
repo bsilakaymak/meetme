@@ -8,6 +8,7 @@ import { Button } from "components/Shared/FormElements";
 interface Props {}
 
 const Div = styled.div`
+background:#3B6978;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -18,7 +19,7 @@ const Div = styled.div`
 const Landing = (props: Props) => {
   const [loginMode, setLoginMode] = useState(false);
   return (
-    <Container sm>
+    <Container sm height="80vh">
       <LandingSquares />
 
       <Card
@@ -30,6 +31,7 @@ const Landing = (props: Props) => {
         width="25%"
         height="40vh"
         position="relative"
+        mHeight="33rem"
       >
         {" "}
         <Div>

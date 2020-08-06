@@ -78,6 +78,7 @@ export const Button = styled.button<FormElementProps>`
 //Input
 export const Input = styled.input<FormElementProps>`
   width: ${(props) => (props.width ? props.width : "70%")};
+  height: ${(props) => (props.height ? props.height : "2rem")};
   background: ${(props) => (props.light ? "#F0F0F0" : "#e0dede")};
   border: ${(props) => (props.light ? "1px solid #3B6978" : "none")};
   font-family: arial, sans-serif;
