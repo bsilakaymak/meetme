@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Input, Button, Form } from '../Shared/FormElements';
+import { useForm } from '../Shared/hooks/useForm';
 
 interface Props {}
 // TODO: Control Login button
 // add validity to form data
 // Add Error model if the user not found
 const Login = (props: Props) => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const initialInputs = {
+    email: { value: '', isValid: false },
+    password: { value: '', isValid: false },
+  };
+  const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
   let history = useHistory();
+
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -19,26 +22,25 @@ const Login = (props: Props) => {
       // call login function
       // Sending user to meeting overview page for now this should be in login function.
       history.push('/meeting-overview');
-      console.log(formData);
     } catch (e) {}
   };
   const InputChangeHandler = (e) => {
     const { value, name } = e.target;
-    setFormData({ ...formData, [name]: value });
+    inputHandler(name, value, true);
   };
   return (
     <Form onSubmit={formSubmitHandler}>
       <Input
         name="email"
         type="email"
-        value={formData.email}
+        value={formState.inputs.email && formState.inputs.email.value}
         placeholder="email"
         onChange={InputChangeHandler}
       />
       <Input
         name="password"
         type="password"
-        value={formData.password}
+        value={formState.inputs.password && formState.inputs.password.value}
         placeholder="password"
         onChange={InputChangeHandler}
       />
