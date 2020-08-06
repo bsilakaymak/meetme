@@ -15,6 +15,7 @@ type payloadType = {
 
 // Register
 const register = async (req: Request, res: Response): Promise<any> => {
+  console.log(req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -85,6 +86,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
       if (err) throw err;
 
       res.json({ token });
+      console.log(token);
     });
   } catch (error) {
     console.log(error.message);

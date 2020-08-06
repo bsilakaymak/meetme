@@ -1,15 +1,15 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Landing from '../LandingPage/Landing';
-import MeetingOverview from '../User/MeetingOverview';
-import CreateMeeting from '../Meetings/CreateMeeting';
-import MeetingDetails from '../Meetings/MeetingDetails';
-
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Landing from "../LandingPage/Landing";
+import MeetingOverview from "../User/MeetingOverview";
+import CreateMeeting from "../Meetings/CreateMeeting";
+import MeetingDetails from "../Meetings/MeetingDetails";
+import AuthState from "../../context/authContext/AuthState";
 interface Props {}
 
 const Routes = (props: Props) => {
   return (
-    <div>
+    <AuthState>
       <Router>
         <Switch>
           <Route path="/" component={Landing} exact />
@@ -18,7 +18,7 @@ const Routes = (props: Props) => {
           <Route path="/meeting-detail" component={MeetingDetails} exact />
         </Switch>
       </Router>
-    </div>
+    </AuthState>
   );
 };
 

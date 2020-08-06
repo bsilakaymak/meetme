@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Input, Button, Form } from '../Shared/FormElements';
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { Input, Button, Form } from "../Shared/FormElements";
+import AuthContext from "../../context/authContext/authContext";
 
-interface Props {}
 // TODO: Control Login button
 // add validity to form data
 // Add Error model if the user not found
-const Login = (props: Props) => {
+const Login = () => {
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  let history = useHistory();
+
+  const history = useHistory();
+
+  const { email, password } = formData;
+
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-    try {
-      // TODO: make a call to backend to send form Data
-      // call login function
-      // Sending user to meeting overview page for now this should be in login function.
-      history.push('/meeting-overview');
-      console.log(formData);
-    } catch (e) {}
+
+    login(formData);
+    history.push("/meeting-overview");
   };
   const InputChangeHandler = (e) => {
     const { value, name } = e.target;
@@ -31,16 +32,18 @@ const Login = (props: Props) => {
       <Input
         name="email"
         type="email"
-        value={formData.email}
+        value={email}
         placeholder="email"
         onChange={InputChangeHandler}
+        required
       />
       <Input
         name="password"
         type="password"
-        value={formData.password}
+        value={password}
         placeholder="password"
         onChange={InputChangeHandler}
+        required
       />
       <Button type="submit" light roundBorder>
         LOGIN
