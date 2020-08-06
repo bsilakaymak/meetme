@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { Input, Button, Form } from '../Shared/FormElements';
 import { useForm } from '../Shared/hooks/useForm';
 
-interface Props {}
 // TODO: Control Login button
 // add validity to form data
 // Add Error model if the user not found
@@ -36,6 +35,7 @@ const Login = (props: Props) => {
         value={formState.inputs.email && formState.inputs.email.value}
         placeholder="email"
         onChange={InputChangeHandler}
+        required
       />
       <Input
         name="password"
@@ -43,6 +43,7 @@ const Login = (props: Props) => {
         value={formState.inputs.password && formState.inputs.password.value}
         placeholder="password"
         onChange={InputChangeHandler}
+        required
       />
       <Button type="submit" light roundBorder>
         LOGIN

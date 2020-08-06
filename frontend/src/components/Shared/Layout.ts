@@ -8,7 +8,6 @@ interface LayoutProps {
   lightBlue?: boolean;
   light?: boolean;
   height?: string;
-  marginTopBottom?: string;
   padding?: string;
   borderedCard?: boolean;
   roundBorder?: boolean;
@@ -20,6 +19,14 @@ interface LayoutProps {
   column?: boolean;
   justify?: string;
   threeSideBorder?: boolean;
+  angled?: boolean;
+  display?: string;
+  align?: string;
+  margin?: string;
+  textAlign?: string;
+  mHeight?: string;
+  mWidth?: string;
+  mColumn?: boolean;
 }
 
 //Global style
@@ -35,7 +42,7 @@ body{
 
 //Page separator
 export const Divider = styled.div<LayoutProps>`
-  width: 95%;
+  width: 100%;
   margin: auto;
   height: 2px;
   margin-top: ${(props) => (props.marginTop ? props.marginTop : "1rem")};
@@ -50,8 +57,7 @@ export const Card = styled.div<LayoutProps>`
   width: ${(props) => (props.width ? props.width : "80%")};
   height: ${(props) => (props.height ? props.height : "5rem")};
   padding: ${(props) => (props.padding ? props.padding : "1rem")};
-  margin: ${(props) =>
-    props.marginTopBottom ? `${props.marginTopBottom} auto` : `auto`};
+  margin: ${(props) => (props.margin ? props.margin : `auto`)};
   background: ${(props) => {
     if (props.lightBlue) {
       return `#84A9AC;`;
@@ -77,15 +83,16 @@ export const Card = styled.div<LayoutProps>`
       return `border:none;`;
     }
   }};
-  border-top: ${(props) => props.threeSideBorder && "none"}
+  border-top: ${(props) => props.threeSideBorder && "none"};
   border-radius: ${(props) => (props.roundBorder ? "7px" : "0")};
   display: flex;
   flex-direction: ${(props) => (props.column ? "column" : "row")};
-  align-items: center;
+  align-items: ${(props) => (props.align ? props.align : "center")};
   justify-content: ${(props) => props.justify && props.justify};
   @media (max-width: 800px) {
     margin-top: 6%;
-    width: 70%;
+    width: ${(props) => (props.mWidth ? props.mWidth : "70%")};
+    height: ${(props) => props.mHeight && props.mHeight};
   }
 `;
 
@@ -101,15 +108,61 @@ export const Text = styled.p<LayoutProps>`
 //Container
 export const Container = styled.div<LayoutProps>`
   width: 95%;
-  margin:auto;
+  margin: auto;
   height: ${(props) => (props.height ? props.height : "100vh")};
   display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing;border-box;
-  justify-content: center;
-  @media  (max-width: 800px) {
+  padding: ${(props) => props.padding && props.padding};
+  justify-content: ${(props) => (props.justify ? props.justify : "center")};
+  flex-direction: ${(props) => (props.column ? "column" : "row")};
+  align-items: ${(props) => (props.align ? props.align : "center")};
+  box-sizing: border-box;
+  @media (max-width: 800px) {
     flex-direction: column;
-    height:${(props) => props.sm && "65rem"}
+    height: ${(props) => props.sm && "65rem"};
+    padding: 1rem;
+    width: 100%;
   }
+`;
+
+export const Avatar = styled.div<LayoutProps>`
+  width: ${(props) => (props.width ? props.width : "3rem")};
+  height: ${(props) => (props.height ? props.height : "3rem")};
+  border-radius: ${(props) => (props.angled ? "0" : "50%")};
+  background: #c4c4c4;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  margin: ${(props) => (props.margin ? props.margin : "0 0.5rem")};
+  @media (max-width: 800px) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  @media (min-width: 801px) and (max-width: 1200px) {
+    height: 2rem;
+    width: 2rem;
+  }
+`;
+
+export const SmallContainer = styled.div<LayoutProps>`
+  width: ${(props) => props.width && props.width};
+  display: ${(props) => props.display && props.display};
+  flex-direction: ${(props) => (props.column ? "column" : "row")};
+  justify-content: ${(props) => props.justify && props.justify};
+  align-items: ${(props) => props.align && props.align};
+  padding: ${(props) => props.padding && props.padding};
+  margin: ${(props) => props.margin && props.margin};
+  text-align: ${(props) => props.textAlign && props.textAlign};
+  @media (max-width: 800px) {
+    width: ${(props) => (props.sm ? "50%" : "90%")};
+    flex-direction: ${(props) => props.mColumn && "column"};
+  }
+`;
+
+export const EmailLabel = styled.span<LayoutProps>`
+  background-color: #c4c4c4;
+  border-radius: 8px;
+  color: #3b6978;
+  padding: 0.35rem;
+  display:inline-block;
+  margin:0.25rem 0.25rem 0.25rem 0;
 `;

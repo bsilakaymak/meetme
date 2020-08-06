@@ -6,23 +6,25 @@ import CreateMeeting from '../Meetings/CreateMeeting';
 import MeetingDetails from '../Meetings/MeetingDetails';
 import Navigation from '../Shared/Navigation';
 import authContext from '../../context/authContext/authContext';
+import AuthState from '../../context/authContext/AuthState';
 
 interface Props {}
 
 const Routes = (props: Props) => {
   const auth = useContext(authContext);
   return (
-    <div>
+    <AuthState>
+      <Navigation />
       <Router>
         {auth['isAuthenticated'] && <Navigation />}
         <Switch>
           <Route path="/" component={Landing} exact />
           <Route path="/meeting-overview" component={MeetingOverview} exact />
           <Route path="/create-meeting" component={CreateMeeting} exact />
-          <Route path="/meeting-detail" component={MeetingDetails} exact />
+          <Route path="/meeting-details" component={MeetingDetails} exact />
         </Switch>
       </Router>
-    </div>
+    </AuthState>
   );
 };
 
