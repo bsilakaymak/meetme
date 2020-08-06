@@ -13,8 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-// import config from 'config';
-// const db: any = config.get('mongoURI');
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const mongoURI = process.env.mongoURI;
@@ -25,7 +23,7 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
             useUnifiedTopology: true,
             useCreateIndex: true,
         });
-        console.log('mongoDB connected...!');
+        console.log("mongoDB connected...!");
     }
     catch (error) {
         console.log(error.message);
