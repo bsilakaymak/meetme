@@ -1,13 +1,14 @@
-import express from 'express';
-import { check } from 'express-validator';
-import auth from '../../middleware/auth';
+import express from "express";
+import { check } from "express-validator";
+import auth from "../../middleware/auth";
 
 import {
   createMeeting,
   getAllMeetings,
   deleteMeeting,
   getMeeting,
-} from '../../controller/meeting-controller';
+  inviteToMeeting,
+} from "../../controller/meeting-controller";
 
 const router = express.Router();
 
@@ -16,19 +17,20 @@ const router = express.Router();
 // @access   Private
 
 router.post(
-  '/',
+  "/",
   auth,
   [
-    check('title', 'Title is required').not().isEmpty(),
-    check('start', 'Start is required').not().isEmpty(),
-    check('end', 'End is required').not().isEmpty(),
+    check("title", "Title is required").not().isEmpty(),
+    check("start", "Start is required").not().isEmpty(),
+    check("end", "End is required").not().isEmpty(),
+    check("address", "Address is required").not().isEmpty(),
     // check("creator", "creator is required").not().isEmpty(),
     // NOTE : creator extracted from req.userId ???
   ],
-  createMeeting,
+  createMeeting
 );
-
-router.get('/', auth, getAllMeetings);
-router.get('/:mId', auth, getMeeting);
-router.delete('/:mId', auth, deleteMeeting);
+router.put("/:mId", auth, inviteToMeeting);
+router.get("/", auth, getAllMeetings);
+router.get("/:mId", auth, getMeeting);
+router.delete("/:mId", auth, deleteMeeting);
 module.exports = router;

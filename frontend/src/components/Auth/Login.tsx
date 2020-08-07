@@ -7,9 +7,6 @@ import Validate from "react-validate-form";
 const Login = () => {
   const [showError, setShowError] = useState(false);
   const { login, error } = useContext(AuthContext);
-  if (error.length !== 0) {
-    console.log(error);
-  }
   const validations = {
     email: ["email"],
     password: ["min:6", "max:15"],
@@ -61,7 +58,13 @@ const Login = () => {
               onBlur={validate}
             />
             <Span> {errorMessages.password} </Span>
-            <Span> {showError && error.errors && error.errors[0].msg} </Span>
+            <Span>
+              {" "}
+              {showError &&
+                error !== null &&
+                error.errors &&
+                error.errors[0].msg}{" "}
+            </Span>
             <Button
               type="submit"
               light

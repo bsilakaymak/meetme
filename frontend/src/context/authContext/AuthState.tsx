@@ -1,13 +1,15 @@
 import React, { useReducer } from "react";
 import AuthReducer from "./authReducer";
 import AuthContext from "./authContext";
-
+import setAuthToken from "../../utils/setAuthToken";
 import axios from "axios";
 import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
 } from "../types";
 
 interface AuthType {
@@ -25,10 +27,11 @@ export interface InitialStateType {
   error: string[];
   login?: (FormData: AuthType) => Promise<void>;
   register?: (FormData: AuthType) => Promise<void>;
+  loadUser: () => Promise<void>;
 }
 
 const AuthState = (props: any) => {
-  const initialState: InitialStateType = {
+  const initialState = {
     user: null,
     isAuthenticated: false,
     loading: false,
@@ -37,13 +40,24 @@ const AuthState = (props: any) => {
   };
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
+  const loadUser = async () => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+
+    try {
+      const res = await axios.get("http://localhost:5000/api/auth/me");
+      dispatch({ type: USER_LOADED, payload: res.data });
+    } catch (error) {
+      dispatch({ type: AUTH_ERROR, payload: null });
+    }
+  };
   const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {
         "Type-content": "application/json",
       },
     };
-
     try {
       const data = await axios.post(
         "http://localhost:5000/api/auth/login",
@@ -54,6 +68,7 @@ const AuthState = (props: any) => {
         type: LOGIN_SUCCESS,
         payload: data.data,
       });
+      loadUser();
     } catch (error) {
       dispatch({
         type: LOGIN_FAIL,
@@ -61,6 +76,7 @@ const AuthState = (props: any) => {
       });
     }
   };
+
   const register = async (signUpForm: AuthType): Promise<void> => {
     const config = {
       headers: {
@@ -74,7 +90,7 @@ const AuthState = (props: any) => {
         config
       );
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
-      // loadUser();
+      loadUser();
     } catch (error) {
       dispatch({ type: REGISTER_FAIL, payload: error.response.data });
     }
@@ -90,6 +106,7 @@ const AuthState = (props: any) => {
         error: state.error,
         login,
         register,
+        loadUser,
       }}
     >
       {props.children}

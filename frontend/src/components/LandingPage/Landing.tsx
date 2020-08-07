@@ -5,10 +5,11 @@ import SignUp from "../Auth/SignUp";
 import { Container, Card } from "../Shared/Layout";
 import styled from "styled-components";
 import { Button } from "components/Shared/FormElements";
+
 interface Props {}
 
 const Div = styled.div`
-background:#3B6978;
+  background: #3b6978;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -18,8 +19,9 @@ background:#3B6978;
 
 const Landing = (props: Props) => {
   const [loginMode, setLoginMode] = useState(false);
+
   return (
-    <Container sm height="80vh" mobileFlexDirection='column-reverse'>
+    <Container sm height="80vh" mobileFlexDirection="column-reverse">
       <LandingSquares />
 
       <Card

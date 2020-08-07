@@ -108,7 +108,13 @@ const SignUp = () => {
               onBlur={validate}
             />
             <Span> {errorMessages.confirmPassword} </Span>
-            <Span> {showError && error.errors && error.errors[0].msg} </Span>
+            <Span>
+              {" "}
+              {showError &&
+                error !== null &&
+                error.errors &&
+                error.errors[0].msg}{" "}
+            </Span>
             <Span> {!match && "Password is not match!"} </Span>
             <Button
               type="submit"
