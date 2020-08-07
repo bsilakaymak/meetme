@@ -1,4 +1,5 @@
 import React from "react";
+import Moment from "react-moment";
 import {
   Card,
   Text,
@@ -8,8 +9,10 @@ import {
 } from "components/Shared/Layout";
 
 interface Props {}
-
-const MeetingOverviewItem = (props: Props) => {
+// @Todo add  the props type
+const MeetingList = ({ meeting }) => {
+  console.log(meeting);
+  const { title, start, end, participants } = meeting;
   return (
     <Card
       lightBlue
@@ -22,7 +25,7 @@ const MeetingOverviewItem = (props: Props) => {
     >
       <SmallContainer display="block" width="70%">
         <Text color="#ffffff" fontSize="2rem" fontWeight="600">
-          Meeting Title
+          {title}
         </Text>
         <SmallContainer
           display="flex"
@@ -34,32 +37,34 @@ const MeetingOverviewItem = (props: Props) => {
           <Text color="#ffffff" fontWeight="600">
             with
           </Text>
-          <SmallContainer margin='0.5rem'>
-            <a href="/#">
-              <Avatar margin="0.25rem 0.5rem 0 0" />
-            </a>
-            <a href="/#">
-              <Avatar margin="0.25rem 0.5rem 0 0" />
-            </a>
-            <a href="/#">
-              <Avatar margin="0.25rem 0.5rem 0 0" />
-            </a>
+          <SmallContainer margin="0.5rem">
+            {participants &&
+              participants.map(({ _id, avatar, name }) => (
+                <Avatar
+                  key={_id}
+                  margin="0.25rem 0.5rem 0 0"
+                  src={avatar}
+                  alt={name}
+                />
+              ))}
           </SmallContainer>
         </SmallContainer>
       </SmallContainer>
       <SmallContainer display="block" width="30%" textAlign="right">
         <div>
-          <Text color="#ffffff">Start: 15.08.2020 12.00</Text>
+          <Text color="#ffffff">
+            Start: <Moment format="YYYY-MM-DD HH:mm">{start}</Moment>
+          </Text>
         </div>
         <Divider />
         <div>
-          <Text color="#ffffff">End: 15.08.2020 13.00</Text>
+          <Text color="#ffffff">
+            End: <Moment format="YYYY-MM-DD HH:mm">{end}</Moment>
+          </Text>
         </div>
       </SmallContainer>
-
-      <div></div>
     </Card>
   );
 };
 
-export default MeetingOverviewItem;
+export default MeetingList;

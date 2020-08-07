@@ -41,7 +41,7 @@ const Logo = styled.div`
 
 const Navigation = (props: Props) => {
   const { isAuthenticated } = useContext(AuthContext);
-  console.log(isAuthenticated, "NavBar");
+
   return (
     <Nav>
       <Div>

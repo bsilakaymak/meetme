@@ -19,6 +19,10 @@ const MeetingSchema = new mongoose_1.Schema({
         type: Date,
         required: true,
     },
+    address: {
+        type: String,
+        required: true,
+    },
     creator: {
         type: mongoose_1.Types.ObjectId,
         required: true,

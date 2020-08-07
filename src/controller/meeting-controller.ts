@@ -16,7 +16,7 @@ const createMeeting: (
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { title, description, start, end } = req.body;
+  const { title, description, start, end, address } = req.body;
 
   const meeting: IMeeting = new Meeting({
     title,
@@ -25,8 +25,8 @@ const createMeeting: (
     end: new Date(end),
     creator: req.userId,
     participants: [req.userId],
-  });
-  console.log(meeting);
+    address,
+  }).populate("participants");
   await meeting.save();
   res.json(meeting).status(201);
   try {
@@ -40,7 +40,9 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
   try {
     const meetings: IMeeting[] = await Meeting.find({
       creator: req.userId,
-    }).sort("createdAt -1");
+    })
+      .sort("createdAt -1")
+      .populate("participants");
 
     res.json(meetings).status(200);
   } catch (error) {
@@ -52,7 +54,9 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
 const getMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: string = req.params.mId;
   try {
-    const meeting: IMeeting | null = await Meeting.findById(mId);
+    const meeting: IMeeting | null = await Meeting.findById(mId).populate(
+      "participants"
+    );
     if (!meeting) {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }

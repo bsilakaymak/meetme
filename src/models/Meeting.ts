@@ -20,6 +20,10 @@ const MeetingSchema = new Schema(
       type: Date,
       required: true,
     },
+    address: {
+      type: String,
+      required: true,
+    },
     creator: {
       type: Types.ObjectId,
       required: true,

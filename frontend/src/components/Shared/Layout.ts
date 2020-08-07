@@ -29,6 +29,8 @@ interface LayoutProps {
   mWidth?: string;
   mColumn?: boolean;
   mobileFlexDirection?: string;
+  src?: string;
+  alt?: string;
 }
 
 //Global style

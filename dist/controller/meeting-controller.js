@@ -21,7 +21,7 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const { title, description, start, end } = req.body;
+    const { title, description, start, end, address } = req.body;
     const meeting = new Meeting_1.default({
         title,
         description,
@@ -29,8 +29,8 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         end: new Date(end),
         creator: req.userId,
         participants: [req.userId],
-    });
-    console.log(meeting);
+        address,
+    }).populate("participants");
     yield meeting.save();
     res.json(meeting).status(201);
     try {
@@ -45,7 +45,9 @@ const getAllMeetings = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const meetings = yield Meeting_1.default.find({
             creator: req.userId,
-        }).sort("createdAt -1");
+        })
+            .sort("createdAt -1")
+            .populate("participants");
         res.json(meetings).status(200);
     }
     catch (error) {
@@ -57,7 +59,7 @@ exports.getAllMeetings = getAllMeetings;
 const getMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const mId = req.params.mId;
     try {
-        const meeting = yield Meeting_1.default.findById(mId);
+        const meeting = yield Meeting_1.default.findById(mId).populate("participants");
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
@@ -91,9 +93,7 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json({ msg: `Users are invited to the meeting` }).status(200);
     }
     catch (error) {
-
         res.status(500).json({ errors: { msg: `${error}` } });
-
     }
 });
 exports.inviteToMeeting = inviteToMeeting;
