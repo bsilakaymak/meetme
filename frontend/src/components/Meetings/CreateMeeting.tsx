@@ -1,43 +1,70 @@
-import React, { useContext } from "react";
-import { Container, Card } from "../Shared/Layout";
-import {
-  Input,
-  Form,
-  Label,
-  LabelAndInputHolder,
-  Button,
-  TextArea,
-} from "../Shared/FormElements";
-import MeetingContext from "../../context/meetingContext/meetingContext";
-interface Props {}
 
-const CreateMeeting = (props: Props) => {
-  const { addMeeting, loading } = useContext(MeetingContext);
+import React, { useContext } from 'react';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { useForm } from '../Shared/hooks/useForm';
+import { Container, Card } from '../Shared/Layout';
+import { Input, Form, Label, LabelAndInputHolder, Button, TextArea } from '../Shared/FormElements';
+import MeetingContext from "../../context/meetingContext/meetingContext";
+import authContext from '../../context/authContext/authContext';
+
+const CreateMeeting = () => {
+    const { addMeeting, loading } = useContext(MeetingContext);
+  const { token } = useContext(authContext);
+  const initialInputs = {
+    title: { value: '', isValid: false },
+    description: { value: '', isValid: false },
+    start: { value: '', isValid: false },
+    end: { value: '', isValid: false },
+  };
+  const [formState, inputHandler] = useForm(initialInputs, false);
+  let history = useHistory();
+  const OnChangeHandler = (e) => {
+    const { value, name } = e.target;
+    value.length > 0 ? inputHandler(name, value, true) : inputHandler(name, value, false);
+  };
+  const formSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        headers: {
+          'Type-content': 'application/json',
+          'x-auth-token': token,
+        },
+      };
+      const { title, description, start, end } = formState.inputs;
+      const formData = {
+        title: title.value,
+        description: description.value,
+        start: start.value,
+        end: end.value,
+      };
+      const response = await axios.post('http://localhost:5000/api/meeting/', formData, config);
+      if (response.statusText === 'OK') {
+        history.push('/meeting-overview');
+      }
+    } catch (e) {}
+  };
 
   return (
     <Container>
       <Card light borderedCard roundBorder height="80%" padding="0 2.5rem">
-        <Form align="flex-start">
+        <Form align="flex-start" onSubmit={formSubmitHandler}>
           <LabelAndInputHolder>
             <Label absolute> Title</Label>
-            <Input width="40%" />
+            <Input name="title" width="40%" onChange={OnChangeHandler} />
           </LabelAndInputHolder>
 
           <LabelAndInputHolder>
             <Label absolute> Description</Label>
-            <TextArea width="70%" />
-          </LabelAndInputHolder>
-
-          <LabelAndInputHolder>
-            <Label absolute> Time</Label>
-            <Input width="40%" />
+            <TextArea name="description" width="70%" onChange={OnChangeHandler} />
           </LabelAndInputHolder>
           <Label>Beginning</Label>
-          <Input width="30%" type="date" />
+          <Input name="start" width="30%" type="datetime-local" onChange={OnChangeHandler} />
           <Label>End</Label>
-          <Input width="30%" type="date" />
+          <Input name="end" width="30%" type="datetime-local" onChange={OnChangeHandler} />
 
-          <Button roundBorder bold>
+          <Button type="submit" roundBorder bold disabled={!formState.isValid}>
             CREATE
           </Button>
         </Form>

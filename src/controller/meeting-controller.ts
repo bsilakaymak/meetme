@@ -14,17 +14,18 @@ const createMeeting: (
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { title, description } = req.body;
+  const { title, description, start, end } = req.body;
 
   const meeting: IMeeting = new Meeting({
     title,
     description,
-    start: Date.now(),
-    end: Date.now(),
+    start: new Date(start),
+    end: new Date(end),
     creator: req.userId,
+    participants: [req.userId],
   });
   await meeting.save();
-  res.json(meeting);
+  res.json(meeting).status(201);
   try {
   } catch (error) {
     console.error(error.message);
@@ -38,7 +39,7 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
       creator: req.userId,
     }).sort("createdAt -1");
 
-    res.json(meetings);
+    res.json(meetings).status(200);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ errors: { msg: "Server Error!" } });
@@ -53,9 +54,28 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }
 
-    res.json(meeting);
+    res.json(meeting).status(200);
   } catch (error) {
     console.error(error.message);
+    res.status(500).json({ errors: { msg: "Server Error!" } });
+  }
+};
+
+const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
+  const mId: string = req.params.mId;
+  try {
+    const meeting: IMeeting | null = await Meeting.findById(mId);
+    if (!meeting) {
+      return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
+    }
+    const newParticipants = [...meeting.participants, req.body.participants];
+    meeting.participants = [...new Set(newParticipants)];
+    // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
+    // again somewhere here we need to establish a relationship between users and meetings, so we would make sure each user invited would have
+    // this meeting on their meetings list
+    await meeting.save();
+    res.json({ msg: `Users are invited to the meeting` }).status(200);
+  } catch (error) {
     res.status(500).json({ errors: { msg: "Server Error!" } });
   }
 };
@@ -69,11 +89,17 @@ const deleteMeeting = async (req: Request, res: Response): Promise<any> => {
     }
     await meeting.remove();
 
-    res.json({ msg: `${meeting.title} meeting deleted` });
+    res.json({ msg: `${meeting.title} meeting deleted` }).status(200);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ errors: { msg: "Server Error!" } });
   }
 };
 
-export { createMeeting, getAllMeetings, deleteMeeting, getMeeting };
+export {
+  createMeeting,
+  getAllMeetings,
+  deleteMeeting,
+  getMeeting,
+  inviteToMeeting,
+};

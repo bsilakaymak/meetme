@@ -16,7 +16,7 @@ const SignUp = () => {
     password: { value: '', isValid: false },
     confirmPassword: { value: '', isValid: false },
   };
-  const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
+  const [formState, inputHandler] = useForm(initialInputs, false);
   let history = useHistory();
   const formSubmitHandler = async (e) => {
     e.preventDefault();

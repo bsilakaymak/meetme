@@ -21,9 +21,10 @@ const MeetingSchema = new mongoose_1.Schema({
     },
     creator: {
         type: mongoose_1.Types.ObjectId,
-        require: true,
+        required: true,
         ref: "User",
     },
+    participants: [{ type: mongoose_1.Types.ObjectId, ref: "User" }],
 }, {
     timestamps: true,
 });

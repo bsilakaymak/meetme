@@ -1,5 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 import { IMeeting } from "./types/meeting";
+import { type } from "os";
 const MeetingSchema = new Schema(
   {
     title: {
@@ -21,9 +22,10 @@ const MeetingSchema = new Schema(
     },
     creator: {
       type: Types.ObjectId,
-      require: true,
+      required: true,
       ref: "User",
     },
+    participants: [{ type: Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,

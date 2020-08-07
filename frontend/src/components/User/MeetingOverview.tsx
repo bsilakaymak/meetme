@@ -1,16 +1,19 @@
 import React, { Fragment } from "react";
-import { Container } from "../Shared/Layout";
+import { Container, StyledLink } from "../Shared/Layout";
 import MeetingOverviewItem from "./MeetingOverviewItem";
-import Navigation from "components/Shared/Navigation";
 
 interface Props {}
 
 const MeetingOverview = (props: Props) => {
   return (
     <Fragment>
-      <Container column justify='flex-start'>
-        <MeetingOverviewItem />
-        <MeetingOverviewItem />
+      <Container column justify="flex-start">
+        <StyledLink width="100%" to="/meeting-details">
+          <MeetingOverviewItem />
+        </StyledLink>
+        <StyledLink width="100%" to="/meeting-details">
+          <MeetingOverviewItem />
+        </StyledLink>
       </Container>
     </Fragment>
   );
