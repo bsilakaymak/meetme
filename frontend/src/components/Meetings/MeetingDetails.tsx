@@ -117,13 +117,13 @@ const MeetingDetails = (props: Props) => {
               </Text>
 
               <div>
-                <a href="#">
+                <a href="/#">
                   <Avatar margin="1rem 0.5rem 0 0" />
                 </a>
-                <a href="#">
+                <a href="/#">
                   <Avatar margin="1rem 0.5rem 0 0" />
                 </a>
-                <a href="#">
+                <a href="/#">
                   <Avatar margin="1rem 0.5rem 0 0" />
                 </a>
               </div>

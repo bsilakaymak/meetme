@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
 } from "react-router-dom";
 import Landing from "../LandingPage/Landing";
 import MeetingOverview from "../User/MeetingOverview";
@@ -11,7 +10,6 @@ import CreateMeeting from "../Meetings/CreateMeeting";
 import MeetingDetails from "../Meetings/MeetingDetails";
 import Navigation from "../Shared/Navigation";
 import authContext from "../../context/authContext/authContext";
-import AuthState from "../../context/authContext/AuthState";
 import PrivateRoute from "./PrivateRoute";
 
 interface Props {}

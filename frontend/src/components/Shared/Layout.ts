@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
+import { Link } from "react-router-dom";
 
 interface LayoutProps {
   background?: string;
@@ -163,6 +164,21 @@ export const EmailLabel = styled.span<LayoutProps>`
   border-radius: 8px;
   color: #3b6978;
   padding: 0.35rem;
-  display:inline-block;
-  margin:0.25rem 0.25rem 0.25rem 0;
+  display: inline-block;
+  margin: 0.25rem 0.25rem 0.25rem 0;
+`;
+
+export const StyledLink = styled(Link)<LayoutProps>`
+  color: ${(props) => props.color && props.color};
+  font-size: ${(props) => props.fontSize && props.fontSize};
+  display: block;
+  width: ${(props) => props.width && props.width};
+  text-decoration: none;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+  }
 `;

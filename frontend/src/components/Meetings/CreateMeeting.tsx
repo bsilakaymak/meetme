@@ -14,7 +14,7 @@ const CreateMeeting = () => {
     start: { value: '', isValid: false },
     end: { value: '', isValid: false },
   };
-  const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
+  const [formState, inputHandler] = useForm(initialInputs, false);
   let history = useHistory();
   const OnChangeHandler = (e) => {
     const { value, name } = e.target;

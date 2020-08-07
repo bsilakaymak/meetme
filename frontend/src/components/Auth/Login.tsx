@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Input, Button, Form } from '../Shared/FormElements';
 import { useForm } from '../Shared/hooks/useForm';
@@ -13,7 +13,7 @@ const Login = () => {
     email: { value: '', isValid: false },
     password: { value: '', isValid: false },
   };
-  const [formState, inputHandler, setFormData] = useForm(initialInputs, false);
+  const [formState, inputHandler] = useForm(initialInputs, false);
   let history = useHistory();
 
   const formSubmitHandler = async (e) => {

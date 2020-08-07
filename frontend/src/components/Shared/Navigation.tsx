@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { StyledLink } from "./Layout";
 
 interface Props {}
 const Div = styled.div`
@@ -37,26 +37,17 @@ const Logo = styled.div`
     font-size: 1.5rem;
   }
 `;
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: #3b6978;
-  font-size: 8rem;
-  &:focus,
-  &:hover,
-  &:visited,
-  &:link,
-  &:active {
-    text-decoration: none;
-  }
-`;
+
 const Navigation = (props: Props) => {
   return (
     <Nav>
       <Div>
-        <StyledLink to="/">
+        <StyledLink color="#3b6978" fontSize="8rem" to="/meeting-overview">
           <Logo>MeetMe</Logo>
         </StyledLink>
-        <StyledLink to="/create-meeting">+</StyledLink>
+        <StyledLink color="#3b6978" fontSize="8rem" to="/create-meeting">
+          +
+        </StyledLink>
       </Div>
     </Nav>
   );

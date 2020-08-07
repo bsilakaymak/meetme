@@ -35,13 +35,13 @@ const MeetingOverviewItem = (props: Props) => {
             with
           </Text>
           <SmallContainer margin='0.5rem'>
-            <a href="#">
+            <a href="/#">
               <Avatar margin="0.25rem 0.5rem 0 0" />
             </a>
-            <a href="#">
+            <a href="/#">
               <Avatar margin="0.25rem 0.5rem 0 0" />
             </a>
-            <a href="#">
+            <a href="/#">
               <Avatar margin="0.25rem 0.5rem 0 0" />
             </a>
           </SmallContainer>
