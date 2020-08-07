@@ -20,10 +20,6 @@ const MeetingSchema = new Schema(
       type: Date,
       required: true,
     },
-    time: {
-      type: String,
-      required: true,
-    },
     creator: {
       type: Types.ObjectId,
       required: true,

@@ -7,5 +7,4 @@ export interface IMeeting extends Document {
   end: Date;
   creator: string;
   participants: string[];
-  time: string;
 }
