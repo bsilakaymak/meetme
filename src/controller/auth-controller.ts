@@ -1,14 +1,14 @@
-import { validationResult } from 'express-validator';
-import { Response, Request } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import gravatar from 'gravatar';
-import normalize from 'normalize-url';
+import { validationResult } from "express-validator";
+import { Response, Request } from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import gravatar from "gravatar";
+import normalize from "normalize-url";
 
-import User from '../models/User';
-import { IUser } from '../models/types/user';
-import Meeting from '../models/Meeting';
+import User from "../models/User";
+import { IUser } from "../models/types/user";
+import Meeting from "../models/Meeting";
 
 dotenv.config();
 const secretJWT: string = process.env.jwtSecret!;
@@ -30,15 +30,15 @@ const register = async (req: Request, res: Response): Promise<any> => {
     // If user exists
     const emailEx: IUser | null = await User.findOne({ email });
     if (emailEx) {
-      return res.status(422).json({ errors: [{ msg: 'User already exists' }] });
+      return res.status(422).json({ errors: [{ msg: "User already exists" }] });
     }
 
     // user avatar
     const avatar = normalize(
       gravatar.url(email, {
-        s: '200',
-        r: 'pg',
-        d: 'mm',
+        s: "200",
+        r: "pg",
+        d: "mm",
       }),
       { forceHttps: true }
     );
@@ -62,13 +62,13 @@ const register = async (req: Request, res: Response): Promise<any> => {
     const payload: payloadType = {
       id: user.id,
     };
-    jwt.sign(payload, secretJWT, { expiresIn: '10d' }, (err, token) => {
+    jwt.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
       if (err) throw err;
       res.json({ token }).status(201);
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send({ errors: [{ msg: 'Server Error!' }] });
+    res.status(500).send({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
@@ -83,13 +83,13 @@ const login = async (req: Request, res: Response): Promise<any> => {
     // See if user exists
     let user: IUser | null = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
+      return res.status(401).json({ errors: [{ msg: "Invalid credentials" }] });
     }
     // If there is a user check his hashed password
     const isMatch: boolean = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
+      return res.status(401).json({ errors: [{ msg: "Invalid credentials" }] });
     }
     // Return JWT
 
@@ -97,7 +97,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
       id: user.id,
     };
 
-    jwt.sign(payload, secretJWT, { expiresIn: '1h' }, (err, token) => {
+    jwt.sign(payload, secretJWT, { expiresIn: "1h" }, (err, token) => {
       if (err) throw err;
 
       res.json({ token }).status(201);
@@ -105,18 +105,18 @@ const login = async (req: Request, res: Response): Promise<any> => {
     });
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+    res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
 };
 
 // get current user
 const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findById(req.userId).select('-password');
+    const user = await User.findById(req.userId).select("-password");
     res.json(user);
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+    res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
 };
 
@@ -126,9 +126,9 @@ const deleteUser = async (req: Request, res: Response): Promise<void> => {
     await User.findOneAndDelete({ _id: req.userId });
     await Meeting.deleteMany({ creator: req.userId });
 
-    res.json({ msg: 'User Deleted' }).status(200);
+    res.json({ msg: "User Deleted" }).status(200);
   } catch (error) {
-    res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+    res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
 };
 
