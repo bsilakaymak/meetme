@@ -21,11 +21,13 @@ export interface MeetingStateTypes {
   meeting: {};
   loading: boolean;
   addMeeting?: (meetingForm: meetingFormType) => Promise<void>;
+  getAllMeeting?: () => Promise<void>;
+  getMeeting?: (id: string) => Promise<void>;
 }
 
 const MeetingState = (props: any) => {
   const initialState = {
-    meetings: [],
+    meetings: null,
     meeting: {},
     loading: true,
   };
@@ -49,9 +51,34 @@ const MeetingState = (props: any) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errors);
     }
   };
+  const getAllMeeting = async () => {
+    try {
+      const data = await axios.get("http://localhost:5000/api/meeting");
+
+      dispatch({
+        type: GET_ALL_MEETINGS,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
+    }
+  };
+
+  const getMeeting = async (id: string) => {
+    try {
+      const data = await axios.get(`http://localhost:5000/api/meeting/${id}`);
+      dispatch({
+        type: GET_MEETING,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
+    }
+  };
+
   return (
     <MeetingContext.Provider
       value={{
@@ -59,6 +86,8 @@ const MeetingState = (props: any) => {
         meeting: state.meeting,
         loading: state.loading,
         addMeeting,
+        getAllMeeting,
+        getMeeting,
       }}
     >
       {props.children}

@@ -6,7 +6,7 @@ interface Props {}
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const { isAuthenticated, loading } = useContext(authContext);
-  console.log(isAuthenticated);
+
   return (
     <Route
       {...rest}

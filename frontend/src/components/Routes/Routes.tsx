@@ -6,7 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Landing from "../LandingPage/Landing";
-import MeetingOverview from "../User/MeetingOverview";
+import Meeting from "../Meetings/Meeting";
 import CreateMeeting from "../Meetings/CreateMeeting";
 import MeetingDetails from "../Meetings/MeetingDetails";
 import Navigation from "../Shared/Navigation";
@@ -24,18 +24,14 @@ const Routes = () => {
       <Router>
         <Navigation />
         <Switch>
-          <PrivateRoute
-            path="/meeting-overview"
-            component={MeetingOverview}
-            exact
-          />
+          <PrivateRoute path="/meeting-overview" component={Meeting} exact />
           <PrivateRoute
             path="/create-meeting"
             component={CreateMeeting}
             exact
           />
           <PrivateRoute
-            path="/meeting-details"
+            path="/meeting-details/:mid"
             component={MeetingDetails}
             exact
           />
