@@ -17,16 +17,16 @@ const User_1 = __importDefault(require("../models/User"));
 // Get all users
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield User_1.default.find().select('-password');
+        const users = yield User_1.default.find().select("-password");
         if (!users) {
-            return res.status(422).json({
-                errors: [{ msg: 'No Users Found' }],
+            return res.status(404).json({
+                errors: [{ msg: "No Users Found" }],
             });
         }
         res.status(200).send(users);
     }
     catch (error) {
-        res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+        res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
 });
 exports.getUsers = getUsers;
@@ -34,13 +34,13 @@ exports.getUsers = getUsers;
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user_id = req.params.user_id;
     try {
-        const user = yield User_1.default.findById(user_id).select('-password');
-        res.json(user);
+        const user = yield User_1.default.findById(user_id).select("-password");
         if (!user)
-            return res.status(400).json({ msg: 'Profile not found' });
+            return res.status(404).json({ msg: "Profile not found" });
+        res.json(user);
     }
     catch (err) {
-        res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+        res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
 });
 exports.getUserById = getUserById;

@@ -7,6 +7,7 @@ import {
   getAllMeetings,
   deleteMeeting,
   getMeeting,
+  inviteToMeeting,
 } from '../../controller/meeting-controller';
 
 const router = express.Router();
@@ -27,7 +28,7 @@ router.post(
   ],
   createMeeting,
 );
-
+router.put('/:mId', auth, inviteToMeeting);
 router.get('/', auth, getAllMeetings);
 router.get('/:mId', auth, getMeeting);
 router.delete('/:mId', auth, deleteMeeting);
