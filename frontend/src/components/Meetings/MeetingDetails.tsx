@@ -46,11 +46,14 @@ const MeetingDetails = () => {
     <>
       {meeting && (
         <Container column justify="flex-start" padding="2rem">
-           {/* Here we will only show this button to meeting creator */}
-           <SmallContainer width="100%">
+          {/* Here we will only show this button to meeting creator */}
+          <SmallContainer width="100%">
             <Button
-              lightBlue
+              
               margin="1rem 0"
+              color="#84A9AC"
+              fontSize='2rem'
+              background="#E3E3E3"
               onClick={() => {
                 setSettingsOpen(!settingsOpen);
               }}
@@ -59,7 +62,7 @@ const MeetingDetails = () => {
             </Button>
             {settingsOpen && <MeetingOwnerDashboard />}
           </SmallContainer>
-          <SmallContainer display="flex" mColumn width='100%'>
+          <SmallContainer display="flex" mColumn width="100%">
             <SmallContainer display="flex" column width="60%">
               <Text color="#204051" fontSize="2.5rem" fontWeight="600">
                 {title}
@@ -87,6 +90,7 @@ const MeetingDetails = () => {
                       <SmallContainer width="100%">
                         <Input
                           light
+                          mWidth="75%"
                           placeholder="Add an email"
                           value={invitedUser}
                           onChange={(e) => setInvitedUser(e.target.value)}

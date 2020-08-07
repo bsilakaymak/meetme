@@ -18,6 +18,7 @@ interface FormElementProps {
   padding?: string;
   background?: string;
   fontSize?: string;
+  mWidth?: string;
 }
 
 //Button
@@ -92,12 +93,12 @@ export const Input = styled.input<FormElementProps>`
   color:#3B6978;
   margin: 2% 0;
   @media (max-width: 530px) {
-    width: 90%;
+    width: ${(props) => (props.mWidth ? props.mWidth : "90%")};
     margin: 5% 0;
 };
   }
   @media (min-width: 530px) and (max-width: 800px) {
-    width: 80%;
+    width: ${(props) => (props.mWidth ? props.mWidth : "80%")};
     margin: 4% 0; };
   }
   @media (min-width: 801px) and (max-width: 1200px) {
