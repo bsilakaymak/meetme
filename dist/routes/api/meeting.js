@@ -16,6 +16,7 @@ router.post('/', auth_1.default, [
     express_validator_1.check('start', 'Start is required').not().isEmpty(),
     express_validator_1.check('end', 'End is required').not().isEmpty(),
 ], meeting_controller_1.createMeeting);
+router.put('/:mId', auth_1.default, meeting_controller_1.inviteToMeeting);
 router.get('/', auth_1.default, meeting_controller_1.getAllMeetings);
 router.get('/:mId', auth_1.default, meeting_controller_1.getMeeting);
 router.delete('/:mId', auth_1.default, meeting_controller_1.deleteMeeting);

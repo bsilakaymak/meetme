@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.inviteToMeeting = exports.getMeeting = exports.deleteMeeting = exports.getAllMeetings = exports.createMeeting = void 0;
 const express_validator_1 = require("express-validator");
 const Meeting_1 = __importDefault(require("../models/Meeting"));
+const User_1 = __importDefault(require("../models/User"));
 const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
@@ -75,8 +76,14 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
-        const newParticipants = [...meeting.participants, req.body.participants];
-        meeting.participants = [...new Set(newParticipants)];
+        const participantsID = [];
+        req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
+            const user = yield User_1.default.findOne({ email: participant });
+            participantsID.push(user === null || user === void 0 ? void 0 : user._id);
+        }));
+        const newParticipants = [...meeting.participants, ...participantsID];
+        console.log(newParticipants);
+        meeting.participants = Array.from(new Set(newParticipants));
         // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
         // again somewhere here we need to establish a relationship between users and meetings, so we would make sure each user invited would have
         // this meeting on their meetings list
@@ -84,7 +91,9 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json({ msg: `Users are invited to the meeting` }).status(200);
     }
     catch (error) {
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+
+        res.status(500).json({ errors: { msg: `${error}` } });
+
     }
 });
 exports.inviteToMeeting = inviteToMeeting;
