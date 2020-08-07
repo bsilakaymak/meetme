@@ -1,60 +1,78 @@
-import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Input, Button, Form } from '../Shared/FormElements';
-import { useForm } from '../Shared/hooks/useForm';
-import AuthContext from '../../context/authContext/authContext';
+import React, { useContext, useState } from "react";
+import { Input, Button, Form, Span } from "../Shared/FormElements";
+import { useForm } from "../Shared/hooks/useForm";
+import AuthContext from "../../context/authContext/authContext";
+import Validate from "react-validate-form";
 
-// TODO: Control Login button
-// add validity to form data
-// Add Error model if the user not found
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const [showError, setShowError] = useState(false);
+  const { login, error } = useContext(AuthContext);
+  if (error.length !== 0) {
+    console.log(error);
+  }
+  const validations = {
+    email: ["email"],
+    password: ["min:6", "max:15"],
+  };
   const initialInputs = {
-    email: { value: '', isValid: false },
-    password: { value: '', isValid: false },
+    email: { value: "", isValid: false },
+    password: { value: "", isValid: false },
   };
   const [formState, inputHandler] = useForm(initialInputs, false);
-  let history = useHistory();
 
-  const formSubmitHandler = async (e) => {
+  const formSubmitHandler = (e) => {
     e.preventDefault();
-    try {
-      // TODO: make a call to backend to send form Data
-      // call login function
-      // Sending user to meeting overview page for now this should be in login function.
-      const formData = {
-        email: formState.inputs.email.value,
-        password: formState.inputs.password.value,
-      };
-      await login(formData);
-      history.push('/meeting-overview');
-    } catch (e) {}
+    const formData = {
+      email: formState.inputs.email.value,
+      password: formState.inputs.password.value,
+    };
+    login(formData);
+    setShowError(true);
   };
   const InputChangeHandler = (e) => {
     const { value, name } = e.target;
-    inputHandler(name, value, true);
+    if (value.length > 0) {
+      inputHandler(name, value, true);
+    } else inputHandler(name, value, false);
+    setShowError(false);
   };
   return (
     <Form onSubmit={formSubmitHandler}>
-      <Input
-        name="email"
-        type="email"
-        value={formState.inputs.email && formState.inputs.email.value}
-        placeholder="email"
-        onChange={InputChangeHandler}
-        required
-      />
-      <Input
-        name="password"
-        type="password"
-        value={formState.inputs.password && formState.inputs.password.value}
-        placeholder="password"
-        onChange={InputChangeHandler}
-        required
-      />
-      <Button type="submit" light roundBorder>
-        LOGIN
-      </Button>
+      <Validate validations={validations}>
+        {({ validate, errorMessages }) => (
+          <>
+            <Input
+              name="email"
+              type="email"
+              value={formState.inputs.email && formState.inputs.email.value}
+              placeholder="email"
+              onChange={InputChangeHandler}
+              onBlur={validate}
+            />
+            <Span> {errorMessages.email} </Span>
+            <Input
+              name="password"
+              type="password"
+              value={
+                formState.inputs.password && formState.inputs.password.value
+              }
+              placeholder="password"
+              onChange={InputChangeHandler}
+              onBlur={validate}
+            />
+            <Span> {errorMessages.password} </Span>
+            <Span> {showError && error.errors && error.errors[0].msg} </Span>
+            <Button
+              type="submit"
+              light
+              roundBorder
+              disabled={!formState.isValid}
+            >
+              LOGIN
+            </Button>
+          </>
+        )}
+      </Validate>
     </Form>
   );
 };

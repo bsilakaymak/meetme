@@ -70,6 +70,10 @@ export const Button = styled.button<FormElementProps>`
       }
     }}
   }
+  &:disabled {
+    background-color: #fff;
+    color: #84a9ac;
+  }
   @media (max-width: 1200px) {
     padding: ${(props) => (props.sm ? "0.25rem" : "0.75rem")};
   }
@@ -162,4 +166,13 @@ export const Form = styled.form<FormElementProps>`
   @media (max-width: 801px) {
     align-items: center;
   }
+`;
+// Span => for warning messages
+export const Span = styled.span<FormElementProps>`
+  display: block;
+  font-size: 0.9rem;
+  text-align: center;
+  color: red;
+  margin: 0px;
+  padding: 5px;
 `;

@@ -1,9 +1,14 @@
-import React, { useReducer } from 'react';
-import AuthReducer from './authReducer';
-import AuthContext from './authContext';
+import React, { useReducer } from "react";
+import AuthReducer from "./authReducer";
+import AuthContext from "./authContext";
 
-import axios from 'axios';
-import { LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL } from '../types';
+import axios from "axios";
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+} from "../types";
 
 interface AuthType {
   name?: string;
@@ -17,7 +22,7 @@ export interface InitialStateType {
   isAuthenticated: boolean;
   loading: boolean;
   token?: string | null;
-  error: string | null;
+  error: string[];
   login?: (FormData: AuthType) => Promise<void>;
   register?: (FormData: AuthType) => Promise<void>;
 }
@@ -27,44 +32,51 @@ const AuthState = (props: any) => {
     user: null,
     isAuthenticated: false,
     loading: false,
-    token: localStorage.getItem('token'),
-    error: null,
+    token: localStorage.getItem("token"),
+    error: [],
   };
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {
-        'Type-content': 'application/json',
+        "Type-content": "application/json",
       },
     };
-    const data = await axios.post('http://localhost:5000/api/auth/login', FormData, config);
 
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: data.data,
-    });
     try {
+      const data = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        FormData,
+        config
+      );
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: data.data,
+      });
     } catch (error) {
       dispatch({
         type: LOGIN_FAIL,
-        payload: error.response.data.errors,
+        payload: error.response.data,
       });
     }
   };
   const register = async (signUpForm: AuthType): Promise<void> => {
-    console.log(signUpForm);
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', signUpForm, config);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        signUpForm,
+        config
+      );
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
       // loadUser();
     } catch (error) {
-      dispatch({ type: REGISTER_FAIL, payload: error.response.data.msg });
+      dispatch({ type: REGISTER_FAIL, payload: error.response.data });
     }
   };
 
