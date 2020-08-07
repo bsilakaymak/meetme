@@ -1,12 +1,15 @@
+
 import React, { useContext } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useForm } from '../Shared/hooks/useForm';
 import { Container, Card } from '../Shared/Layout';
 import { Input, Form, Label, LabelAndInputHolder, Button, TextArea } from '../Shared/FormElements';
+import MeetingContext from "../../context/meetingContext/meetingContext";
 import authContext from '../../context/authContext/authContext';
 
 const CreateMeeting = () => {
+    const { addMeeting, loading } = useContext(MeetingContext);
   const { token } = useContext(authContext);
   const initialInputs = {
     title: { value: '', isValid: false },
@@ -42,6 +45,7 @@ const CreateMeeting = () => {
       }
     } catch (e) {}
   };
+
   return (
     <Container>
       <Card light borderedCard roundBorder height="80%" padding="0 2.5rem">

@@ -10,6 +10,10 @@ import CreateMeeting from "../Meetings/CreateMeeting";
 import MeetingDetails from "../Meetings/MeetingDetails";
 import Navigation from "../Shared/Navigation";
 import authContext from "../../context/authContext/authContext";
+
+import AuthState from "../../context/authContext/AuthState";
+import MeetingState from "../../context/meetingContext/MeetingState";
+
 import PrivateRoute from "./PrivateRoute";
 
 interface Props {}
@@ -17,11 +21,12 @@ interface Props {}
 const Routes = (props: Props) => {
   const auth = useContext(authContext);
   return (
+
+   <AuthState>
+    <MeetingState>
     <Router>
-      {" "}
       {auth && auth.isAuthenticated && !auth.loading && <Navigation />}
       <Switch>
-        {" "}
         {auth && !auth.isAuthenticated && (
           <Route path="/" component={Landing} exact />
         )}
@@ -38,6 +43,9 @@ const Routes = (props: Props) => {
         />
       </Switch>
     </Router>
+   </MeetingState>
+ </AuthState>
+
   );
 };
 
