@@ -31,6 +31,7 @@ interface LayoutProps {
   mobileFlexDirection?: string;
   src?: string;
   alt?: string;
+  mFont?: string;
 }
 
 //Global style
@@ -185,4 +186,14 @@ export const StyledLink = styled(Link)<LayoutProps>`
   &:active {
     text-decoration: none;
   }
+  @media (max-width: 500px) {
+    font-size: ${(props) => props.mFont && props.mFont};
+  }
+`;
+
+export const Title = styled.h2<LayoutProps>`
+  font-size: ${(props) => props.fontSize && props.fontSize};
+  font-weight: ${(props) => props.fontWeight && props.fontWeight};
+  color: ${(props) => props.color && props.color};
+  text-align: ${(props) => props.textAlign && props.textAlign};
 `;

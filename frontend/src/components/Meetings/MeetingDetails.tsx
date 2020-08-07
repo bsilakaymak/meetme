@@ -14,6 +14,7 @@ import { Button, Input, Form } from "components/Shared/FormElements";
 import SendButton from "./SendButton";
 import { useParams } from "react-router-dom";
 import MeetingContext from "../../context/meetingContext/meetingContext";
+import MeetingOwnerDashboard from "./MeetingOwnerDashboard";
 
 const PlusButton = styled.span`
   font-size: 3rem;
@@ -35,6 +36,7 @@ const MeetingDetails = () => {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [invitedUsers, setInvitedUsers] = useState(["sila@gmail.com"]);
   const [invitedUser, setInvitedUser] = useState("");
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     getMeeting(mid);
@@ -44,7 +46,20 @@ const MeetingDetails = () => {
     <>
       {meeting && (
         <Container column justify="flex-start" padding="2rem">
-          <SmallContainer display="flex" mColumn>
+           {/* Here we will only show this button to meeting creator */}
+           <SmallContainer width="100%">
+            <Button
+              lightBlue
+              margin="1rem 0"
+              onClick={() => {
+                setSettingsOpen(!settingsOpen);
+              }}
+            >
+              <i className="fas fa-cog"></i>{" "}
+            </Button>
+            {settingsOpen && <MeetingOwnerDashboard />}
+          </SmallContainer>
+          <SmallContainer display="flex" mColumn width='100%'>
             <SmallContainer display="flex" column width="60%">
               <Text color="#204051" fontSize="2.5rem" fontWeight="600">
                 {title}

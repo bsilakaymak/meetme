@@ -17,13 +17,14 @@ interface FormElementProps {
   align?: string;
   padding?: string;
   background?: string;
+  fontSize?: string;
 }
 
 //Button
 export const Button = styled.button<FormElementProps>`
   width: ${(props) => props.width && props.width};
   box-sizing: border-box;
-  font-size: 1.15rem;
+  font-size: ${(props) => (props.fontSize ? props.fontSize : "1.15rem")};
   border-radius: ${(props) => (props.roundBorder ? "6px" : "0")};
   padding: ${(props) => {
     if (props.sm) {
@@ -38,6 +39,7 @@ export const Button = styled.button<FormElementProps>`
   position: ${(props) => props.relative && "relative"};
   font-weight: ${(props) => (props.bold ? "600" : "400")};
   margin: ${(props) => (props.margin ? props.margin : "1rem")};
+  color: ${(props) => props.color && props.color};
   ${(props) => {
     if (props.light) {
       return `background: #FFFFFF;
@@ -107,8 +109,8 @@ export const Input = styled.input<FormElementProps>`
 //TextArea
 export const TextArea = styled.textarea<FormElementProps>`
   width: ${(props) => (props.width ? props.width : "40%")};
-  background: #e0dede;
-  border: none;
+  background: ${(props) => (props.light ? "#F0F0F0" : "#e0dede")};
+  border: ${(props) => (props.light ? "1px solid #3B6978" : "none")};
   min-height: 6rem;
   margin: 2% 0;
   position: ${(props) => props.relative && "relative"};
