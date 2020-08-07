@@ -28,6 +28,7 @@ interface LayoutProps {
   mHeight?: string;
   mWidth?: string;
   mColumn?: boolean;
+  mobileFlexDirection?: string;
 }
 
 //Global style
@@ -118,7 +119,8 @@ export const Container = styled.div<LayoutProps>`
   align-items: ${(props) => (props.align ? props.align : "center")};
   box-sizing: border-box;
   @media (max-width: 800px) {
-    flex-direction: column;
+    flex-direction: ${(props) =>
+      props.mobileFlexDirection ? props.mobileFlexDirection : "column"};
     height: ${(props) => props.sm && "65rem"};
     padding: 1rem;
     width: 100%;

@@ -19,7 +19,7 @@ background:#3B6978;
 const Landing = (props: Props) => {
   const [loginMode, setLoginMode] = useState(false);
   return (
-    <Container sm height="80vh">
+    <Container sm height="80vh" mobileFlexDirection='column-reverse'>
       <LandingSquares />
 
       <Card
@@ -29,9 +29,9 @@ const Landing = (props: Props) => {
         justify="space-between"
         column
         width="25%"
-        height="40vh"
+        height="26rem"
         position="relative"
-        mHeight="33rem"
+        mHeight="46rem"
       >
         {" "}
         <Div>

@@ -21,12 +21,15 @@ const Div = styled.div`
   margin: 0 3rem;
   @media (max-width: 530px) {
     width: 95%;
+    margin: 2rem;
   }
   @media (min-width: 530px) and (max-width: 800px) {
     width: 75%;
+    margin: 2rem;
   }
   @media (min-width: 801px) and (max-width: 1200px) {
     width: 50%;
+    margin: 2rem;
   }
 `;
 
