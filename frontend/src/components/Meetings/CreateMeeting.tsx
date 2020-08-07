@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Card } from "../Shared/Layout";
 import {
   Input,
@@ -8,10 +8,12 @@ import {
   Button,
   TextArea,
 } from "../Shared/FormElements";
-
+import MeetingContext from "../../context/meetingContext/meetingContext";
 interface Props {}
 
 const CreateMeeting = (props: Props) => {
+  const { addMeeting, loading } = useContext(MeetingContext);
+
   return (
     <Container>
       <Card light borderedCard roundBorder height="80%" padding="0 2.5rem">
