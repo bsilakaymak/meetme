@@ -30,6 +30,7 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         creator: req.userId,
         participants: [req.userId],
     });
+    console.log(meeting);
     yield meeting.save();
     res.json(meeting).status(201);
     try {
@@ -90,7 +91,9 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json({ msg: `Users are invited to the meeting` }).status(200);
     }
     catch (error) {
+
         res.status(500).json({ errors: { msg: `${error}` } });
+
     }
 });
 exports.inviteToMeeting = inviteToMeeting;

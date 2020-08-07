@@ -34,13 +34,15 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // If user exists
         const emailEx = yield User_1.default.findOne({ email });
         if (emailEx) {
+
             return res.status(422).json({ errors: [{ msg: 'User already exists' }] });
+
         }
         // user avatar
         const avatar = normalize_url_1.default(gravatar_1.default.url(email, {
-            s: '200',
-            r: 'pg',
-            d: 'mm',
+            s: "200",
+            r: "pg",
+            d: "mm",
         }), { forceHttps: true });
         // create user
         const user = new User_1.default({
@@ -58,7 +60,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const payload = {
             id: user.id,
         };
-        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: '10d' }, (err, token) => {
+        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
             if (err)
                 throw err;
             res.json({ token }).status(201);
@@ -66,7 +68,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).send({ errors: [{ msg: 'Server Error!' }] });
+        res.status(500).send({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.register = register;
@@ -81,18 +83,21 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // See if user exists
         let user = yield User_1.default.findOne({ email });
         if (!user) {
+
             return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
         }
         // If there is a user check his hashed password
         const isMatch = yield bcryptjs_1.default.compare(password, user.password);
         if (!isMatch) {
+
             return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
+
         }
         // Return JWT
         const payload = {
             id: user.id,
         };
-        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: '1h' }, (err, token) => {
+        jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: "1h" }, (err, token) => {
             if (err)
                 throw err;
             res.json({ token }).status(201);
@@ -101,19 +106,19 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.log(error.message);
-        res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+        res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
 });
 exports.login = login;
 // get current user
 const getCurrentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield User_1.default.findById(req.userId).select('-password');
+        const user = yield User_1.default.findById(req.userId).select("-password");
         res.json(user);
     }
     catch (err) {
         console.log(err.message);
-        res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+        res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
 });
 exports.getCurrentUser = getCurrentUser;
@@ -122,10 +127,11 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         yield User_1.default.findOneAndDelete({ _id: req.userId });
         yield Meeting_1.default.deleteMany({ creator: req.userId });
+
         res.json({ msg: 'User Deleted' }).status(200);
     }
     catch (error) {
-        res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+        res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
 });
 exports.deleteUser = deleteUser;

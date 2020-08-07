@@ -26,6 +26,7 @@ const createMeeting: (
     creator: req.userId,
     participants: [req.userId],
   });
+  console.log(meeting);
   await meeting.save();
   res.json(meeting).status(201);
   try {

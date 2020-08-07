@@ -30,6 +30,7 @@ const MeetingState = (props: any) => {
     loading: true,
   };
   const [state, dispatch] = useReducer(MeetingReducer, initialState);
+
   const addMeeting = async (meetingForm: meetingFormType) => {
     const config = {
       headers: {

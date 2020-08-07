@@ -1,9 +1,16 @@
-import React, { useReducer } from 'react';
-import AuthReducer from './authReducer';
-import AuthContext from './authContext';
-
-import axios from 'axios';
-import { LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL } from '../types';
+import React, { useReducer } from "react";
+import AuthReducer from "./authReducer";
+import AuthContext from "./authContext";
+import setAuthToken from "../../utils/setAuthToken";
+import axios from "axios";
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+} from "../types";
 
 interface AuthType {
   name?: string;
@@ -20,30 +27,49 @@ export interface InitialStateType {
   error: string | null;
   login?: (FormData: AuthType) => Promise<void>;
   register?: (FormData: AuthType) => Promise<void>;
+  loadUser: () => Promise<void>;
 }
 
 const AuthState = (props: any) => {
-  const initialState: InitialStateType = {
+  const initialState = {
     user: null,
     isAuthenticated: false,
-    loading: false,
-    token: localStorage.getItem('token'),
+    loading: true,
+    token: localStorage.getItem("token"),
     error: null,
   };
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
+  const loadUser = async () => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+
+    try {
+      const res = await axios.get("http://localhost:5000/api/auth/me");
+      dispatch({ type: USER_LOADED, payload: res.data });
+    } catch (error) {
+      dispatch({ type: AUTH_ERROR, payload: null });
+    }
+  };
   const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {
-        'Type-content': 'application/json',
+        "Type-content": "application/json",
       },
     };
-    const data = await axios.post('http://localhost:5000/api/auth/login', FormData, config);
+    const data = await axios.post(
+      "http://localhost:5000/api/auth/login",
+      FormData,
+      config
+    );
 
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data.data,
     });
+
+    loadUser();
     try {
     } catch (error) {
       dispatch({
@@ -52,17 +78,21 @@ const AuthState = (props: any) => {
       });
     }
   };
+
   const register = async (signUpForm: AuthType): Promise<void> => {
-    console.log(signUpForm);
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', signUpForm, config);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        signUpForm,
+        config
+      );
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
-      // loadUser();
+      loadUser();
     } catch (error) {
       dispatch({ type: REGISTER_FAIL, payload: error.response.data.msg });
     }
@@ -78,6 +108,7 @@ const AuthState = (props: any) => {
         error: state.error,
         login,
         register,
+        loadUser,
       }}
     >
       {props.children}

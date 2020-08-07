@@ -19,7 +19,6 @@ export default (state: InitialStateType, action: Actions) => {
   const { type, payload } = action;
   switch (type) {
     case USER_LOADED:
-      localStorage.setItem("token", payload.token);
       return {
         ...state,
         isAuthenticated: true,
