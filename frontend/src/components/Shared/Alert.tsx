@@ -3,18 +3,18 @@ import AlertContext from "../../context/alert/alertContext";
 import styled from "styled-components";
 
 interface AlertProps {
-  // background?: boolean;
   color?: string;
   padding?: string;
   success?: boolean;
 }
 
 const StyledAlert = styled.div<AlertProps>`
-  background: ${({ success }) => (success ? "#4fe0ca" : "#e04f67")};
+  background: ${({ success }) => (success ? "#84ac92" : "#ac8492")};
   color: white;
   padding: 1rem;
   text-align: center;
   position: fixed;
+  top: 0;
   width: 100%;
 `;
 
