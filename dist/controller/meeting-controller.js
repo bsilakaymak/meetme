@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.inviteToMeeting = exports.getMeeting = exports.deleteMeeting = exports.getAllMeetings = exports.createMeeting = void 0;
+exports.updateMeeting = exports.inviteToMeeting = exports.getMeeting = exports.deleteMeeting = exports.getAllMeetings = exports.createMeeting = void 0;
 const express_validator_1 = require("express-validator");
 const Meeting_1 = __importDefault(require("../models/Meeting"));
 const User_1 = __importDefault(require("../models/User"));
@@ -115,3 +115,21 @@ const deleteMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteMeeting = deleteMeeting;
+const updateMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const mId = req.params.mId;
+    const updates = Object.keys(req.body);
+    try {
+        const meeting = yield Meeting_1.default.findById(mId).populate("participants");
+        if (!meeting) {
+            return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
+        }
+        updates.forEach((update) => (meeting[update] = req.body[update]));
+        yield meeting.save();
+        res.json(meeting);
+    }
+    catch (error) {
+        console.error(error.message);
+        res.status(500).json({ errors: { msg: "Server Error!" } });
+    }
+});
+exports.updateMeeting = updateMeeting;

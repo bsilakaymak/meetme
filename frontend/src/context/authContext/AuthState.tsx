@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import AuthReducer from "./authReducer";
 import AuthContext from "./authContext";
 import setAuthToken from "../../utils/setAuthToken";
@@ -40,7 +40,7 @@ const AuthState = (props: any) => {
   };
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
@@ -51,7 +51,7 @@ const AuthState = (props: any) => {
     } catch (error) {
       dispatch({ type: AUTH_ERROR, payload: null });
     }
-  };
+  }, []);
   const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {

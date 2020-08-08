@@ -8,6 +8,7 @@ import {
   deleteMeeting,
   getMeeting,
   inviteToMeeting,
+  updateMeeting,
 } from "../../controller/meeting-controller";
 
 const router = express.Router();
@@ -28,6 +29,19 @@ router.post(
     // NOTE : creator extracted from req.userId ???
   ],
   createMeeting
+);
+router.patch(
+  "/:mId",
+  auth,
+  [
+    check("title", "Title is required").not().isEmpty(),
+    check("start", "Start is required").not().isEmpty(),
+    check("end", "End is required").not().isEmpty(),
+    check("address", "Address is required").not().isEmpty(),
+    // check("creator", "creator is required").not().isEmpty(),
+    // NOTE : creator extracted from req.userId ???
+  ],
+  updateMeeting
 );
 router.put("/:mId", auth, inviteToMeeting);
 router.get("/", auth, getAllMeetings);

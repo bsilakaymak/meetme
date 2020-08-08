@@ -56,7 +56,12 @@ const Navigation = (props: Props) => {
             align="center"
             justify="center"
           >
-            <StyledLink color="#3b6978" fontSize="8rem" to="/create-meeting" mFont='6rem'>
+            <StyledLink
+              color="#3b6978"
+              fontSize="8rem"
+              to="/create-meeting"
+              m_font="6rem"
+            >
               +
             </StyledLink>
             <Button background="none" color="#84A9AC" fontSize="3rem">

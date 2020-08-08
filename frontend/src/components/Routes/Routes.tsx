@@ -17,7 +17,7 @@ const Routes = () => {
   const { loadUser, isAuthenticated } = useContext(AuthContext);
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
 
   return (
     <MeetingState>

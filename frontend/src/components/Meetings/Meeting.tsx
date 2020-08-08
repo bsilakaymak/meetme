@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
-import { Container, StyledLink, Card } from "../Shared/Layout";
+import { Container, StyledLink } from "../Shared/Layout";
 import MeetingList from "./MeetingList";
 import MeetingContext from "../../context/meetingContext/meetingContext";
 const Meeting = () => {
-  const { getAllMeeting, meetings, loading } = useContext(MeetingContext);
+  const { getAllMeeting, meetings } = useContext(MeetingContext);
   useEffect(() => {
     getAllMeeting();
-  }, []);
+  }, [getAllMeeting]);
 
   return (
     <>
@@ -17,8 +17,12 @@ const Meeting = () => {
 
         {meetings &&
           meetings.map((meeting) => (
-            <StyledLink width="100%" to={`/meeting-details/${meeting._id}`}>
-              <MeetingList key={meeting._id} meeting={meeting} />
+            <StyledLink
+              width="100%"
+              to={`/meeting-details/${meeting._id}`}
+              key={meeting._id}
+            >
+              <MeetingList meeting={meeting} />
             </StyledLink>
           ))}
       </Container>
