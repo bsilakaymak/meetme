@@ -5,7 +5,7 @@ interface Props {}
 
 const SendButton = () => {
   return (
-    <Button background='#E3E3E3'>
+    <Button background='#E3E3E3' margin='0'>
       <svg
         id="Capa_1"
         enable-background="new 0 0 512.004 512.004"

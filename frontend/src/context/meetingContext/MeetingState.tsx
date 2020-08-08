@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import axios from "axios";
 import MeetingContext from "./meetingContext";
 import MeetingReducer from "./meetingReducer";
@@ -7,6 +7,8 @@ import {
   DELETE_MEETING,
   GET_ALL_MEETINGS,
   GET_MEETING,
+  UPDATE_MEETING,
+  INVITE_TO_MEETING,
 } from "../types";
 
 type meetingFormType = {
@@ -14,18 +16,42 @@ type meetingFormType = {
   description: string;
   start: string;
   end: string;
+  address: string;
 };
 
 export interface MeetingStateTypes {
-  meetings: [];
+  meetings: [
+    {
+      address: string;
+      creator: string;
+      description: string;
+      end: string;
+      participants: [
+        {
+          email: string;
+          name: string;
+          _id: string;
+          avatar: string;
+        }
+      ];
+      start: string;
+      title: string;
+      _id: string;
+    }
+  ];
   meeting: {};
   loading: boolean;
   addMeeting?: (meetingForm: meetingFormType) => Promise<void>;
+  updateMeeting?: (meetingForm: meetingFormType) => Promise<void>;
+  getAllMeeting?: () => Promise<void>;
+  getMeeting?: (id: string) => Promise<void>;
+  deleteMeeting?: (mId: string) => Promise<void>;
+  inviteToMeeting?: (participants : string[], meetingId:string) => Promise<void>;
 }
 
 const MeetingState = (props: any) => {
   const initialState = {
-    meetings: [],
+    meetings: null,
     meeting: {},
     loading: true,
   };
@@ -49,7 +75,88 @@ const MeetingState = (props: any) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errors);
+    }
+  };
+
+
+  const inviteToMeeting = async (participants, meetingId) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const data = await axios.put(
+        `http://localhost:5000/api/meeting/${meetingId}`,
+        participants,
+        config
+      );
+      dispatch({
+        type: INVITE_TO_MEETING,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
+    }
+  };
+  
+ const getAllMeeting = useCallback(async () => {
+    try {
+      const data = await axios.get("http://localhost:5000/api/meeting");
+
+      dispatch({
+        type: GET_ALL_MEETINGS,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
+    }
+  }, []);
+
+  const getMeeting = useCallback(async (id: string) => {
+    try {
+      const data = await axios.get(`http://localhost:5000/api/meeting/${id}`);
+      dispatch({
+        type: GET_MEETING,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
+    }
+  }, []);
+
+  const updateMeeting = async (meetingForm: meetingFormType, mId: string) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const data = await axios.patch(
+        `http://localhost:5000/api/meeting/${mId}`,
+        meetingForm,
+        config
+      );
+      dispatch({
+        type: UPDATE_MEETING,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
+    }
+  };
+
+  const deleteMeeting = async (mId: string) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/meeting/${mId}`);
+      dispatch({
+        type: DELETE_MEETING,
+        payload: mId,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
     }
   };
   return (
@@ -59,6 +166,11 @@ const MeetingState = (props: any) => {
         meeting: state.meeting,
         loading: state.loading,
         addMeeting,
+        getAllMeeting,
+        getMeeting,
+        deleteMeeting,
+        updateMeeting,
+        inviteToMeeting
       }}
     >
       {props.children}

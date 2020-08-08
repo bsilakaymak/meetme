@@ -6,7 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Landing from "../LandingPage/Landing";
-import MeetingOverview from "../User/MeetingOverview";
+import Meeting from "../Meetings/Meeting";
 import CreateMeeting from "../Meetings/CreateMeeting";
 import MeetingDetails from "../Meetings/MeetingDetails";
 import Navigation from "../Shared/Navigation";
@@ -20,38 +20,34 @@ const Routes = () => {
   const { loadUser, isAuthenticated } = useContext(AuthContext);
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
 
   return (
     <MeetingState>
-      <AlertContext>
-        <Router>
-          <Navigation />
-          <Alert />
-          <Switch>
-            <PrivateRoute
-              path="/meeting-overview"
-              component={MeetingOverview}
-              exact
-            />
-            <PrivateRoute
-              path="/create-meeting"
-              component={CreateMeeting}
-              exact
-            />
-            <PrivateRoute
-              path="/meeting-details"
-              component={MeetingDetails}
-              exact
-            />
-            {isAuthenticated ? (
-              <Redirect to="/meeting-overview" />
-            ) : (
-              <Route path={"/"} component={Landing} exact />
-            )}
-          </Switch>
-        </Router>
-      </AlertContext>
+      <Router>
+       <AlertContext>
+        <Navigation />
+        <Alert />
+        <Switch>
+          <PrivateRoute path="/meeting-overview" component={Meeting} exact />
+          <PrivateRoute
+            path="/create-meeting"
+            component={CreateMeeting}
+            exact
+          />
+          <PrivateRoute
+            path="/meeting-details/:mid"
+            component={MeetingDetails}
+            exact
+          />
+          {isAuthenticated ? (
+            <Redirect to="/meeting-overview" />
+          ) : (
+            <Route path={"/"} component={Landing} exact />
+          )}
+        </Switch>
+        </AlertContext>
+      </Router>
     </MeetingState>
   );
 };

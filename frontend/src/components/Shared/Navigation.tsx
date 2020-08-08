@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { StyledLink } from "./Layout";
+import { StyledLink, SmallContainer } from "./Layout";
+import { Button } from "./FormElements";
 
 import AuthContext from "../../context/authContext/authContext";
 interface Props {}
@@ -41,7 +42,7 @@ const Logo = styled.div`
 
 const Navigation = (props: Props) => {
   const { isAuthenticated } = useContext(AuthContext);
-  console.log(isAuthenticated, "NavBar");
+
   return (
     <Nav>
       <Div>
@@ -49,9 +50,24 @@ const Navigation = (props: Props) => {
           <Logo>MeetMe</Logo>
         </StyledLink>
         {isAuthenticated && (
-          <StyledLink color="#3b6978" fontSize="8rem" to="/create-meeting">
-            +
-          </StyledLink>
+          <SmallContainer
+            display="flex"
+            width="8rem"
+            align="center"
+            justify="center"
+          >
+            <StyledLink
+              color="#3b6978"
+              fontSize="8rem"
+              to="/create-meeting"
+              m_font="6rem"
+            >
+              +
+            </StyledLink>
+            <Button background="none" color="#84A9AC" fontSize="3rem">
+              <i className="fas fa-sign-out-alt"></i>
+            </Button>
+          </SmallContainer>
         )}
       </Div>
     </Nav>

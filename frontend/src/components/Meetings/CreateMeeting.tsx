@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import axios from "axios";
+
 import { useHistory } from "react-router-dom";
 import { useForm } from "../Shared/hooks/useForm";
 import { Container, Card } from "../Shared/Layout";
@@ -15,14 +15,16 @@ import MeetingContext from "../../context/meetingContext/meetingContext";
 import AlertContext from "../../context/alert/alertContext";
 
 const CreateMeeting = () => {
-  const { addMeeting, loading } = useContext(MeetingContext);
-  const { setAlert } = useContext(AlertContext);
 
+  const { addMeeting } = useContext(MeetingContext);
+  const { setAlert } = useContext(AlertContext);
+  
   const initialInputs = {
     title: { value: "", isValid: false },
     description: { value: "", isValid: false },
     start: { value: "", isValid: false },
     end: { value: "", isValid: false },
+    address: { value: "", isValid: false },
   };
   const [formState, inputHandler] = useForm(initialInputs, false);
   let history = useHistory();
@@ -35,18 +37,22 @@ const CreateMeeting = () => {
   const formSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const { title, description, start, end } = formState.inputs;
+    const { title, description, start, end, address } = formState.inputs;
     const formData = {
       title: title.value,
       description: description.value,
       start: start.value,
       end: end.value,
+      address: address.value,
     };
     addMeeting(formData);
+
     setAlert("Meeting sent successfully!", "success");
+
+    history.push("/meeting-overview");
+
   };
 
-  console.log(loading);
   return (
     <Container>
       <Card light borderedCard roundBorder height="80%" padding="0 2.5rem">
@@ -63,6 +69,10 @@ const CreateMeeting = () => {
               width="70%"
               onChange={OnChangeHandler}
             />
+          </LabelAndInputHolder>
+          <LabelAndInputHolder>
+            <Label absolute> Address</Label>
+            <Input name="address" width="40%" onChange={OnChangeHandler} />
           </LabelAndInputHolder>
           <Label>Beginning</Label>
           <Input
