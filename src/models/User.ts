@@ -1,5 +1,5 @@
-import { Schema, model, Types } from 'mongoose';
-import { IUser } from './types/user';
+import { Schema, model, Types } from "mongoose";
+import { IUser } from "./types/user";
 const userSchema = new Schema({
   name: {
     type: String,
@@ -19,13 +19,15 @@ const userSchema = new Schema({
     type: String,
     trim: true,
   },
-  meetings: {
-    type: Types.ObjectId,
-    ref: 'Meeting',
-  },
+  meetings: [
+    {
+      type: Types.ObjectId,
+      ref: "Meeting",
+    },
+  ],
   avatar: {
     type: String,
   },
 });
 
-export default model<IUser>('User', userSchema);
+export default model<IUser>("User", userSchema);

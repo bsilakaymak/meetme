@@ -3,6 +3,7 @@ import {
   GET_MEETING,
   DELETE_MEETING,
   CREATE_MEETING,
+  INVITE_TO_MEETING,
 } from "../types";
 import { MeetingStateTypes } from "./MeetingState";
 export default (state: MeetingStateTypes, action) => {
@@ -26,6 +27,12 @@ export default (state: MeetingStateTypes, action) => {
       return {
         ...state,
         meetings: [payload, ...state.meetings],
+        loading: false,
+      };
+    case INVITE_TO_MEETING:
+      return {
+        ...state,
+        meeting: { ...state.meeting, participants: payload },
         loading: false,
       };
     // case DELETE_MEETING:

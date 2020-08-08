@@ -78,16 +78,18 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
     const participantsID: string[] = [];
     req.body.participants.map(async (participant: String) => {
       const user: IUser | null = await User.findOne({ email: participant });
+      if (user !== null) {
+        user.meetings = Array.from(new Set([...user.meetings, mId]));
+        await user.save();
+      }
       participantsID.push(user?._id);
     });
     const newParticipants = [...meeting.participants, ...participantsID];
     console.log(newParticipants);
     meeting.participants = Array.from(new Set(newParticipants));
     // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
-    // again somewhere here we need to establish a relationship between users and meetings, so we would make sure each user invited would have
-    // this meeting on their meetings list
     await meeting.save();
-    res.json({ msg: `Users are invited to the meeting` }).status(200);
+    res.json(meeting.participants).status(200);
   } catch (error) {
     res.status(500).json({ errors: { msg: `${error}` } });
   }

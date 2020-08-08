@@ -7,6 +7,7 @@ import {
   DELETE_MEETING,
   GET_ALL_MEETINGS,
   GET_MEETING,
+  INVITE_TO_MEETING,
 } from "../types";
 
 type meetingFormType = {
@@ -23,6 +24,7 @@ export interface MeetingStateTypes {
   addMeeting?: (meetingForm: meetingFormType) => Promise<void>;
   getAllMeeting?: () => Promise<void>;
   getMeeting?: (id: string) => Promise<void>;
+  inviteToMeeting?: (participants : string[], meetingId:string) => Promise<void>;
 }
 
 const MeetingState = (props: any) => {
@@ -54,6 +56,29 @@ const MeetingState = (props: any) => {
       console.log(error.response.data.errors);
     }
   };
+
+  const inviteToMeeting = async (participants, meetingId) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const data = await axios.put(
+        `http://localhost:5000/api/meeting/${meetingId}`,
+        participants,
+        config
+      );
+      dispatch({
+        type: INVITE_TO_MEETING,
+        payload: data.data,
+      });
+    } catch (error) {
+      console.log(error.response.data.errors);
+    }
+  };
+
   const getAllMeeting = async () => {
     try {
       const data = await axios.get("http://localhost:5000/api/meeting");
@@ -88,6 +113,7 @@ const MeetingState = (props: any) => {
         addMeeting,
         getAllMeeting,
         getMeeting,
+        inviteToMeeting
       }}
     >
       {props.children}
