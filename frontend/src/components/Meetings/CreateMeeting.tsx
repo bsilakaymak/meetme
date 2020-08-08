@@ -12,9 +12,11 @@ import {
   TextArea,
 } from "../Shared/FormElements";
 import MeetingContext from "../../context/meetingContext/meetingContext";
+import AlertContext from "../../context/alert/alertContext";
 
 const CreateMeeting = () => {
   const { addMeeting, loading } = useContext(MeetingContext);
+  const { setAlert } = useContext(AlertContext);
 
   const initialInputs = {
     title: { value: "", isValid: false },
@@ -41,6 +43,7 @@ const CreateMeeting = () => {
       end: end.value,
     };
     addMeeting(formData);
+    setAlert("Meeting sent successfully!", "success");
   };
 
   console.log(loading);
