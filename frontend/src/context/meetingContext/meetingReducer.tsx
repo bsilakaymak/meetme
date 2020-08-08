@@ -3,6 +3,7 @@ import {
   GET_MEETING,
   DELETE_MEETING,
   CREATE_MEETING,
+  UPDATE_MEETING,
 } from "../types";
 import { MeetingStateTypes } from "./MeetingState";
 export default (state: MeetingStateTypes, action) => {
@@ -28,12 +29,20 @@ export default (state: MeetingStateTypes, action) => {
         meetings: [payload, ...state.meetings],
         loading: false,
       };
-    // case DELETE_MEETING:
-    //   return {
-    //     ...state,
-    //     meetings: state.meetings.filter((meeting) => meeting._id !== payload),
-    //     loading: false,
-    //   };
+    case UPDATE_MEETING:
+      return {
+        ...state,
+        meetings: state.meetings.map((meeting) =>
+          meeting._id === payload._id ? payload : meeting
+        ),
+        loading: false,
+      };
+    case DELETE_MEETING:
+      return {
+        ...state,
+        meetings: state.meetings.filter((meeting) => meeting._id !== payload),
+        loading: false,
+      };
     default:
       return state;
   }

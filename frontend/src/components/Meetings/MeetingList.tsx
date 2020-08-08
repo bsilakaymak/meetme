@@ -8,11 +8,28 @@ import {
   SmallContainer,
 } from "components/Shared/Layout";
 
-interface Props {}
-// @Todo add  the props type
-const MeetingList = ({ meeting }) => {
-  console.log(meeting);
-  const { title, start, end, participants } = meeting;
+interface Props {
+  meeting: {
+    title: string;
+    description: string;
+    address: string;
+    start: string;
+    end: string;
+    participants: [
+      {
+        email: string;
+        name: string;
+        _id: string;
+        avatar: string;
+      }
+    ];
+  };
+}
+
+const MeetingList = (props: Props) => {
+  const {
+    meeting: { title, start, end, participants },
+  } = props;
   return (
     <Card
       lightBlue
@@ -39,9 +56,9 @@ const MeetingList = ({ meeting }) => {
           </Text>
           <SmallContainer margin="0.5rem">
             {participants &&
-              participants.map(({ _id, avatar, name }) => (
+              participants.map(({ email, avatar, name }) => (
                 <Avatar
-                  key={_id}
+                  key={email}
                   margin="0.25rem 0.5rem 0 0"
                   src={avatar}
                   alt={name}

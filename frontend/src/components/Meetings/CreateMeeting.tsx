@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import axios from "axios";
+
 import { useHistory } from "react-router-dom";
 import { useForm } from "../Shared/hooks/useForm";
 import { Container, Card } from "../Shared/Layout";
@@ -14,7 +14,7 @@ import {
 import MeetingContext from "../../context/meetingContext/meetingContext";
 
 const CreateMeeting = () => {
-  const { addMeeting, loading } = useContext(MeetingContext);
+  const { addMeeting } = useContext(MeetingContext);
 
   const initialInputs = {
     title: { value: "", isValid: false },

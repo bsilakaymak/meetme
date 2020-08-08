@@ -31,7 +31,7 @@ interface LayoutProps {
   mobileFlexDirection?: string;
   src?: string;
   alt?: string;
-  mFont?: string;
+  m_font?: string;
 }
 
 //Global style
@@ -187,7 +187,7 @@ export const StyledLink = styled(Link)<LayoutProps>`
     text-decoration: none;
   }
   @media (max-width: 500px) {
-    font-size: ${(props) => props.mFont && props.mFont};
+    font-size: ${({ m_font }) => m_font && m_font};
   }
 `;
 

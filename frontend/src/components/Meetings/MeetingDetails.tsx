@@ -30,7 +30,9 @@ const PlusButton = styled.span`
 const MeetingDetails = () => {
   const { mid } = useParams();
 
-  const { meeting, getMeeting } = useContext(MeetingContext);
+  const { meeting, getMeeting, deleteMeeting, updateMeeting } = useContext(
+    MeetingContext
+  );
 
   const [notesOpen, setNotesOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -40,7 +42,7 @@ const MeetingDetails = () => {
 
   useEffect(() => {
     getMeeting(mid);
-  }, [mid]);
+  }, [mid, getMeeting]);
   const { title, address, description, start, participants } = meeting;
   return (
     <>
@@ -49,10 +51,9 @@ const MeetingDetails = () => {
           {/* Here we will only show this button to meeting creator */}
           <SmallContainer width="100%">
             <Button
-              
               margin="1rem 0"
               color="#84A9AC"
-              fontSize='2rem'
+              fontSize="2rem"
               background="#E3E3E3"
               onClick={() => {
                 setSettingsOpen(!settingsOpen);
@@ -60,7 +61,13 @@ const MeetingDetails = () => {
             >
               <i className="fas fa-cog"></i>{" "}
             </Button>
-            {settingsOpen && <MeetingOwnerDashboard />}
+            {settingsOpen && (
+              <MeetingOwnerDashboard
+                meeting={meeting}
+                deleteMeeting={deleteMeeting}
+                updateMeeting={updateMeeting}
+              />
+            )}
           </SmallContainer>
           <SmallContainer display="flex" mColumn width="100%">
             <SmallContainer display="flex" column width="60%">

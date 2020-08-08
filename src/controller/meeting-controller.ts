@@ -109,10 +109,30 @@ const deleteMeeting = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+const updateMeeting = async (req: Request, res: Response): Promise<any> => {
+  const mId: string = req.params.mId;
+  const updates: string[] = Object.keys(req.body);
+  try {
+    const meeting: IMeeting | any = await Meeting.findById(mId).populate(
+      "participants"
+    );
+    if (!meeting) {
+      return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
+    }
+    updates.forEach((update) => (meeting[update] = req.body[update]));
+    await meeting.save();
+    res.json(meeting);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ errors: { msg: "Server Error!" } });
+  }
+};
+
 export {
   createMeeting,
   getAllMeetings,
   deleteMeeting,
   getMeeting,
   inviteToMeeting,
+  updateMeeting,
 };
