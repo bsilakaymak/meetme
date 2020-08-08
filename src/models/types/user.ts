@@ -5,6 +5,6 @@ export interface IUser extends Document {
   email: String;
   password: String;
   companyName: String;
-  meeting: String;
+  meetings: String[];
   avatar: String;
 }

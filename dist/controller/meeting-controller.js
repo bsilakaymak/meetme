@@ -81,16 +81,18 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         const participantsID = [];
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
+            if (user !== null) {
+                user.meetings = Array.from(new Set([...user.meetings, mId]));
+                yield user.save();
+            }
             participantsID.push(user === null || user === void 0 ? void 0 : user._id);
         }));
         const newParticipants = [...meeting.participants, ...participantsID];
         console.log(newParticipants);
         meeting.participants = Array.from(new Set(newParticipants));
         // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
-        // again somewhere here we need to establish a relationship between users and meetings, so we would make sure each user invited would have
-        // this meeting on their meetings list
         yield meeting.save();
-        res.json({ msg: `Users are invited to the meeting` }).status(200);
+        res.json(meeting.participants).status(200);
     }
     catch (error) {
         res.status(500).json({ errors: { msg: `${error}` } });

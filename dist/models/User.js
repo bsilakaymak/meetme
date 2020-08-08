@@ -20,12 +20,14 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         trim: true,
     },
-    meetings: {
-        type: mongoose_1.Types.ObjectId,
-        ref: 'Meeting',
-    },
+    meetings: [
+        {
+            type: mongoose_1.Types.ObjectId,
+            ref: "Meeting",
+        },
+    ],
     avatar: {
         type: String,
     },
 });
-exports.default = mongoose_1.model('User', userSchema);
+exports.default = mongoose_1.model("User", userSchema);

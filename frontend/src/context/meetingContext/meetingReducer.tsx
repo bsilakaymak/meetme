@@ -4,6 +4,7 @@ import {
   DELETE_MEETING,
   CREATE_MEETING,
   UPDATE_MEETING,
+  INVITE_TO_MEETING,
 } from "../types";
 import { MeetingStateTypes } from "./MeetingState";
 export default (state: MeetingStateTypes, action) => {
@@ -29,6 +30,7 @@ export default (state: MeetingStateTypes, action) => {
         meetings: [payload, ...state.meetings],
         loading: false,
       };
+
     case UPDATE_MEETING:
       return {
         ...state,
@@ -43,6 +45,14 @@ export default (state: MeetingStateTypes, action) => {
         meetings: state.meetings.filter((meeting) => meeting._id !== payload),
         loading: false,
       };
+
+    case INVITE_TO_MEETING:
+      return {
+        ...state,
+        meeting: { ...state.meeting, participants: payload },
+        loading: false,
+      };
+
     default:
       return state;
   }
