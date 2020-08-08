@@ -13,6 +13,9 @@ import Navigation from "../Shared/Navigation";
 import MeetingState from "../../context/meetingContext/MeetingState";
 import PrivateRoute from "./PrivateRoute";
 import AuthContext from "../../context/authContext/authContext";
+import AlertContext from "context/alert/AlertState";
+import Alert from "components/Shared/Alert";
+
 const Routes = () => {
   const { loadUser, isAuthenticated } = useContext(AuthContext);
   useEffect(() => {
@@ -22,7 +25,9 @@ const Routes = () => {
   return (
     <MeetingState>
       <Router>
+       <AlertContext>
         <Navigation />
+        <Alert />
         <Switch>
           <PrivateRoute path="/meeting-overview" component={Meeting} exact />
           <PrivateRoute
@@ -41,6 +46,7 @@ const Routes = () => {
             <Route path={"/"} component={Landing} exact />
           )}
         </Switch>
+        </AlertContext>
       </Router>
     </MeetingState>
   );
