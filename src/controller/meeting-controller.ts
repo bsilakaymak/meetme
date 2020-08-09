@@ -26,7 +26,11 @@ const createMeeting: (
     creator: req.userId,
     participants: [req.userId],
     address,
-  }).populate("participants");
+  }).populate({
+    path: "participants",
+    select: "name email avatar _id",
+  });
+
   await meeting.save();
   res.json(meeting).status(201);
   try {
@@ -42,7 +46,10 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
       creator: req.userId,
     })
       .sort("createdAt -1")
-      .populate("participants");
+      .populate({
+        path: "participants",
+        select: "name email avatar _id",
+      });
 
     res.json(meetings).status(200);
   } catch (error) {
@@ -54,9 +61,10 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
 const getMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: string = req.params.mId;
   try {
-    const meeting: IMeeting | null = await Meeting.findById(mId).populate(
-      "participants"
-    );
+    const meeting: IMeeting | null = await Meeting.findById(mId).populate({
+      path: "participants",
+      select: "name email avatar _id",
+    });
     if (!meeting) {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }
@@ -76,10 +84,13 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }
     const participantsID: string[] = [];
-    req.body.participants.map(async (participant: String) => {
+
+    req.body.participants.map(async (participant: string) => {
       const user: IUser | null = await User.findOne({ email: participant });
+
       if (user !== null) {
         user.meetings = Array.from(new Set([...user.meetings, mId]));
+
         await user.save();
       }
       participantsID.push(user?._id);
@@ -115,9 +126,10 @@ const updateMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: string = req.params.mId;
   const updates: string[] = Object.keys(req.body);
   try {
-    const meeting: IMeeting | any = await Meeting.findById(mId).populate(
-      "participants"
-    );
+    const meeting: IMeeting | any = await Meeting.findById(mId).populate({
+      path: "participants",
+      select: "name email avatar _id",
+    });
     if (!meeting) {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }

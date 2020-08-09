@@ -10,12 +10,14 @@ import {
   Avatar,
   EmailLabel,
 } from "components/Shared/Layout";
+import { Link } from "react-router-dom";
 import { Button, Input, Form } from "components/Shared/FormElements";
 import SendButton from "./SendButton";
 import { useParams } from "react-router-dom";
 import MeetingContext from "../../context/meetingContext/meetingContext";
 import MeetingOwnerDashboard from "./MeetingOwnerDashboard";
-
+import NoteContext from "../../context/noteContext/noteContext";
+import NoteItem from "../Note/NoteItem";
 const PlusButton = styled.span`
   font-size: 3rem;
   font-weight: 600;
@@ -28,6 +30,8 @@ const PlusButton = styled.span`
 `;
 
 const MeetingDetails = () => {
+  const { getNotes, notes } = useContext(NoteContext);
+
   const { mid } = useParams();
 
   const { meeting, getMeeting, deleteMeeting, updateMeeting } = useContext(
@@ -41,9 +45,11 @@ const MeetingDetails = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
+    getNotes(mid);
     getMeeting(mid);
-  }, [mid, getMeeting]);
-  const { title, address, description, start, participants } = meeting;
+  }, [mid, getMeeting, getNotes]);
+  const { title, address, description, start, participants, _id } = meeting;
+  console.log(notes);
   return (
     <>
       {meeting && (
@@ -126,14 +132,21 @@ const MeetingDetails = () => {
               DETAILS
             </Button>
 
-            <Button
-              sm
-              lightBlue
-              margin="0 0 0 1rem"
-              onClick={() => setNotesOpen(true)}
-            >
-              NOTES
-            </Button>
+            {notes !== null && notes.length > 0 && (
+              <Button
+                sm
+                lightBlue
+                margin="0 0 0 1rem"
+                onClick={() => setNotesOpen(true)}
+              >
+                NOTES
+              </Button>
+            )}
+            <Link to={`/addNote/${_id}`}>
+              <Button sm lightBlue margin="0 0 0 1rem">
+                ADD NOTES
+              </Button>
+            </Link>
 
             <SmallContainer>
               {!notesOpen ? (
@@ -174,41 +187,10 @@ const MeetingDetails = () => {
                     Meeting Notes
                   </Text>
                   <Divider />
-                  <Text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.
-                  </Text>
+                  {notes !== null &&
+                    notes.map((note) => (
+                      <NoteItem note={note} key={note._id} />
+                    ))}
                 </Card>
               )}
             </SmallContainer>

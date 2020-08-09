@@ -15,10 +15,9 @@ import MeetingContext from "../../context/meetingContext/meetingContext";
 import AlertContext from "../../context/alert/alertContext";
 
 const CreateMeeting = () => {
-
   const { addMeeting } = useContext(MeetingContext);
   const { setAlert } = useContext(AlertContext);
-  
+
   const initialInputs = {
     title: { value: "", isValid: false },
     description: { value: "", isValid: false },
@@ -27,7 +26,9 @@ const CreateMeeting = () => {
     address: { value: "", isValid: false },
   };
   const [formState, inputHandler] = useForm(initialInputs, false);
+
   let history = useHistory();
+
   const OnChangeHandler = (e) => {
     const { value, name } = e.target;
     value.length > 0
@@ -38,6 +39,7 @@ const CreateMeeting = () => {
     e.preventDefault();
 
     const { title, description, start, end, address } = formState.inputs;
+
     const formData = {
       title: title.value,
       description: description.value,
@@ -45,12 +47,12 @@ const CreateMeeting = () => {
       end: end.value,
       address: address.value,
     };
+
     addMeeting(formData);
 
     setAlert("Meeting sent successfully!", "success");
 
     history.push("/meeting-overview");
-
   };
 
   return (
