@@ -41,7 +41,11 @@ const Logo = styled.div`
 `;
 
 const Navigation = (props: Props) => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <Nav>
@@ -64,7 +68,12 @@ const Navigation = (props: Props) => {
             >
               +
             </StyledLink>
-            <Button background="none" color="#84A9AC" fontSize="3rem">
+            <Button
+              onClick={() => handleLogout()}
+              background="none"
+              color="#84A9AC"
+              fontSize="3rem"
+            >
               <i className="fas fa-sign-out-alt"></i>
             </Button>
           </SmallContainer>
