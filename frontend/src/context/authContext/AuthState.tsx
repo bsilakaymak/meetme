@@ -11,6 +11,9 @@ import {
   USER_LOADED,
   AUTH_ERROR,
   LOGOUT,
+  CLEAR_MEETINGS,
+  CLEAR_CURRENT_MEETING,
+  CLEAR_NOTES,
 } from "../types";
 
 interface AuthType {
@@ -28,8 +31,8 @@ export interface InitialStateType {
   error: string[];
   login?: (FormData: AuthType) => Promise<void>;
   register?: (FormData: AuthType) => Promise<void>;
-  loadUser: () => Promise<void>;
-  logout: () => Promise<void>;
+  loadUser?: () => Promise<void>;
+  logout?: () => void;
 }
 
 const AuthState = (props: any) => {
@@ -99,7 +102,9 @@ const AuthState = (props: any) => {
     }
   };
 
-  const logout = () => dispatch({ type: LOGOUT, payload: AUTH_ERROR });
+  const logout = () => {
+    dispatch({ type: LOGOUT, payload: null });
+  };
 
   return (
     <AuthContext.Provider

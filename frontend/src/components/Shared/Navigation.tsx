@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+
 import { StyledLink, SmallContainer } from "./Layout";
 import { Button } from "./FormElements";
-
 import AuthContext from "../../context/authContext/authContext";
+import MeetingContext from "context/meetingContext/meetingContext";
+import NoteContext from "context/noteContext/noteContext";
+
 interface Props {}
 const Div = styled.div`
   height: 100%;
@@ -42,9 +45,14 @@ const Logo = styled.div`
 
 const Navigation = (props: Props) => {
   const { isAuthenticated, logout } = useContext(AuthContext);
+  const { clearMeetings, clearCurrentMeeting } = useContext(MeetingContext);
+  const { clearNotes } = useContext(NoteContext);
 
   const handleLogout = () => {
     logout();
+    clearMeetings();
+    clearCurrentMeeting();
+    clearNotes();
   };
 
   return (

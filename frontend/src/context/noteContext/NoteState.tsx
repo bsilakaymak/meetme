@@ -2,7 +2,7 @@ import React, { useReducer, useCallback } from "react";
 import axios from "axios";
 import NoteReducer from "./noteReducer";
 import NoteContext from "./noteContext";
-import { ADD_NOTE, GET_NOTES, DELETE_NOTE } from "../types";
+import { ADD_NOTE, GET_NOTES, DELETE_NOTE, CLEAR_NOTES } from "../types";
 
 export interface INote {
   notes: [
@@ -16,6 +16,7 @@ export interface INote {
   addNote?: (data: noteFormTypes, mId: string) => Promise<void> | undefined;
   getNotes?: (mId: string) => Promise<void> | undefined;
   deleteNote?: (mId: string, nId: string) => Promise<void>;
+  clearNotes?: () => void;
 }
 
 type noteFormTypes = {
@@ -79,6 +80,9 @@ const NoteState = (props: any) => {
       console.log(error);
     }
   };
+
+  const clearNotes = () => dispatch({ type: CLEAR_NOTES });
+
   return (
     <NoteContext.Provider
       value={{
@@ -87,6 +91,7 @@ const NoteState = (props: any) => {
         addNote,
         getNotes,
         deleteNote,
+        clearNotes,
       }}
     >
       {props.children}
