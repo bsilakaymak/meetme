@@ -22,7 +22,7 @@ export default (state: InitialStateType, action: Actions) => {
       return {
         ...state,
         isAuthenticated: true,
-        loading: false,
+        loading: true,
         user: payload,
       };
     case REGISTER_SUCCESS:
@@ -32,7 +32,7 @@ export default (state: InitialStateType, action: Actions) => {
         ...state,
         ...payload,
         isAuthenticated: true,
-        loading: false,
+        loading: true,
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -43,7 +43,7 @@ export default (state: InitialStateType, action: Actions) => {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: false,
+        loading: true,
         user: null,
         error: payload,
       };

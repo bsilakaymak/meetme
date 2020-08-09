@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useLocation, Redirect } from "react-router-dom";
 import LandingSquares from "./LandingSquare";
 import Login from "../Auth/Login";
 import SignUp from "../Auth/SignUp";
 import { Container, Card } from "../Shared/Layout";
 import styled from "styled-components";
 import { Button } from "components/Shared/FormElements";
-
-interface Props {}
+import AuthContext from "../../context/authContext/authContext";
 
 const Div = styled.div`
   background: #3b6978;
@@ -17,13 +17,20 @@ const Div = styled.div`
   justify-content: center;
 `;
 
-const Landing = (props: Props) => {
+const Landing = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+
+  const { pathname } = useLocation();
+
   const [loginMode, setLoginMode] = useState(false);
+
+  if (isAuthenticated && pathname === "/") {
+    return <Redirect to="/meeting-overview" />;
+  }
 
   return (
     <Container sm height="80vh" mobileFlexDirection="column-reverse">
       <LandingSquares />
-
       <Card
         threeSideBorder
         light

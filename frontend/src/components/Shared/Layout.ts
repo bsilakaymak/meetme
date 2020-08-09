@@ -5,6 +5,8 @@ interface LayoutProps {
   background?: string;
   marginTop?: string;
   marginBottom?: string;
+  marginRight?: string;
+  marginLeft?: string;
   width?: string;
   lightBlue?: boolean;
   light?: boolean;
@@ -32,6 +34,12 @@ interface LayoutProps {
   src?: string;
   alt?: string;
   m_font?: string;
+  mr?: string;
+  ml?: string;
+  mt?: string;
+  mb?: string;
+  size?: string;
+  float?: string;
 }
 
 //Global style
@@ -158,6 +166,7 @@ export const SmallContainer = styled.div<LayoutProps>`
   padding: ${(props) => props.padding && props.padding};
   margin: ${(props) => props.margin && props.margin};
   text-align: ${(props) => props.textAlign && props.textAlign};
+  background: ${({ background }) => background};
   @media (max-width: 800px) {
     width: ${(props) => (props.sm ? "50%" : "90%")};
     flex-direction: ${(props) => props.mColumn && "column"};
@@ -196,4 +205,15 @@ export const Title = styled.h2<LayoutProps>`
   font-weight: ${(props) => props.fontWeight && props.fontWeight};
   color: ${(props) => props.color && props.color};
   text-align: ${(props) => props.textAlign && props.textAlign};
+`;
+
+export const Icon = styled.i<LayoutProps>`
+  font-size: ${({ fontSize }) => fontSize};
+  cursor: pointer;
+  float: ${({ float }) => float};
+  color: ${({ color }) => color};
+  margin-top: ${({ marginTop }) => marginTop};
+  margin-right: ${({ marginRight }) => marginRight};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
+  margin-left: ${({ marginLeft }) => marginLeft};
 `;

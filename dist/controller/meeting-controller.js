@@ -30,7 +30,10 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         creator: req.userId,
         participants: [req.userId],
         address,
-    }).populate("participants");
+    }).populate({
+        path: "participants",
+        select: "name email avatar _id",
+    });
     yield meeting.save();
     res.json(meeting).status(201);
     try {
@@ -47,7 +50,10 @@ const getAllMeetings = (req, res) => __awaiter(void 0, void 0, void 0, function*
             creator: req.userId,
         })
             .sort("createdAt -1")
-            .populate("participants");
+            .populate({
+            path: "participants",
+            select: "name email avatar _id",
+        });
         res.json(meetings).status(200);
     }
     catch (error) {
@@ -59,7 +65,10 @@ exports.getAllMeetings = getAllMeetings;
 const getMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const mId = req.params.mId;
     try {
-        const meeting = yield Meeting_1.default.findById(mId).populate("participants");
+        const meeting = yield Meeting_1.default.findById(mId).populate({
+            path: "participants",
+            select: "name email avatar _id",
+        });
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
@@ -119,7 +128,10 @@ const updateMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const mId = req.params.mId;
     const updates = Object.keys(req.body);
     try {
-        const meeting = yield Meeting_1.default.findById(mId).populate("participants");
+        const meeting = yield Meeting_1.default.findById(mId).populate({
+            path: "participants",
+            select: "name email avatar _id",
+        });
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }

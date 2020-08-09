@@ -44,7 +44,9 @@ const MeetingOwnerDashboard = (props: Props) => {
   const OnChangeHandler = (e) => {
     setUpdateForm({ ...updateForm, [e.target.name]: e.target.value });
   };
+
   const { title, description, start, end, address } = updateForm;
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
     updateMeeting(updateForm, meeting._id);
