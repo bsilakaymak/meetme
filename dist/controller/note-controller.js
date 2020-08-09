@@ -18,10 +18,12 @@ const Note_1 = __importDefault(require("../models/Note"));
 const getNotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { mId } = req.params;
     try {
-        const notes = yield Note_1.default.find({ meeting: mId }).populate({
+        const notes = yield Note_1.default.find({ meeting: mId })
+            .populate({
             path: "creator",
             select: "name email avatar _id",
-        });
+        })
+            .sort({ createdAt: -1 });
         if (!notes) {
             return res.status(404).json({ errors: [{ msg: "there is no notes" }] });
         }

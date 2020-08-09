@@ -40,6 +40,9 @@ interface LayoutProps {
   mb?: string;
   size?: string;
   float?: string;
+  zIndex?: string;
+  right?: string;
+  top?: string;
 }
 
 //Global style
@@ -71,6 +74,7 @@ export const Card = styled.div<LayoutProps>`
   height: ${(props) => (props.height ? props.height : "5rem")};
   padding: ${(props) => (props.padding ? props.padding : "1rem")};
   margin: ${(props) => (props.margin ? props.margin : `auto`)};
+  z-index: ${({ zIndex }) => zIndex};
   background: ${(props) => {
     if (props.lightBlue) {
       return `#84A9AC;`;
@@ -187,6 +191,8 @@ export const StyledLink = styled(Link)<LayoutProps>`
   font-size: ${(props) => props.fontSize && props.fontSize};
   display: block;
   width: ${(props) => props.width && props.width};
+  position: relative;
+  z-index: ${({ zIndex }) => zIndex};
   text-decoration: none;
   &:focus,
   &:hover,
@@ -216,4 +222,8 @@ export const Icon = styled.i<LayoutProps>`
   margin-right: ${({ marginRight }) => marginRight};
   margin-bottom: ${({ marginBottom }) => marginBottom};
   margin-left: ${({ marginLeft }) => marginLeft};
+  position: ${({ position }) => position};
+  z-index: ${({ zIndex }) => zIndex};
+  right: ${({ right }) => right};
+  top: ${({ top }) => top};
 `;

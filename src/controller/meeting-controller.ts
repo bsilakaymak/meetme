@@ -45,11 +45,11 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
     const meetings: IMeeting[] = await Meeting.find({
       creator: req.userId,
     })
-      .sort("createdAt -1")
       .populate({
         path: "participants",
         select: "name email avatar _id",
-      });
+      })
+      .sort({ createdAt: -1 });
 
     res.json(meetings).status(200);
   } catch (error) {
