@@ -10,6 +10,7 @@ import {
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
+  LOGOUT,
 } from "../types";
 
 interface AuthType {
@@ -28,6 +29,7 @@ export interface InitialStateType {
   login?: (FormData: AuthType) => Promise<void>;
   register?: (FormData: AuthType) => Promise<void>;
   loadUser: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthState = (props: any) => {
@@ -52,6 +54,7 @@ const AuthState = (props: any) => {
       dispatch({ type: AUTH_ERROR, payload: null });
     }
   }, []);
+
   const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {
@@ -96,6 +99,8 @@ const AuthState = (props: any) => {
     }
   };
 
+  const logout = () => dispatch({ type: LOGOUT, payload: AUTH_ERROR });
+
   return (
     <AuthContext.Provider
       value={{
@@ -105,6 +110,7 @@ const AuthState = (props: any) => {
         isAuthenticated: state.isAuthenticated,
         error: state.error,
         login,
+        logout,
         register,
         loadUser,
       }}
