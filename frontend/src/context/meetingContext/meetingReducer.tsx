@@ -5,8 +5,11 @@ import {
   CREATE_MEETING,
   UPDATE_MEETING,
   INVITE_TO_MEETING,
+  CLEAR_CURRENT_MEETING,
+  CLEAR_MEETINGS,
 } from "../types";
 import { MeetingStateTypes } from "./MeetingState";
+
 export default (state: MeetingStateTypes, action) => {
   const { type, payload } = action;
 
@@ -17,6 +20,7 @@ export default (state: MeetingStateTypes, action) => {
         meetings: payload,
         loading: false,
       };
+
     case GET_MEETING:
       return {
         ...state,
@@ -39,6 +43,7 @@ export default (state: MeetingStateTypes, action) => {
         ),
         loading: false,
       };
+
     case DELETE_MEETING:
       return {
         ...state,
@@ -50,6 +55,20 @@ export default (state: MeetingStateTypes, action) => {
       return {
         ...state,
         meeting: { ...state.meeting, participants: payload },
+        loading: false,
+      };
+
+    case CLEAR_MEETINGS:
+      return {
+        ...state,
+        meetings: null,
+        loading: false,
+      };
+
+    case CLEAR_CURRENT_MEETING:
+      return {
+        ...state,
+        meeting: null,
         loading: false,
       };
 

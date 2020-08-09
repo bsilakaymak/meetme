@@ -9,6 +9,8 @@ import {
   GET_MEETING,
   UPDATE_MEETING,
   INVITE_TO_MEETING,
+  CLEAR_CURRENT_MEETING,
+  CLEAR_MEETINGS,
 } from "../types";
 
 type meetingFormType = {
@@ -46,7 +48,12 @@ export interface MeetingStateTypes {
   getAllMeeting?: () => Promise<void>;
   getMeeting?: (id: string) => Promise<void>;
   deleteMeeting?: (mId: string) => Promise<void>;
-  inviteToMeeting?: (participants : string[], meetingId:string) => Promise<void>;
+  clearCurrentMeeting?: () => void;
+  clearMeetings?: () => void;
+  inviteToMeeting?: (
+    participants: string[],
+    meetingId: string
+  ) => Promise<void>;
 }
 
 const MeetingState = (props: any) => {
@@ -79,7 +86,6 @@ const MeetingState = (props: any) => {
     }
   };
 
-
   const inviteToMeeting = async (participants, meetingId) => {
     const config = {
       headers: {
@@ -101,8 +107,8 @@ const MeetingState = (props: any) => {
       console.log(error.response.data.errors);
     }
   };
-  
- const getAllMeeting = useCallback(async () => {
+
+  const getAllMeeting = useCallback(async () => {
     try {
       const data = await axios.get("http://localhost:5000/api/meeting");
 
@@ -159,6 +165,10 @@ const MeetingState = (props: any) => {
       console.log(error.response.data.errors);
     }
   };
+
+  const clearMeetings = () => dispatch({ type: CLEAR_MEETINGS });
+  const clearCurrentMeeting = () => dispatch({ type: CLEAR_CURRENT_MEETING });
+
   return (
     <MeetingContext.Provider
       value={{
@@ -170,7 +180,9 @@ const MeetingState = (props: any) => {
         getMeeting,
         deleteMeeting,
         updateMeeting,
-        inviteToMeeting
+        inviteToMeeting,
+        clearMeetings,
+        clearCurrentMeeting,
       }}
     >
       {props.children}
