@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
+import MeetingContext from "../../context/meetingContext/meetingContext";
 import { SmallContainer, Title } from "../Shared/Layout";
 import { Input, TextArea, Form, Button, Label } from "../Shared/FormElements";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 export type dataType = {
   title: string;
   description: string;
@@ -10,28 +11,12 @@ export type dataType = {
   start: string;
   end: string;
 };
-interface Props {
-  deleteMeeting: (id: string) => Promise<void>;
-  updateMeeting: (data: dataType, id: string) => Promise<void>;
-  meeting: {
-    _id: string;
-    title: string;
-    start: string;
-    end: string;
-    description: string;
-    address: string;
-  };
-}
 
-const MeetingOwnerDashboard = (props: Props) => {
-  const { deleteMeeting, meeting, updateMeeting } = props;
+const UpdateMeeting = () => {
+  const { mId } = useParams();
+  const { meeting, updateMeeting, getMeeting } = useContext(MeetingContext);
 
   const history = useHistory();
-
-  const onDeleteHandler = () => {
-    deleteMeeting(meeting._id);
-    history.push("/meeting-overview");
-  };
 
   const [updateForm, setUpdateForm] = useState({
     title: meeting.title,
@@ -52,6 +37,11 @@ const MeetingOwnerDashboard = (props: Props) => {
     updateMeeting(updateForm, meeting._id);
     history.push("/meeting-overview");
   };
+
+  useEffect(() => {
+    getMeeting(mId);
+  }, [mId, getMeeting]);
+
   return (
     <SmallContainer light width="100%">
       <Title color="#3b6978" textAlign="center">
@@ -101,17 +91,8 @@ const MeetingOwnerDashboard = (props: Props) => {
         />
         <Button light>UPDATE</Button>
       </Form>
-      <Title textAlign="center" color="#3b6978">
-        Add Notes
-      </Title>
-      <Form>
-        <Input light height="2rem" placeholder="Title" />
-        <TextArea light placeholder="Notes" />
-        <Button light>ADD</Button>
-      </Form>
-      <Button onClick={onDeleteHandler}>DELETE MEETING</Button>
     </SmallContainer>
   );
 };
 
-export default MeetingOwnerDashboard;
+export default UpdateMeeting;

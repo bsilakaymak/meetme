@@ -13,10 +13,12 @@ export interface INote extends Document {
 const getNotes = async (req: Request, res: Response): Promise<any> => {
   const { mId } = req.params;
   try {
-    const notes = await Note.find({ meeting: mId }).populate({
-      path: "creator",
-      select: "name email avatar _id",
-    });
+    const notes = await Note.find({ meeting: mId })
+      .populate({
+        path: "creator",
+        select: "name email avatar _id",
+      })
+      .sort({ createdAt: -1 });
 
     if (!notes) {
       return res.status(404).json({ errors: [{ msg: "there is no notes" }] });

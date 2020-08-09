@@ -9,13 +9,14 @@ import {
   Divider,
   Avatar,
   EmailLabel,
+  Icon,
 } from "components/Shared/Layout";
-import { Link } from "react-router-dom";
+
 import { Button, Input, Form } from "components/Shared/FormElements";
 import SendButton from "./SendButton";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import MeetingContext from "../../context/meetingContext/meetingContext";
-import MeetingOwnerDashboard from "./MeetingOwnerDashboard";
+
 import NoteContext from "../../context/noteContext/noteContext";
 import NoteItem from "../Note/NoteItem";
 const PlusButton = styled.span`
@@ -32,48 +33,45 @@ const PlusButton = styled.span`
 const MeetingDetails = () => {
   const { getNotes, notes } = useContext(NoteContext);
 
+  const history = useHistory();
+
   const { mid } = useParams();
 
-  const { meeting, getMeeting, deleteMeeting, updateMeeting } = useContext(
-    MeetingContext
-  );
+  const { meeting, getMeeting, deleteMeeting } = useContext(MeetingContext);
 
   const [notesOpen, setNotesOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [invitedUsers, setInvitedUsers] = useState(["sila@gmail.com"]);
   const [invitedUser, setInvitedUser] = useState("");
-  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     getNotes(mid);
     getMeeting(mid);
   }, [mid, getMeeting, getNotes]);
   const { title, address, description, start, participants, _id } = meeting;
-  console.log(notes);
+
+  const onDeleteHandler = () => {
+    deleteMeeting(_id);
+    history.push("/meeting-overview");
+  };
+
   return (
     <>
       {meeting && (
         <Container column justify="flex-start" padding="2rem">
           {/* Here we will only show this button to meeting creator */}
+
           <SmallContainer width="100%">
-            <Button
-              margin="1rem 0"
-              color="#84A9AC"
-              fontSize="2rem"
-              background="#E3E3E3"
-              onClick={() => {
-                setSettingsOpen(!settingsOpen);
-              }}
-            >
-              <i className="fas fa-cog"></i>{" "}
+            <Link to={`/update-meeting/${_id}`}>
+              <Button>
+                <Icon className="fas fa-edit" />
+                Edit Meeting
+              </Button>
+            </Link>
+            <Button onClick={onDeleteHandler}>
+              <Icon className="fas fa-trash-alt" fontSize="1rem" /> DELETE
+              MEETING
             </Button>
-            {settingsOpen && (
-              <MeetingOwnerDashboard
-                meeting={meeting}
-                deleteMeeting={deleteMeeting}
-                updateMeeting={updateMeeting}
-              />
-            )}
           </SmallContainer>
           <SmallContainer display="flex" mColumn width="100%">
             <SmallContainer display="flex" column width="60%">

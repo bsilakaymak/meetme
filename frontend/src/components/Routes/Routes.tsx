@@ -4,6 +4,7 @@ import Landing from "../LandingPage/Landing";
 import Meeting from "../Meetings/Meeting";
 import CreateMeeting from "../Meetings/CreateMeeting";
 import MeetingDetails from "../Meetings/MeetingDetails";
+import UpdateMeeting from "../Meetings/UpdateMeeting";
 import Navigation from "../Shared/Navigation";
 import MeetingState from "../../context/meetingContext/MeetingState";
 import NoteState from "../../context/noteContext/NoteState";
@@ -12,6 +13,7 @@ import AuthContext from "../../context/authContext/authContext";
 import AlertState from "context/alert/AlertState";
 import Alert from "components/Shared/Alert";
 import AddNote from "../Note/AddNote";
+
 const Routes = () => {
   const { loadUser } = useContext(AuthContext);
   useEffect(() => {
@@ -40,6 +42,11 @@ const Routes = () => {
               <PrivateRoute
                 path="/meeting-details/:mid"
                 component={MeetingDetails}
+                exact
+              />
+              <PrivateRoute
+                path="/update-meeting/:mId"
+                component={UpdateMeeting}
                 exact
               />
               <PrivateRoute path="/addNote/:mId" component={AddNote} exact />
