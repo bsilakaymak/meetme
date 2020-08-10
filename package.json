@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bsilakaymak/meetme#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.2.3",
     "@types/bcryptjs": "^2.4.2",
     "@types/config": "0.0.36",
     "@types/cors": "^2.8.7",
