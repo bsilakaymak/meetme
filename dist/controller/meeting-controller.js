@@ -83,27 +83,28 @@ exports.getMeeting = getMeeting;
 const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const mId = req.params.mId;
     try {
-        const meeting = yield Meeting_1.default.findById(mId).populate({
-            path: "participants",
-            select: "name email avatar _id",
-        });
+        const meeting = yield Meeting_1.default.findById(mId);
+        const user = yield User_1.default.findById(req.userId);
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
-        const participantsID = [];
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
             if (user !== null) {
-                user.meetings = Array.from(new Set([...user.meetings, mId]));
+                user.meetings.push(mId);
+                meeting.participants.push(user._id);
+                yield meeting.save();
                 yield user.save();
             }
-            participantsID.push(user === null || user === void 0 ? void 0 : user._id);
         }));
-        const newParticipants = [...meeting.participants, ...participantsID];
-        console.log(newParticipants);
-        meeting.participants = Array.from(new Set(newParticipants));
         // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
-        yield meeting.save();
+        // if (user !== null) {
+        //   invitationNotificationEmail(
+        //     meeting.title,
+        //     req.body.participants,
+        //     user.name
+        //   );
+        // }
         res.json(meeting.participants).status(200);
     }
     catch (error) {

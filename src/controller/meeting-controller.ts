@@ -79,31 +79,30 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
 const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: string = req.params.mId;
   try {
-    const meeting: IMeeting | null = await Meeting.findById(mId).populate({
-      path: "participants",
-      select: "name email avatar _id",
-    });
+    const meeting: IMeeting | null = await Meeting.findById(mId);
+    const user: IUser | null = await User.findById(req.userId);
     if (!meeting) {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }
-    const participantsID: string[] = [];
-
     req.body.participants.map(async (participant: string) => {
       const user: IUser | null = await User.findOne({ email: participant });
       if (user !== null) {
-        user.meetings = Array.from(new Set([...user.meetings, mId]));
-
+        user.meetings.push(mId);
+        meeting.participants.push(user._id);
+        await meeting.save();
         await user.save();
       }
-      participantsID.push(user?._id);
     });
-    const newParticipants = [...meeting.participants, ...participantsID];
-    console.log(newParticipants);
-    meeting.participants = Array.from(new Set(newParticipants));
+
     // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
-    await meeting.save();
+    // if (user !== null) {
+    //   invitationNotificationEmail(
+    //     meeting.title,
+    //     req.body.participants,
+    //     user.name
+    //   );
+    // }
     res.json(meeting.participants).status(200);
-    
   } catch (error) {
     res.status(500).json(error);
   }

@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, Mongoose } from "mongoose";
 
 export interface IMeeting extends Document {
   title: string;
@@ -6,6 +6,6 @@ export interface IMeeting extends Document {
   start: Date;
   end: Date;
   creator: string;
-  participants: string[];
+  participants: any[];
   address: string;
 }

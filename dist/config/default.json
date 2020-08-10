@@ -1,5 +1,5 @@
 {
-  "mongoURI": "mongodb+srv://rabie:Damascus1311@meetme.4zdml.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://sila:xwQVKQipD7wPljCK@cluster0.eows6.mongodb.net/testtt?retryWrites=true&w=majority",
   "jwtSecret": "mysecrettoken",
   "SEND_GRID_API_KEY":"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"
 }
