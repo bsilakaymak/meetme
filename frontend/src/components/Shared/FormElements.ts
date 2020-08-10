@@ -91,7 +91,7 @@ export const Input = styled.input<FormElementProps>`
   font-family: arial, sans-serif;
   font-size: 18px;
   color:#3B6978;
-  margin: 2% 0;
+  margin: ${(props) => (props.margin ? props.margin : "2% 0")};
   @media (max-width: 530px) {
     width: ${(props) => (props.mWidth ? props.mWidth : "90%")};
     margin: 5% 0;
@@ -113,7 +113,7 @@ export const TextArea = styled.textarea<FormElementProps>`
   background: ${(props) => (props.light ? "#F0F0F0" : "#e0dede")};
   border: ${(props) => (props.light ? "1px solid #3B6978" : "none")};
   min-height: 6rem;
-  margin: 2% 0;
+  margin: ${(props) => (props.margin ? props.margin : "2% 0")};
   position: ${(props) => props.relative && "relative"};
   @media (max-width: 530px) {
     width:90%;
@@ -141,6 +141,7 @@ export const Label = styled.label<FormElementProps>`
   left: ${(props) => props.left && props.left};
   color: #ffffff;
   text-align: center;
+  border-radius: 0 7px;
   padding: 0.55%;
   @media (max-width: 530px) {
     height: 1rem;

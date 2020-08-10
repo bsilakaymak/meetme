@@ -43,6 +43,8 @@ interface LayoutProps {
   zIndex?: string;
   right?: string;
   top?: string;
+  overflowY?: string;
+  backgroundColor?: string;
 }
 
 //Global style
@@ -58,9 +60,9 @@ body{
 
 //Page separator
 export const Divider = styled.div<LayoutProps>`
-  width: 100%;
+  width: ${(props) => (props.width ? props.width : "100%")};
   margin: auto;
-  height: 2px;
+  height: ${(props) => (props.height ? props.height : "2px")};
   margin-top: ${(props) => (props.marginTop ? props.marginTop : "1rem")};
   margin-bottom: ${(props) =>
     props.marginBottom ? props.marginBottom : "1rem"};
@@ -75,6 +77,7 @@ export const Card = styled.div<LayoutProps>`
   padding: ${(props) => (props.padding ? props.padding : "1rem")};
   margin: ${(props) => (props.margin ? props.margin : `auto`)};
   z-index: ${({ zIndex }) => zIndex};
+  overflow-y: ${(props) => (props.overflowY ? props.overflowY : `none`)};
   background: ${(props) => {
     if (props.lightBlue) {
       return `#84A9AC;`;
@@ -116,7 +119,7 @@ export const Card = styled.div<LayoutProps>`
 //Text
 export const Text = styled.p<LayoutProps>`
   margin: 0;
-  padding: 0;
+  padding: ${(props) => (props.padding ? props.padding : "0px")};
   color: ${(props) => props.color && props.color};
   font-size: ${(props) => props.fontSize && props.fontSize};
   font-weight: ${(props) => props.fontWeight && props.fontWeight};
@@ -124,8 +127,10 @@ export const Text = styled.p<LayoutProps>`
 
 //Container
 export const Container = styled.div<LayoutProps>`
-  width: 95%;
-  margin: auto;
+  width: ${(props) => (props.width ? props.width : "95%")};
+  background-color: ${(props) =>
+    props.backgroundColor ? props.backgroundColor : "inherit"};
+  margin: ${(props) => (props.margin ? props.margin : "auto")};
   height: ${(props) => (props.height ? props.height : "100vh")};
   display: flex;
   padding: ${(props) => props.padding && props.padding};
@@ -211,6 +216,7 @@ export const Title = styled.h2<LayoutProps>`
   font-weight: ${(props) => props.fontWeight && props.fontWeight};
   color: ${(props) => props.color && props.color};
   text-align: ${(props) => props.textAlign && props.textAlign};
+  padding: ${(props) => props.padding && props.padding};
 `;
 
 export const Icon = styled.i<LayoutProps>`

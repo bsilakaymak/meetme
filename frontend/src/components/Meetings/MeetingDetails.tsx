@@ -58,23 +58,19 @@ const MeetingDetails = () => {
   return (
     <>
       {meeting && (
-        <Container column justify="flex-start" padding="2rem">
+        <Container
+          column
+          justify="flex-start"
+          padding="2rem"
+          width="80%"
+          backgroundColor="#F0F0F0"
+          margin="2rem auto"
+          height="auto"
+        >
           {/* Here we will only show this button to meeting creator */}
 
-          <SmallContainer width="100%">
-            <Link to={`/update-meeting/${_id}`}>
-              <Button>
-                <Icon className="fas fa-edit" />
-                Edit Meeting
-              </Button>
-            </Link>
-            <Button onClick={onDeleteHandler}>
-              <Icon className="fas fa-trash-alt" fontSize="1rem" /> DELETE
-              MEETING
-            </Button>
-          </SmallContainer>
           <SmallContainer display="flex" mColumn width="100%">
-            <SmallContainer display="flex" column width="60%">
+            <SmallContainer display="flex" column width="60%" padding="1rem">
               <Text color="#204051" fontSize="2.5rem" fontWeight="600">
                 {title}
               </Text>
@@ -84,14 +80,14 @@ const MeetingDetails = () => {
                 </Text>
               </SmallContainer>
             </SmallContainer>
-            <SmallContainer width="30%">
+            <SmallContainer width="30%" padding="1rem" textAlign="right">
               <Button margin="0" onClick={() => setInviteOpen(!inviteOpen)}>
                 Invite
               </Button>
 
               {inviteOpen && (
                 <>
-                  <SmallContainer>
+                  <SmallContainer textAlign="left">
                     <Form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -119,14 +115,16 @@ const MeetingDetails = () => {
                       <EmailLabel>{invitedUser}</EmailLabel>
                     ))}
                   </SmallContainer>
-                  <SendButton />{" "}
+                  <SmallContainer textAlign="left">
+                    <SendButton />{" "}
+                  </SmallContainer>
                 </>
               )}
             </SmallContainer>
           </SmallContainer>
 
-          <SmallContainer width="100%" margin="1rem 0">
-            <Button sm margin="0 1rem 0 0" onClick={() => setNotesOpen(false)}>
+          <SmallContainer width="100%" margin="1rem 0" padding="1rem">
+            <Button sm margin="0 1rem" onClick={() => setNotesOpen(false)}>
               DETAILS
             </Button>
 
@@ -134,7 +132,7 @@ const MeetingDetails = () => {
               <Button
                 sm
                 lightBlue
-                margin="0 0 0 1rem"
+                margin="0 1rem"
                 onClick={() => setNotesOpen(true)}
               >
                 NOTES
@@ -146,7 +144,7 @@ const MeetingDetails = () => {
               </Button>
             </Link>
 
-            <SmallContainer>
+            <SmallContainer padding="1rem">
               {!notesOpen ? (
                 <SmallContainer>
                   <Divider background="#E3E3E3" />
@@ -180,6 +178,7 @@ const MeetingDetails = () => {
                   column
                   align="end"
                   mWidth="100%"
+                  light
                 >
                   <Text color="#3B6978" fontSize="2rem" fontWeight="600">
                     Meeting Notes
@@ -192,6 +191,18 @@ const MeetingDetails = () => {
                 </Card>
               )}
             </SmallContainer>
+          </SmallContainer>
+          <SmallContainer width="100%" textAlign="right" margin="0 3rem 0 1rem">
+            <Link to={`/update-meeting/${_id}`}>
+              <Button>
+                <Icon className="fas fa-edit" />
+                Edit Meeting
+              </Button>
+            </Link>
+            <Button onClick={onDeleteHandler}>
+              <Icon className="fas fa-trash-alt" fontSize="1rem" /> DELETE
+              MEETING
+            </Button>
           </SmallContainer>
         </Container>
       )}

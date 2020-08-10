@@ -57,30 +57,55 @@ const CreateMeeting = () => {
 
   return (
     <Container>
-      <Card light borderedCard roundBorder height="80%" padding="0 2.5rem">
+      <Card
+        light
+        borderedCard
+        roundBorder
+        height="680px"
+        padding="0 2.5rem"
+        overflowY="scroll"
+      >
         <Form align="flex-start" onSubmit={formSubmitHandler}>
           <LabelAndInputHolder>
-            <Label absolute> Title</Label>
-            <Input name="title" width="40%" onChange={OnChangeHandler} />
+            <Label absolute top="-15px">
+              Title
+            </Label>
+            <Input
+              name="title"
+              width="40%"
+              margin="2rem 0"
+              onChange={OnChangeHandler}
+            />
           </LabelAndInputHolder>
 
           <LabelAndInputHolder>
-            <Label absolute> Description</Label>
+            <Label absolute top="-15px">
+              Description
+            </Label>
             <TextArea
               name="description"
               width="70%"
+              margin="2rem 0"
               onChange={OnChangeHandler}
             />
           </LabelAndInputHolder>
           <LabelAndInputHolder>
-            <Label absolute> Address</Label>
-            <Input name="address" width="40%" onChange={OnChangeHandler} />
+            <Label absolute top="-15px">
+              Address
+            </Label>
+            <Input
+              name="address"
+              width="40%"
+              margin="2rem 0"
+              onChange={OnChangeHandler}
+            />
           </LabelAndInputHolder>
           <Label>Beginning</Label>
           <Input
             name="start"
             width="30%"
             type="datetime-local"
+            margin="1rem 0"
             onChange={OnChangeHandler}
           />
           <Label>End</Label>
@@ -88,9 +113,9 @@ const CreateMeeting = () => {
             name="end"
             width="30%"
             type="datetime-local"
+            margin="1rem 0"
             onChange={OnChangeHandler}
           />
-
           <Button type="submit" roundBorder bold disabled={!formState.isValid}>
             CREATE
           </Button>
