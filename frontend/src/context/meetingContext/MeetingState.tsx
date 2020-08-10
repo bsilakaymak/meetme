@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from "react";
+import React, { useReducer, useCallback, useContext } from "react";
 import axios from "axios";
 import MeetingContext from "./meetingContext";
 import MeetingReducer from "./meetingReducer";
@@ -20,6 +20,7 @@ type meetingFormType = {
   end: string;
   address: string;
 };
+
 
 export interface MeetingStateTypes {
   meetings: [
@@ -93,10 +94,14 @@ const MeetingState = (props: any) => {
       },
     };
 
+    const formData = {
+      participants,
+    };
+
     try {
       const data = await axios.put(
-        `http://localhost:5000/api/meeting/${meetingId}`,
-        participants,
+        `http://localhost:5000/api/meeting/${meetingId}/participants`,
+        formData,
         config
       );
       dispatch({

@@ -83,7 +83,10 @@ exports.getMeeting = getMeeting;
 const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const mId = req.params.mId;
     try {
-        const meeting = yield Meeting_1.default.findById(mId);
+        const meeting = yield Meeting_1.default.findById(mId).populate({
+            path: "participants",
+            select: "name email avatar _id",
+        });
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
@@ -104,7 +107,7 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json(meeting.participants).status(200);
     }
     catch (error) {
-        res.status(500).json({ errors: { msg: `${error}` } });
+        res.status(500).json(error);
     }
 });
 exports.inviteToMeeting = inviteToMeeting;

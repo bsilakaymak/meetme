@@ -17,6 +17,8 @@ const router = express.Router();
 // @desc     Create meeting
 // @access   Private
 
+router.put("/:mId/participants", auth, inviteToMeeting);
+
 router.post(
   "/",
   auth,
@@ -39,7 +41,6 @@ router.patch(
   ],
   updateMeeting
 );
-router.put("/:mId", auth, inviteToMeeting);
 router.get("/", auth, getAllMeetings);
 router.get("/:mId", auth, getMeeting);
 router.delete("/:mId", auth, deleteMeeting);

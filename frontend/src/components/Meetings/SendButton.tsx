@@ -1,11 +1,9 @@
 import React from "react";
-import { Button } from "components/Shared/FormElements";
 
 interface Props {}
 
 const SendButton = () => {
   return (
-    <Button background="#F0F0F0" margin="0">
       <svg
         id="Capa_1"
         enable-background="new 0 0 512.004 512.004"
@@ -33,7 +31,6 @@ const SendButton = () => {
           />
         </g>
       </svg>
-    </Button>
   );
 };
 

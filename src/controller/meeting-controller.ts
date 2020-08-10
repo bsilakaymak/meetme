@@ -79,7 +79,10 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
 const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: string = req.params.mId;
   try {
-    const meeting: IMeeting | null = await Meeting.findById(mId);
+    const meeting: IMeeting | null = await Meeting.findById(mId).populate({
+      path: "participants",
+      select: "name email avatar _id",
+    });
     if (!meeting) {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }
@@ -87,7 +90,6 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
 
     req.body.participants.map(async (participant: string) => {
       const user: IUser | null = await User.findOne({ email: participant });
-
       if (user !== null) {
         user.meetings = Array.from(new Set([...user.meetings, mId]));
 
@@ -101,8 +103,9 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
     // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
     await meeting.save();
     res.json(meeting.participants).status(200);
+    
   } catch (error) {
-    res.status(500).json({ errors: { msg: `${error}` } });
+    res.status(500).json(error);
   }
 };
 

@@ -147,7 +147,7 @@ export const Container = styled.div<LayoutProps>`
   }
 `;
 
-export const Avatar = styled.div<LayoutProps>`
+export const Avatar = styled.img<LayoutProps>`
   width: ${(props) => (props.width ? props.width : "3rem")};
   height: ${(props) => (props.height ? props.height : "3rem")};
   border-radius: ${(props) => (props.angled ? "0" : "50%")};
@@ -163,6 +163,9 @@ export const Avatar = styled.div<LayoutProps>`
   @media (min-width: 801px) and (max-width: 1200px) {
     height: 2rem;
     width: 2rem;
+  }
+  &:hover{
+    transform:scale(1.1)
   }
 `;
 

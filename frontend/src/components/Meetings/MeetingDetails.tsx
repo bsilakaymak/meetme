@@ -19,6 +19,8 @@ import MeetingContext from "../../context/meetingContext/meetingContext";
 
 import NoteContext from "../../context/noteContext/noteContext";
 import NoteItem from "../Note/NoteItem";
+import { SET_ALERT } from "context/types";
+import alertContext from "context/alert/alertContext";
 const PlusButton = styled.span`
   font-size: 3rem;
   font-weight: 600;
@@ -37,12 +39,15 @@ const MeetingDetails = () => {
 
   const { mid } = useParams();
 
-  const { meeting, getMeeting, deleteMeeting } = useContext(MeetingContext);
-
+  const { meeting, getMeeting, deleteMeeting, inviteToMeeting } = useContext(
+    MeetingContext
+  );
+ 
   const [notesOpen, setNotesOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
-  const [invitedUsers, setInvitedUsers] = useState(["sila@gmail.com"]);
+  const [invitedUsers, setInvitedUsers] = useState<string[]>([]);
   const [invitedUser, setInvitedUser] = useState("");
+  const {setAlert} = useContext(alertContext)
 
   useEffect(() => {
     getNotes(mid);
@@ -116,7 +121,17 @@ const MeetingDetails = () => {
                     ))}
                   </SmallContainer>
                   <SmallContainer textAlign="left">
-                    <SendButton />{" "}
+                    <Button
+                      background="#F0F0F0"
+                      margin="0"
+                      onClick={() => {
+                        inviteToMeeting(invitedUsers, _id)
+                        setAlert('Participants Invited')
+                      
+                      }}
+                    >
+                      <SendButton />
+                    </Button>
                   </SmallContainer>
                 </>
               )}

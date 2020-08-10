@@ -2,16 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { Text } from "../Shared/Layout";
 interface Props {}
-interface BoxProps {
-  width?: any;
-  darkBlue?: any;
-  blue?: any;
-  lightBlue?: any;
-  sm: any;
-  top: any;
-  left: any;
-  paddingTop: any;
-  height: any;
+interface BoxPropTypes {
+  width?: string;
+  darkBlue?: boolean;
+  blue?: boolean;
+  lightBlue?: boolean;
+  top: string;
+  left: string;
+  paddingTop: string;
+  height: string;
 }
 
 const Div = styled.div`
@@ -33,7 +32,7 @@ const Div = styled.div`
   }
 `;
 
-const Box: any = styled.div<BoxProps>`
+const Box: any = styled.div<BoxPropTypes>`
   width: ${(props) => props.width && props.width};
   height: ${(props) => props.height && props.height};
   background: ${(props) => {
