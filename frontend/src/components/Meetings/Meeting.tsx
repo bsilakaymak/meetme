@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Container, StyledLink } from "../Shared/Layout";
+import { Container, StyledLink, Text } from "../Shared/Layout";
 import MeetingList from "./MeetingList";
 import MeetingContext from "../../context/meetingContext/meetingContext";
 const Meeting = () => {
@@ -12,7 +12,9 @@ const Meeting = () => {
     <>
       <Container column justify="flex-start">
         {meetings !== null && meetings.length === 0 && (
-          <h3>There is no meeting</h3>
+          <Text color="#84A9AC" fontSize="2rem"  textAlign="center">
+            There is no meeting
+          </Text>
         )}
 
         {meetings &&

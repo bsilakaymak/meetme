@@ -82,8 +82,12 @@ const MeetingDetails = () => {
                   </Text>
                 </SmallContainer>
               </SmallContainer>
-              <SmallContainer width="30%" padding="1rem" textAlign="right">
-                <Button margin="0" onClick={() => setInviteOpen(!inviteOpen)}>
+              <SmallContainer width="30%" padding="1rem">
+                <Button
+                  margin="0"
+                  padding="0.35rem"
+                  onClick={() => setInviteOpen(!inviteOpen)}
+                >
                   Invite
                 </Button>
 
@@ -96,11 +100,12 @@ const MeetingDetails = () => {
                           setInvitedUsers([...invitedUsers, invitedUser]);
                         }}
                       >
-                        <SmallContainer width="100%">
+                        <SmallContainer width="100%" mWidth="100%">
                           <Input
                             light
                             mWidth="75%"
                             placeholder="Add an email"
+                            margin="5% 0"
                             value={invitedUser}
                             onChange={(e) => setInvitedUser(e.target.value)}
                           />{" "}

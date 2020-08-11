@@ -72,7 +72,7 @@ const Navigation = (props: Props) => {
               color="#3b6978"
               fontSize="8rem"
               to="/create-meeting"
-              m_font="6rem"
+              mFont="4rem"
             >
               +
             </StyledLink>
@@ -81,6 +81,7 @@ const Navigation = (props: Props) => {
               background="none"
               color="#84A9AC"
               fontSize="3rem"
+              mFont='2rem'
             >
               <i className="fas fa-sign-out-alt"></i>
             </Button>
