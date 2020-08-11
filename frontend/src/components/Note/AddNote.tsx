@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
-import { SmallContainer, Title } from "../Shared/Layout";
-import { Input, TextArea, Form, Button } from "../Shared/FormElements";
+
+import { SmallContainer, Title, Icon } from "../Shared/Layout";
+import { Input, TextArea, Form, Button, Label } from "../Shared/FormElements";
 import { useParams, useHistory } from "react-router-dom";
+
 import NoteContext from "../../context/noteContext/noteContext";
 const AddNote = () => {
   const history = useHistory();
@@ -20,33 +22,55 @@ const AddNote = () => {
   const onSubmitNoteHandler = (e) => {
     e.preventDefault();
     addNote(noteInput, mId);
-
-    history.push(`/meeting-details/${mId}`);
   };
   const { title, description } = noteInput;
 
   return (
-    <SmallContainer>
+    <SmallContainer
+      border="4px solid #84A9AC"
+      background="#f0f0f0"
+      padding="10px 0 10px 60px "
+      margin="50px auto"
+      width="80%"
+      borderRadius="7px"
+    >
+      <SmallContainer textAlign="right" padding="10px 40px">
+        <Icon
+          fontSize="2.2rem"
+          color="#3B6978"
+          fontWeight="700"
+          fontStyle="normal"
+          onClick={() => {
+            history.push(`/meeting-details/${mId}`);
+          }}
+        >
+          X
+        </Icon>
+      </SmallContainer>
+
       <Title textAlign="center" color="#3b6978">
         Add Notes
       </Title>
-      <Form onSubmit={onSubmitNoteHandler}>
+      <Form align="start" onSubmit={onSubmitNoteHandler}>
+        <Label> Title </Label>
         <Input
-          light
           height="2rem"
           placeholder="Title"
           name="title"
           value={title}
           onChange={notInputOnChangeHandler}
         />
+        <Label> Notes </Label>
         <TextArea
-          light
           placeholder="Notes"
           name="description"
           value={description}
           onChange={notInputOnChangeHandler}
+          width="70%"
         />
-        <Button light>ADD</Button>
+        <Button light disabled={title === "" && description === ""}>
+          ADD
+        </Button>
       </Form>
     </SmallContainer>
   );

@@ -22,9 +22,9 @@ const Routes = () => {
 
   return (
     <Router>
-      <MeetingState>
-        <NoteState>
-          <AlertState>
+      <AlertState>
+        <MeetingState>
+          <NoteState>
             <Navigation />
             <Alert />
             <Switch>
@@ -51,9 +51,9 @@ const Routes = () => {
               />
               <PrivateRoute path="/addNote/:mId" component={AddNote} exact />
             </Switch>
-          </AlertState>
-        </NoteState>
-      </MeetingState>
+          </NoteState>
+        </MeetingState>
+      </AlertState>
     </Router>
   );
 };

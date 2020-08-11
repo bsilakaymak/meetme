@@ -38,16 +38,20 @@ export default (state: MeetingStateTypes, action) => {
     case UPDATE_MEETING:
       return {
         ...state,
-        meetings: state.meetings.map((meeting) =>
-          meeting._id === payload._id ? payload : meeting
-        ),
+        meetings:
+          state.meetings !== null &&
+          state.meetings.map((meeting) =>
+            meeting._id === payload._id ? payload : meeting
+          ),
         loading: false,
       };
 
     case DELETE_MEETING:
       return {
         ...state,
-        meetings: state.meetings.filter((meeting) => meeting._id !== payload),
+        meetings:
+          state.meetings !== null &&
+          state.meetings.filter((meeting) => meeting._id !== payload),
         loading: false,
       };
 

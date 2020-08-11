@@ -112,6 +112,7 @@ export const TextArea = styled.textarea<FormElementProps>`
   width: ${(props) => (props.width ? props.width : "40%")};
   background: ${(props) => (props.light ? "#F0F0F0" : "#e0dede")};
   border: ${(props) => (props.light ? "1px solid #3B6978" : "none")};
+  color:#3B6978;
   min-height: 6rem;
   margin: ${(props) => (props.margin ? props.margin : "2% 0")};
   position: ${(props) => props.relative && "relative"};

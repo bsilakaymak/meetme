@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 
 import MeetingContext from "../../context/meetingContext/meetingContext";
-import { SmallContainer, Title } from "../Shared/Layout";
+import { SmallContainer, Title, Icon } from "../Shared/Layout";
 import { Input, TextArea, Form, Button, Label } from "../Shared/FormElements";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams, Redirect, useHistory } from "react-router-dom";
 export type dataType = {
   title: string;
   description: string;
@@ -14,85 +14,106 @@ export type dataType = {
 
 const UpdateMeeting = () => {
   const { mId } = useParams();
+  const history = useHistory();
   const { meeting, updateMeeting, getMeeting } = useContext(MeetingContext);
 
-  const history = useHistory();
-
   const [updateForm, setUpdateForm] = useState({
-    title: meeting.title,
-    description: meeting.description,
-    address: meeting.address,
-    start: meeting.start,
-    end: meeting.end,
+    title: meeting !== null && meeting.title,
+    description: meeting !== null && meeting.description,
+    address: meeting !== null && meeting.address,
+    start: meeting !== null && meeting.start,
+    end: meeting !== null && meeting.end,
   });
-
-  const OnChangeHandler = (e) => {
-    setUpdateForm({ ...updateForm, [e.target.name]: e.target.value });
-  };
-
-  const { title, description, start, end, address } = updateForm;
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    updateMeeting(updateForm, meeting._id);
-    history.push("/meeting-overview");
-  };
-
   useEffect(() => {
     getMeeting(mId);
   }, [mId, getMeeting]);
 
-  return (
-    <SmallContainer light width="100%">
-      <Title color="#3b6978" textAlign="center">
-        Update Meeting
-      </Title>
-      <Form onSubmit={onSubmitHandler}>
-        <Input
-          light
-          height="2rem"
-          name="title"
-          placeholder="Title"
-          onChange={OnChangeHandler}
-          value={title}
-        />
-        <Input
-          light
-          height="2rem"
-          name="address"
-          placeholder="Address"
-          onChange={OnChangeHandler}
-          value={address}
-        />
-        <TextArea
-          light
-          placeholder="Description"
-          name="description"
-          onChange={OnChangeHandler}
-          value={description}
-        />
-        <Label>Beginning</Label>
-        <Input
-          light
-          name="start"
-          width="30%"
-          type="datetime-local"
-          onChange={OnChangeHandler}
-          value={start}
-        />
-        <Label>End</Label>
-        <Input
-          light
-          name="end"
-          width="30%"
-          type="datetime-local"
-          onChange={OnChangeHandler}
-          value={end}
-        />
-        <Button light>UPDATE</Button>
-      </Form>
-    </SmallContainer>
-  );
+  if (meeting === null) {
+    return <Redirect to={`/meeting-details/${mId}`}></Redirect>;
+  } else {
+    const OnChangeHandler = (e) => {
+      setUpdateForm({ ...updateForm, [e.target.name]: e.target.value });
+    };
+
+    const { title, description, start, end, address } = updateForm;
+
+    const onSubmitHandler = (e) => {
+      e.preventDefault();
+
+      updateMeeting(updateForm, meeting._id);
+    };
+
+    return (
+      <SmallContainer
+        border="4px solid #84A9AC"
+        background="#f0f0f0"
+        padding="20px 50px"
+        margin="50px auto"
+        width="80%"
+        borderRadius="7px"
+      >
+        <SmallContainer textAlign="right" padding="0px">
+          <Icon
+            fontSize="2.2rem"
+            color="#3B6978"
+            fontWeight="700"
+            fontStyle="normal"
+            onClick={() => {
+              history.push(`/meeting-details/${mId}`);
+            }}
+          >
+            X
+          </Icon>
+        </SmallContainer>
+        <Title color="#3b6978" textAlign="center">
+          Update Meeting
+        </Title>
+        <Form align="start" padding="20px" onSubmit={onSubmitHandler}>
+          <Label>Title</Label>
+          <Input
+            height="2rem"
+            name="title"
+            placeholder="Title"
+            onChange={OnChangeHandler}
+            value={title}
+          />
+          <Label>Address</Label>
+          <Input
+            height="2rem"
+            name="address"
+            placeholder="Address"
+            onChange={OnChangeHandler}
+            value={address}
+          />
+          <Label>Description</Label>
+          <TextArea
+            placeholder="Description"
+            name="description"
+            width="70%"
+            onChange={OnChangeHandler}
+            value={description}
+          />
+          <Label>Beginning</Label>
+          <Input
+            name="start"
+            width="30%"
+            type="datetime-local"
+            onChange={OnChangeHandler}
+            value={start}
+          />
+          <Label>End</Label>
+          <Input
+            name="end"
+            width="30%"
+            type="datetime-local"
+            onChange={OnChangeHandler}
+            value={end}
+          />
+          <Button light>UPDATE</Button>
+        </Form>
+      </SmallContainer>
+    );
+  }
 };
 
 export default UpdateMeeting;

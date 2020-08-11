@@ -1,5 +1,5 @@
-import React, { useReducer } from "react";
-// import uuid from "uuid";
+import React, { useReducer, useCallback } from "react";
+
 import { v4 as uuidv4 } from "uuid";
 import AlertContext from "./alertContext";
 import alertReducer from "./alertReducer";
@@ -10,18 +10,21 @@ const AlertState = (props: any) => {
 
   const [state, dispatch] = useReducer(alertReducer, initialState);
 
-  const setAlert = (msg: any, type: any, timeout?: number): void => {
-    const id = uuidv4();
-    dispatch({
-      type: SET_ALERT,
-      payload: { msg, type, id },
-    });
+  const setAlert = useCallback(
+    (msg: any, type: any, timeout?: number): void => {
+      const id = uuidv4();
+      dispatch({
+        type: SET_ALERT,
+        payload: { msg, type, id },
+      });
 
-    setTimeout(
-      () => dispatch({ type: REMOVE_ALERT, payload: id }),
-      (timeout = 5000)
-    );
-  };
+      setTimeout(
+        () => dispatch({ type: REMOVE_ALERT, payload: id }),
+        (timeout = 5000)
+      );
+    },
+    []
+  );
 
   return (
     <AlertContext.Provider

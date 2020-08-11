@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 
-import { useHistory } from "react-router-dom";
 import { useForm } from "../Shared/hooks/useForm";
-import { Container, Card } from "../Shared/Layout";
+import { Container, Card, Title } from "../Shared/Layout";
 import {
   Input,
   Form,
@@ -12,11 +11,9 @@ import {
   TextArea,
 } from "../Shared/FormElements";
 import MeetingContext from "../../context/meetingContext/meetingContext";
-import AlertContext from "../../context/alert/alertContext";
 
 const CreateMeeting = () => {
   const { addMeeting } = useContext(MeetingContext);
-  const { setAlert } = useContext(AlertContext);
 
   const initialInputs = {
     title: { value: "", isValid: false },
@@ -27,18 +24,15 @@ const CreateMeeting = () => {
   };
   const [formState, inputHandler] = useForm(initialInputs, false);
 
-  let history = useHistory();
-
   const OnChangeHandler = (e) => {
     const { value, name } = e.target;
     value.length > 0
       ? inputHandler(name, value, true)
       : inputHandler(name, value, false);
   };
+  const { title, description, start, end, address } = formState.inputs;
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-
-    const { title, description, start, end, address } = formState.inputs;
 
     const formData = {
       title: title.value,
@@ -49,22 +43,22 @@ const CreateMeeting = () => {
     };
 
     addMeeting(formData);
-
-    setAlert("Meeting sent successfully!", "success");
-
-    history.push("/meeting-overview");
   };
 
   return (
-    <Container>
+    <Container margin="20px auto">
       <Card
         light
         borderedCard
         roundBorder
-        height="680px"
-        padding="0 2.5rem"
+        height="700px"
+        padding="10px 2.5rem"
         overflowY="scroll"
+        column
       >
+        <Title textAlign="center" color="#3b6978">
+          Create Meeting
+        </Title>
         <Form align="flex-start" onSubmit={formSubmitHandler}>
           <LabelAndInputHolder>
             <Label absolute top="-15px">
@@ -116,6 +110,7 @@ const CreateMeeting = () => {
             margin="1rem 0"
             onChange={OnChangeHandler}
           />
+
           <Button type="submit" roundBorder bold disabled={!formState.isValid}>
             CREATE
           </Button>

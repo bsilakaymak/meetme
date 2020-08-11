@@ -45,6 +45,9 @@ interface LayoutProps {
   top?: string;
   overflowY?: string;
   backgroundColor?: string;
+  border?: string;
+  borderRadius?: string;
+  fontStyle?: string;
 }
 
 //Global style
@@ -164,8 +167,8 @@ export const Avatar = styled.img<LayoutProps>`
     height: 2rem;
     width: 2rem;
   }
-  &:hover{
-    transform:scale(1.1)
+  &:hover {
+    transform: scale(1.1);
   }
 `;
 
@@ -179,6 +182,9 @@ export const SmallContainer = styled.div<LayoutProps>`
   margin: ${(props) => props.margin && props.margin};
   text-align: ${(props) => props.textAlign && props.textAlign};
   background: ${({ background }) => background};
+  border: ${(props) => (props.border ? props.border : "none")};
+  border-radius: ${(props) =>
+    props.borderRadius ? props.borderRadius : "0px"};
   @media (max-width: 800px) {
     width: ${(props) => (props.sm ? "50%" : "90%")};
     flex-direction: ${(props) => props.mColumn && "column"};
@@ -224,6 +230,8 @@ export const Title = styled.h2<LayoutProps>`
 
 export const Icon = styled.i<LayoutProps>`
   font-size: ${({ fontSize }) => fontSize};
+  font-style: ${({ fontStyle }) => fontStyle};
+  font-weight: ${({ fontWeight }) => fontWeight};
   cursor: pointer;
   float: ${({ float }) => float};
   color: ${({ color }) => color};

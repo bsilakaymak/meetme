@@ -26,7 +26,10 @@ const getNotes = async (req: Request, res: Response): Promise<any> => {
     res.json(notes);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    if (error.kind === "ObjectId") {
+      res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+    }
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
@@ -53,7 +56,10 @@ const addNote = async (req: Request, res: Response): Promise<any> => {
     res.json(note);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    if (error.kind === "ObjectId") {
+      res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+    }
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
@@ -73,7 +79,10 @@ const deleteNote = async (req: Request, res: Response): Promise<any> => {
     res.json({ msg: "Note deleted" });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    if (error.kind === "ObjectId") {
+      res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+    }
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 export { getNotes, addNote, deleteNote };

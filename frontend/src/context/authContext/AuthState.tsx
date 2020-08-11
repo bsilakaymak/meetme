@@ -11,9 +11,6 @@ import {
   USER_LOADED,
   AUTH_ERROR,
   LOGOUT,
-  CLEAR_MEETINGS,
-  CLEAR_CURRENT_MEETING,
-  CLEAR_NOTES,
 } from "../types";
 
 interface AuthType {
