@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 
 import MeetingContext from "../../context/meetingContext/meetingContext";
-import { SmallContainer, Title } from "../Shared/Layout";
+import { SmallContainer, Title, Icon } from "../Shared/Layout";
 import { Input, TextArea, Form, Button, Label } from "../Shared/FormElements";
 import { useParams } from "react-router-dom";
 export type dataType = {
@@ -42,37 +42,57 @@ const UpdateMeeting = () => {
   }, [mId, getMeeting]);
 
   return (
-    <SmallContainer light width="100%">
+    <SmallContainer
+      border="4px solid #84A9AC"
+      background="#f0f0f0"
+      padding="20px 50px"
+      margin="50px auto"
+      width="80%"
+      borderRadius="7px"
+    >
+      <SmallContainer textAlign="right" padding="0px">
+        <Icon
+          fontSize="2.2rem"
+          color="#3B6978"
+          fontWeight="700"
+          fontStyle="normal"
+          onClick={() => {
+            history.push(`/meeting-details/${mId}`);
+          }}
+        >
+          X
+        </Icon>
+      </SmallContainer>
       <Title color="#3b6978" textAlign="center">
         Update Meeting
       </Title>
-      <Form onSubmit={onSubmitHandler}>
+      <Form align="start" padding="20px" onSubmit={onSubmitHandler}>
+        <Label>Title</Label>
         <Input
-          light
           height="2rem"
           name="title"
           placeholder="Title"
           onChange={OnChangeHandler}
           value={title}
         />
+        <Label>Address</Label>
         <Input
-          light
           height="2rem"
           name="address"
           placeholder="Address"
           onChange={OnChangeHandler}
           value={address}
         />
+        <Label>Description</Label>
         <TextArea
-          light
           placeholder="Description"
           name="description"
+          width="70%"
           onChange={OnChangeHandler}
           value={description}
         />
         <Label>Beginning</Label>
         <Input
-          light
           name="start"
           width="30%"
           type="datetime-local"
@@ -81,7 +101,6 @@ const UpdateMeeting = () => {
         />
         <Label>End</Label>
         <Input
-          light
           name="end"
           width="30%"
           type="datetime-local"

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import { useForm } from "../Shared/hooks/useForm";
-import { Container, Card } from "../Shared/Layout";
+import { Container, Card, Title } from "../Shared/Layout";
 import {
   Input,
   Form,
@@ -46,15 +46,19 @@ const CreateMeeting = () => {
   };
 
   return (
-    <Container>
+    <Container margin="20px auto">
       <Card
         light
         borderedCard
         roundBorder
-        height="680px"
-        padding="0 2.5rem"
+        height="700px"
+        padding="10px 2.5rem"
         overflowY="scroll"
+        column
       >
+        <Title textAlign="center" color="#3b6978">
+          Create Meeting
+        </Title>
         <Form align="flex-start" onSubmit={formSubmitHandler}>
           <LabelAndInputHolder>
             <Label absolute top="-15px">
