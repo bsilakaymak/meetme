@@ -99,7 +99,9 @@ const CreateMeeting = () => {
             name="start"
             width="30%"
             type="datetime-local"
+            placeholder="YYYY-MM-DDT00:00"
             margin="1rem 0"
+            pattern="\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d"
             onChange={OnChangeHandler}
           />
           <Label>End</Label>
@@ -107,6 +109,8 @@ const CreateMeeting = () => {
             name="end"
             width="30%"
             type="datetime-local"
+            placeholder="YYYY-MM-DDT00:00"
+            pattern="\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d"
             margin="1rem 0"
             onChange={OnChangeHandler}
           />
