@@ -95,9 +95,9 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
       const user: IUser | null = await User.findOne({ email: participant });
       if (
         user !== null &&
-        !meeting.participants.find(
+        meeting.participants.filter(
           (participant) => participant === user._id.toString()
-        )
+        ).length !==0
       ) {
         user.meetings.push(mId);
         meeting.participants.push(user._id);

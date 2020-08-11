@@ -98,7 +98,7 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
             if (user !== null &&
-                !meeting.participants.find((participant) => participant === user._id.toString())) {
+                meeting.participants.filter((participant) => participant === user._id.toString()).length !== 0) {
                 user.meetings.push(mId);
                 meeting.participants.push(user._id);
                 yield meeting.save();
