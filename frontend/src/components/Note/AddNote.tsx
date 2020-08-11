@@ -2,10 +2,11 @@ import React, { useState, useContext } from "react";
 
 import { SmallContainer, Title, Icon } from "../Shared/Layout";
 import { Input, TextArea, Form, Button, Label } from "../Shared/FormElements";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import NoteContext from "../../context/noteContext/noteContext";
 const AddNote = () => {
+  const history = useHistory();
   const { mId } = useParams();
 
   const [noteInput, setNoteInput] = useState({
