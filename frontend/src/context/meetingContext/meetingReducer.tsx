@@ -38,9 +38,11 @@ export default (state: MeetingStateTypes, action) => {
     case UPDATE_MEETING:
       return {
         ...state,
-        meetings: state.meetings.map((meeting) =>
-          meeting._id === payload._id ? payload : meeting
-        ),
+        meetings:
+          state.meetings !== null &&
+          state.meetings.map((meeting) =>
+            meeting._id === payload._id ? payload : meeting
+          ),
         loading: false,
       };
 
