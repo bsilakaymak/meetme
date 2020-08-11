@@ -13,8 +13,9 @@ export const invitationNotificationEmail = async (
     to: email,
     from: "bsilakaymak@gmail.com",
     subject: "A new meeting",
-    text: `Hello!\n 
-        You have been invited to the meeting ${meetingName} by ${sender}\n`,
+    text: `
+    Hello!\n 
+    You have been invited to the meeting ${meetingName} by ${sender}\n`,
   };
   try {
     await sgMail.send(mailOptions);
@@ -23,5 +24,3 @@ export const invitationNotificationEmail = async (
     throw error.message;
   }
 };
-
-

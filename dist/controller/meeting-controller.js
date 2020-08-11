@@ -48,7 +48,7 @@ exports.createMeeting = createMeeting;
 const getAllMeetings = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const meetings = yield Meeting_1.default.find({
-            creator: req.userId,
+            $or: [{ creator: req.userId }, { participants: req.userId }],
         })
             .populate({
             path: "participants",
@@ -92,13 +92,18 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
             select: "name email avatar _id",
         });
         const user = yield User_1.default.findById(req.userId);
+        if (user && meeting && user._id.toString() !== meeting.creator.toString()) {
+            return res.status(401).json({
+                errors: [{ msg: "Only the creator can send an invitation " }],
+            });
+        }
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
             if (user !== null &&
-                meeting.participants.filter((participant) => participant === user._id.toString()).length !== 0) {
+                meeting.participants.filter((participant) => participant._id.toString() === user._id.toString()).length === 0) {
                 user.meetings.push(mId);
                 meeting.participants.push(user._id);
                 yield meeting.save();
