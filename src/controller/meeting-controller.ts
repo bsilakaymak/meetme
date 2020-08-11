@@ -36,7 +36,7 @@ const createMeeting: (
   try {
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
@@ -54,7 +54,7 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
     res.json(meetings).status(200);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
@@ -72,7 +72,10 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
     res.json(meeting).status(200);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    if (error.kind === "ObjectId") {
+      res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+    }
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
@@ -104,7 +107,10 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
     // }
     res.json(meeting.participants).status(200);
   } catch (error) {
-    res.status(500).json(error);
+    if (error.kind === "ObjectId") {
+      res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+    }
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
@@ -119,12 +125,20 @@ const deleteMeeting = async (req: Request, res: Response): Promise<any> => {
 
     res.json({ msg: `${meeting.title} meeting deleted` }).status(200);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    if (error.kind === "ObjectId") {
+      res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+    }
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 
 const updateMeeting = async (req: Request, res: Response): Promise<any> => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const mId: string = req.params.mId;
   const updates: string[] = Object.keys(req.body);
   try {
@@ -139,8 +153,10 @@ const updateMeeting = async (req: Request, res: Response): Promise<any> => {
     await meeting.save();
     res.json(meeting);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ errors: { msg: "Server Error!" } });
+    if (error.kind === "ObjectId") {
+      res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+    }
+    res.status(500).json({ errors: [{ msg: "Server Error!" }] });
   }
 };
 

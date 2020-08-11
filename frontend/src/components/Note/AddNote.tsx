@@ -1,10 +1,9 @@
 import React, { useState, useContext } from "react";
 import { SmallContainer, Title } from "../Shared/Layout";
 import { Input, TextArea, Form, Button } from "../Shared/FormElements";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import NoteContext from "../../context/noteContext/noteContext";
 const AddNote = () => {
-  const history = useHistory();
   const { mId } = useParams();
 
   const [noteInput, setNoteInput] = useState({
@@ -20,8 +19,6 @@ const AddNote = () => {
   const onSubmitNoteHandler = (e) => {
     e.preventDefault();
     addNote(noteInput, mId);
-
-    history.push(`/meeting-details/${mId}`);
   };
   const { title, description } = noteInput;
 

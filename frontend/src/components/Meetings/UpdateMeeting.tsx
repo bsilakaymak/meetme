@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from "react";
 import MeetingContext from "../../context/meetingContext/meetingContext";
 import { SmallContainer, Title } from "../Shared/Layout";
 import { Input, TextArea, Form, Button, Label } from "../Shared/FormElements";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 export type dataType = {
   title: string;
   description: string;
@@ -14,16 +14,15 @@ export type dataType = {
 
 const UpdateMeeting = () => {
   const { mId } = useParams();
+
   const { meeting, updateMeeting, getMeeting } = useContext(MeetingContext);
 
-  const history = useHistory();
-
   const [updateForm, setUpdateForm] = useState({
-    title: meeting.title,
-    description: meeting.description,
-    address: meeting.address,
-    start: meeting.start,
-    end: meeting.end,
+    title: meeting.title || "",
+    description: meeting.description || "",
+    address: meeting.address || "",
+    start: meeting.start || "",
+    end: meeting.end || "",
   });
 
   const OnChangeHandler = (e) => {
@@ -34,8 +33,8 @@ const UpdateMeeting = () => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+
     updateMeeting(updateForm, meeting._id);
-    history.push("/meeting-overview");
   };
 
   useEffect(() => {

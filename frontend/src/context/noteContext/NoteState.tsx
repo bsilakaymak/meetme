@@ -1,7 +1,9 @@
-import React, { useReducer, useCallback } from "react";
+import React, { useReducer, useCallback, useContext } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import NoteReducer from "./noteReducer";
 import NoteContext from "./noteContext";
+import AlertContext from "../alert/alertContext";
 import { ADD_NOTE, GET_NOTES, DELETE_NOTE, CLEAR_NOTES } from "../types";
 
 export interface INote {
@@ -25,6 +27,10 @@ type noteFormTypes = {
 };
 
 const NoteState = (props: any) => {
+  const { setAlert } = useContext(AlertContext);
+
+  const history = useHistory();
+
   const initialState = {
     notes: null,
     loading: true,
@@ -48,24 +54,37 @@ const NoteState = (props: any) => {
         type: ADD_NOTE,
         payload: data.data,
       });
+      setAlert("Note added successfully!", "success");
+      history.push(`/meeting-details/${mId}`);
     } catch (error) {
-      console.log(error);
+      const errors = error.response.data.errors;
+
+      if (errors) {
+        errors.forEach(({ msg }) => setAlert(msg, "danger"));
+      }
     }
   };
 
-  const getNotes = useCallback(async (mId: string) => {
-    try {
-      const data = await axios.get(
-        `http://localhost:5000/api/notes/meetings/${mId}`
-      );
-      dispatch({
-        type: GET_NOTES,
-        payload: data.data,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  const getNotes = useCallback(
+    async (mId: string) => {
+      try {
+        const data = await axios.get(
+          `http://localhost:5000/api/notes/meetings/${mId}`
+        );
+        dispatch({
+          type: GET_NOTES,
+          payload: data.data,
+        });
+      } catch (error) {
+        const errors = error.response.data.errors;
+
+        if (errors) {
+          errors.forEach(({ msg }) => setAlert(msg, "danger"));
+        }
+      }
+    },
+    [setAlert]
+  );
 
   const deleteNote = async (mId: string, nId: string) => {
     try {
@@ -76,8 +95,13 @@ const NoteState = (props: any) => {
         type: DELETE_NOTE,
         payload: nId,
       });
+      setAlert("Note deleted successfully!", "success");
     } catch (error) {
-      console.log(error);
+      const errors = error.response.data.errors;
+
+      if (errors) {
+        errors.forEach(({ msg }) => setAlert(msg, "danger"));
+      }
     }
   };
 

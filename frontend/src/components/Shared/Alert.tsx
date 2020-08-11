@@ -13,9 +13,7 @@ const StyledAlert = styled.div<AlertProps>`
   color: white;
   padding: 1rem;
   text-align: center;
-  position: fixed;
-  top: 0;
-  width: 100%;
+  margin-bottom: 0.5rem;
 `;
 
 const Alert = (props: AlertProps) => {
