@@ -16,6 +16,7 @@ exports.updateMeeting = exports.inviteToMeeting = exports.getMeeting = exports.d
 const express_validator_1 = require("express-validator");
 const Meeting_1 = __importDefault(require("../models/Meeting"));
 const User_1 = __importDefault(require("../models/User"));
+const account_1 = require("../emails/account");
 const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
@@ -90,7 +91,8 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         }
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
-            if (user !== null) {
+            if (user !== null &&
+                !meeting.participants.find((participant) => participant === user._id.toString())) {
                 user.meetings.push(mId);
                 meeting.participants.push(user._id);
                 yield meeting.save();
@@ -98,17 +100,13 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
             }
         }));
         // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
-        // if (user !== null) {
-        //   invitationNotificationEmail(
-        //     meeting.title,
-        //     req.body.participants,
-        //     user.name
-        //   );
-        // }
+        if (user !== null) {
+            account_1.invitationNotificationEmail(meeting.title, req.body.participants, user.name);
+        }
         res.json(meeting.participants).status(200);
     }
     catch (error) {
-        res.status(500).json(error);
+        res.status(500).json({ errors: { msg: `${error}` } });
     }
 });
 exports.inviteToMeeting = inviteToMeeting;

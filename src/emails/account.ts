@@ -4,7 +4,7 @@ const sendGridApiKey = process.env.SEND_GRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(sendGridApiKey);
 
-const invitationNotificationEmail = async (
+export const invitationNotificationEmail = async (
   meetingName: string,
   email: string[],
   sender: string
@@ -24,6 +24,4 @@ const invitationNotificationEmail = async (
   }
 };
 
-module.exports = {
-  invitationNotificationEmail,
-};
+

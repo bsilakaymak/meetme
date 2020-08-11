@@ -8,11 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.invitationNotificationEmail = void 0;
 const config = require("config");
 const sendGridApiKey = process.env.SEND_GRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(sendGridApiKey);
-const invitationNotificationEmail = (meetingName, email, sender) => __awaiter(void 0, void 0, void 0, function* () {
+exports.invitationNotificationEmail = (meetingName, email, sender) => __awaiter(void 0, void 0, void 0, function* () {
     const mailOptions = {
         to: email,
         from: "bsilakaymak@gmail.com",
@@ -28,6 +30,3 @@ const invitationNotificationEmail = (meetingName, email, sender) => __awaiter(vo
         throw error.message;
     }
 });
-module.exports = {
-    invitationNotificationEmail,
-};

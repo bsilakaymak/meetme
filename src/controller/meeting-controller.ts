@@ -4,6 +4,7 @@ import Meeting from "../models/Meeting";
 import { IMeeting } from "../models/types/meeting";
 import User from "../models/User";
 import { IUser } from "../models/types/user";
+import { invitationNotificationEmail } from "../emails/account";
 
 const createMeeting: (
   req: Request,
@@ -86,7 +87,12 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
     }
     req.body.participants.map(async (participant: string) => {
       const user: IUser | null = await User.findOne({ email: participant });
-      if (user !== null) {
+      if (
+        user !== null &&
+        !meeting.participants.find(
+          (participant) => participant === user._id.toString()
+        )
+      ) {
         user.meetings.push(mId);
         meeting.participants.push(user._id);
         await meeting.save();
@@ -95,16 +101,16 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
     });
 
     // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
-    // if (user !== null) {
-    //   invitationNotificationEmail(
-    //     meeting.title,
-    //     req.body.participants,
-    //     user.name
-    //   );
-    // }
+    if (user !== null) {
+      invitationNotificationEmail(
+        meeting.title,
+        req.body.participants,
+        user.name
+      );
+    }
     res.json(meeting.participants).status(200);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ errors: { msg: `${error}` } });
   }
 };
 

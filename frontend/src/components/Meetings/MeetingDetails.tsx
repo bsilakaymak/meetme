@@ -53,12 +53,13 @@ const MeetingDetails = () => {
     getNotes(mid);
     getMeeting(mid);
   }, [mid, getMeeting, getNotes]);
-  const { title, address, description, start, participants, _id } = meeting;
+
 
   const onDeleteHandler = () => {
     deleteMeeting(_id);
     history.push("/meeting-overview");
   };
+    const { title, address, description, start, participants, _id } = meeting;
 
   return (
     <>
@@ -72,8 +73,6 @@ const MeetingDetails = () => {
           margin="2rem auto"
           height="auto"
         >
-          {/* Here we will only show this button to meeting creator */}
-
           <SmallContainer display="flex" mColumn width="100%">
             <SmallContainer display="flex" column width="60%" padding="1rem">
               <Text color="#204051" fontSize="2.5rem" fontWeight="600">
