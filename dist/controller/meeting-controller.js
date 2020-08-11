@@ -40,7 +40,7 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        res.status(500).json({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.createMeeting = createMeeting;
@@ -58,7 +58,7 @@ const getAllMeetings = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        res.status(500).json({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.getAllMeetings = getAllMeetings;
@@ -76,7 +76,10 @@ const getMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        if (error.kind === "ObjectId") {
+            res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+        }
+        res.status(500).json({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.getMeeting = getMeeting;
@@ -108,7 +111,10 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json(meeting.participants).status(200);
     }
     catch (error) {
-        res.status(500).json(error);
+        if (error.kind === "ObjectId") {
+            res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+        }
+        res.status(500).json({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.inviteToMeeting = inviteToMeeting;
@@ -123,12 +129,18 @@ const deleteMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json({ msg: `${meeting.title} meeting deleted` }).status(200);
     }
     catch (error) {
-        console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        if (error.kind === "ObjectId") {
+            res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+        }
+        res.status(500).json({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.deleteMeeting = deleteMeeting;
 const updateMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = express_validator_1.validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     const mId = req.params.mId;
     const updates = Object.keys(req.body);
     try {
@@ -144,8 +156,10 @@ const updateMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json(meeting);
     }
     catch (error) {
-        console.error(error.message);
-        res.status(500).json({ errors: { msg: "Server Error!" } });
+        if (error.kind === "ObjectId") {
+            res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
+        }
+        res.status(500).json({ errors: [{ msg: "Server Error!" }] });
     }
 });
 exports.updateMeeting = updateMeeting;

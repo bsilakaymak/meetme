@@ -2,6 +2,7 @@ import React, { useReducer, useCallback, useContext } from "react";
 import axios from "axios";
 import MeetingContext from "./meetingContext";
 import MeetingReducer from "./meetingReducer";
+import { useHistory } from "react-router-dom";
 import {
   CREATE_MEETING,
   DELETE_MEETING,
@@ -12,7 +13,7 @@ import {
   CLEAR_CURRENT_MEETING,
   CLEAR_MEETINGS,
 } from "../types";
-
+import AlertContext from "../alert/alertContext";
 type meetingFormType = {
   title: string;
   description: string;
@@ -20,7 +21,6 @@ type meetingFormType = {
   end: string;
   address: string;
 };
-
 
 export interface MeetingStateTypes {
   meetings: [
@@ -42,7 +42,8 @@ export interface MeetingStateTypes {
       _id: string;
     }
   ];
-  meeting: {};
+  meeting: {} | null;
+
   loading: boolean;
   addMeeting?: (meetingForm: meetingFormType) => Promise<void>;
   updateMeeting?: (meetingForm: meetingFormType) => Promise<void>;
@@ -58,11 +59,16 @@ export interface MeetingStateTypes {
 }
 
 const MeetingState = (props: any) => {
+  const { setAlert } = useContext(AlertContext);
+
+  const history = useHistory();
+
   const initialState = {
     meetings: null,
-    meeting: {},
+    meeting: null,
     loading: true,
   };
+
   const [state, dispatch] = useReducer(MeetingReducer, initialState);
 
   const addMeeting = async (meetingForm: meetingFormType) => {
@@ -82,8 +88,16 @@ const MeetingState = (props: any) => {
         type: CREATE_MEETING,
         payload: data.data,
       });
+
+      setAlert("Meeting sent successfully!", "success");
+
+      history.push("/meeting-overview");
     } catch (error) {
-      console.log(error.response.data.errors);
+      const errors = error.response.data.errors;
+
+      if (errors) {
+        errors.forEach(({ msg }) => setAlert(msg, "danger"));
+      }
     }
   };
 
@@ -109,7 +123,11 @@ const MeetingState = (props: any) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error.response.data.errors);
+      const errors = error.response.data.errors;
+
+      if (errors) {
+        errors.forEach(({ msg }) => setAlert(msg, "danger"));
+      }
     }
   };
 
@@ -122,21 +140,32 @@ const MeetingState = (props: any) => {
         payload: data.data,
       });
     } catch (error) {
-      console.log(error.response.data.errors);
-    }
-  }, []);
+      const errors = error.response.data.errors;
 
-  const getMeeting = useCallback(async (id: string) => {
-    try {
-      const data = await axios.get(`http://localhost:5000/api/meeting/${id}`);
-      dispatch({
-        type: GET_MEETING,
-        payload: data.data,
-      });
-    } catch (error) {
-      console.log(error.response.data.errors);
+      if (errors) {
+        errors.forEach(({ msg }) => setAlert(msg, "danger"));
+      }
     }
-  }, []);
+  }, [setAlert]);
+
+  const getMeeting = useCallback(
+    async (id: string) => {
+      try {
+        const data = await axios.get(`http://localhost:5000/api/meeting/${id}`);
+        dispatch({
+          type: GET_MEETING,
+          payload: data.data,
+        });
+      } catch (error) {
+        const errors = error.response.data.errors;
+
+        if (errors) {
+          errors.forEach(({ msg }) => setAlert(msg, "danger"));
+        }
+      }
+    },
+    [setAlert]
+  );
 
   const updateMeeting = async (meetingForm: meetingFormType, mId: string) => {
     const config = {
@@ -154,8 +183,16 @@ const MeetingState = (props: any) => {
         type: UPDATE_MEETING,
         payload: data.data,
       });
+
+      history.push("/meeting-overview");
+
+      setAlert("Meeting updated successfully!", "success");
     } catch (error) {
-      console.log(error.response.data.errors);
+      const errors = error.response.data.errors;
+
+      if (errors) {
+        errors.forEach(({ msg }) => setAlert(msg, "danger"));
+      }
     }
   };
 
@@ -166,8 +203,14 @@ const MeetingState = (props: any) => {
         type: DELETE_MEETING,
         payload: mId,
       });
+      history.push("/meeting-overview");
+      setAlert("Meeting deleted successfully!", "success");
     } catch (error) {
-      console.log(error.response.data.errors);
+      const errors = error.response.data.errors;
+
+      if (errors) {
+        errors.forEach(({ msg }) => setAlert(msg, "danger"));
+      }
     }
   };
 

@@ -16,13 +16,16 @@ export const UPDATE_MEETING = "UPDATE_MEETING";
 export const INVITE_TO_MEETING = "INVITE_TO_MEETING";
 export const CLEAR_CURRENT_MEETING = "CLEAR_CURRENT_MEETING";
 export const CLEAR_MEETINGS = "CLEAR_CURRENT_MEETINGS";
+export const MEETING_ERROR = "MEETING_ERROR";
 
 // Alert types
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
+export const CLEAR_ERROR = "CLEAR_ERROR";
 
 // Notes type
 export const ADD_NOTE = "ADD_NOTE";
 export const GET_NOTES = "GET_NOTES";
 export const DELETE_NOTE = "DELETE_NOTE";
 export const CLEAR_NOTES = "CLEAR_NOTES";
+export const NOTE_ERROR = "NOTE_ERROR";
