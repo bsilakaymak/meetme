@@ -19,6 +19,7 @@ interface FormElementProps {
   background?: string;
   fontSize?: string;
   mWidth?: string;
+  mFont?: string;
 }
 
 //Button
@@ -29,7 +30,7 @@ export const Button = styled.button<FormElementProps>`
   border-radius: ${(props) => (props.roundBorder ? "6px" : "0")};
   padding: ${(props) => {
     if (props.sm) {
-      return `0.25rem`;
+      return `0.4rem`;
     } else if (props.padding) {
       return `${props.padding}`;
     } else {
@@ -78,7 +79,8 @@ export const Button = styled.button<FormElementProps>`
     color: #84a9ac;
   }
   @media (max-width: 1200px) {
-    padding: ${(props) => (props.sm ? "0.25rem" : "0.75rem")};
+    padding: ${(props) => (props.sm ? "0.4rem" : "0.75rem")};
+    font-size: ${(props) => props.mFont && props.mFont};
   }
 `;
 

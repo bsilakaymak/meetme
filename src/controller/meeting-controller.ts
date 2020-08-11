@@ -4,6 +4,7 @@ import Meeting from "../models/Meeting";
 import { IMeeting } from "../models/types/meeting";
 import User from "../models/User";
 import { IUser } from "../models/types/user";
+import { invitationNotificationEmail } from "../emails/account";
 
 const createMeeting: (
   req: Request,
@@ -82,14 +83,22 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
 const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: string = req.params.mId;
   try {
-    const meeting: IMeeting | null = await Meeting.findById(mId);
+    const meeting: IMeeting | null = await Meeting.findById(mId).populate({
+      path: "participants",
+      select: "name email avatar _id",
+    });
     const user: IUser | null = await User.findById(req.userId);
     if (!meeting) {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }
     req.body.participants.map(async (participant: string) => {
       const user: IUser | null = await User.findOne({ email: participant });
-      if (user !== null) {
+      if (
+        user !== null &&
+        meeting.participants.filter(
+          (participant) => participant === user._id.toString()
+        ).length !==0
+      ) {
         user.meetings.push(mId);
         meeting.participants.push(user._id);
         await meeting.save();
@@ -97,14 +106,13 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
       }
     });
 
-    // somewhere here we would call the function to send email to the relevant users via sendgrid or some other library
-    // if (user !== null) {
-    //   invitationNotificationEmail(
-    //     meeting.title,
-    //     req.body.participants,
-    //     user.name
-    //   );
-    // }
+    if (user !== null) {
+      invitationNotificationEmail(
+        meeting.title,
+        req.body.participants,
+        user.name
+      );
+    }
     res.json(meeting.participants).status(200);
   } catch (error) {
     if (error.kind === "ObjectId") {

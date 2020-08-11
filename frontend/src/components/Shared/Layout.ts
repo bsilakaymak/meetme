@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from "styled-components";
 import { Link } from "react-router-dom";
+import { prependOnceListener } from "process";
 
 interface LayoutProps {
   background?: string;
@@ -33,7 +34,7 @@ interface LayoutProps {
   mobileFlexDirection?: string;
   src?: string;
   alt?: string;
-  m_font?: string;
+  mFont?: string;
   mr?: string;
   ml?: string;
   mt?: string;
@@ -186,7 +187,15 @@ export const SmallContainer = styled.div<LayoutProps>`
   border-radius: ${(props) =>
     props.borderRadius ? props.borderRadius : "0px"};
   @media (max-width: 800px) {
-    width: ${(props) => (props.sm ? "50%" : "90%")};
+    width: ${(props) => {
+      if (props.sm) {
+        return `50%`;
+      } else if (props.mWidth) {
+        return `${props.mWidth}`;
+      } else {
+        return `90%`;
+      }
+    }};
     flex-direction: ${(props) => props.mColumn && "column"};
   }
 `;
@@ -216,7 +225,7 @@ export const StyledLink = styled(Link)<LayoutProps>`
     text-decoration: none;
   }
   @media (max-width: 500px) {
-    font-size: ${({ m_font }) => m_font && m_font};
+    font-size: ${({ mFont }) => mFont && mFont};
   }
 `;
 
