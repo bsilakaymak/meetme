@@ -1,5 +1,5 @@
-import request from "supertest";
-import app from "../app";
+const request = require("supertest");
+const app = require("../app");
 // import User from "../models/User";
 
 test("Should sign up a new user", async () => {
@@ -9,7 +9,6 @@ test("Should sign up a new user", async () => {
       name: "testRab123",
       email: "testRab123@test.com",
       password: "Password2123",
-      company: "any company 123",
     })
     .expect(201);
 });

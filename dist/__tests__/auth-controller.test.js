@@ -8,21 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const supertest_1 = __importDefault(require("supertest"));
-const app_1 = __importDefault(require("../app"));
+const request = require("supertest");
+const app = require("../app");
 // import User from "../models/User";
 test("Should sign up a new user", () => __awaiter(void 0, void 0, void 0, function* () {
-    yield supertest_1.default(app_1.default)
+    yield request(app)
         .post("/register")
         .send({
         name: "testRab123",
         email: "testRab123@test.com",
         password: "Password2123",
-        company: "any company 123",
     })
         .expect(201);
 }));

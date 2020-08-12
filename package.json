@@ -2,11 +2,11 @@
   "name": "meetme",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "nodemon dist/server.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\" ",
-    "test": "  jest --watch \"env-cmd ./test.env\"  "
+    "dev": "env-cmd -f ./config/.env concurrently \"tsc -w\" \"nodemon dist/server.js\"",
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
   },
   "repository": {
     "type": "git",
