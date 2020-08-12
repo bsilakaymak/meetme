@@ -12,24 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const mongoURI = process.env.mongoURI;
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield mongoose_1.default.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useCreateIndex: true,
-        });
-        console.log("mongoURI", mongoURI);
-        console.log("mongoDB connected...!");
-    }
-    catch (error) {
-        console.log(error.message);
-        //exit process with failure
-        process.exit(1);
-    }
-});
-exports.default = connectDB;
+const supertest_1 = __importDefault(require("supertest"));
+const app_1 = __importDefault(require("../app"));
+// import User from "../models/User";
+test("Should sign up a new user", () => __awaiter(void 0, void 0, void 0, function* () {
+    yield supertest_1.default(app_1.default)
+        .post("/register")
+        .send({
+        name: "testRab123",
+        email: "testRab123@test.com",
+        password: "Password2123",
+    })
+        .expect(201);
+}));
