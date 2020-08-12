@@ -10,7 +10,7 @@ app.use(express.json());
 
 //Define Routes
 app.use("/api/auth", require("./routes/api/auth"));
-console.log("test from app.js");
+// console.log("test from app.js");
 
 app.use("/api/meeting", require("./routes/api/meeting"));
 app.use("/api/users", require("./routes/api/users"));

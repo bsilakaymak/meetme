@@ -12,7 +12,7 @@ const connectDB: () => Promise<void> = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
-    console.log("mongoURI", mongoURI);
+    console.log("mongoURI:", mongoURI);
 
     console.log("mongoDB connected...!");
   } catch (error) {

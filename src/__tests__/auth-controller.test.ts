@@ -1,6 +1,16 @@
-const request = require("supertest");
-const app = require("../app");
-// import User from "../models/User";
+import request from "supertest";
+import app from "../app";
+import User from "../models/User";
+
+const userOne = {
+  name: "Mike",
+  email: "mike@example.com",
+  password: "56what!!",
+};
+
+beforeEach(async () => {
+  await User.deleteMany({});
+});
 
 test("Should sign up a new user", async () => {
   await request(app)

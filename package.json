@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon dist/server.js",
-    "dev": "env-cmd -f ./config/.env concurrently \"tsc -w\" \"nodemon dist/server.js\"",
-    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
+    "dev": "env-cmd -f ./src/config/.env concurrently \"tsc -w\" \"nodemon dist/server.js\"",
+    "test": "env-cmd -f ./src/config/test.env jest --watch --runInBand"
   },
   "repository": {
     "type": "git",
