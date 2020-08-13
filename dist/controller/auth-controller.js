@@ -61,7 +61,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
             if (err)
                 throw err;
-            res.json({ token }).status(201);
+            res.status(201).json({ token });
         });
     }
     catch (error) {

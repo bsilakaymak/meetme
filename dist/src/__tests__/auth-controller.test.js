@@ -14,14 +14,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../app"));
-// import User from "../models/User";
-test("Should sign up a new user", () => __awaiter(void 0, void 0, void 0, function* () {
-    yield supertest_1.default(app_1.default)
-        .post("/register")
-        .send({
-        name: "testRab123",
-        email: "testRab123@test.com",
-        password: "Password2123",
-    })
-        .expect(201);
-}));
+const User_1 = __importDefault(require("../models/User"));
+const db_1 = __importDefault(require("../config/db"));
+const userOne = {
+    name: "Mike",
+    email: "mike@example.com",
+    password: "56what!!",
+};
+describe("Auth Controller", () => {
+    beforeAll((done) => {
+        db_1.default()
+            .then(done)
+            .catch((err) => {
+            throw err;
+        });
+    });
+    beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
+        yield expect(User_1.default.deleteMany({})).resolves.toBeTruthy();
+    }));
+    test("Should sign up a new user", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield supertest_1.default(app_1.default)
+            .post("/api/auth/register")
+            .send({
+            name: "testRab123",
+            email: "testRab123@test.com",
+            password: "Password2123",
+        })
+            .expect(201);
+    }));
+    test("Should throw 400 without password", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield supertest_1.default(app_1.default)
+            .post("/api/auth/register")
+            .send({
+            name: "testRab123",
+            email: "testRab123@test.com",
+        })
+            .expect(400);
+    }));
+});

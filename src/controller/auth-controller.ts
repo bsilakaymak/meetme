@@ -17,6 +17,13 @@ type payloadType = {
   id: string;
 };
 
+interface ICredentialRegister {
+  name: string;
+  email: string;
+  password: string;
+  company?: string;
+}
+
 // Register
 const register = async (req: Request, res: Response): Promise<any> => {
   const errors = validationResult(req);
@@ -24,7 +31,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password, company } = req.body;
+  const { name, email, password, company } = req.body as ICredentialRegister;
 
   try {
     // If user exists
@@ -44,7 +51,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
     );
 
     // create user
-    const user: IUser = new User({
+    const user = new User({
       name,
       email,
       password,
@@ -64,7 +71,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
     };
     jwt.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
       if (err) throw err;
-      res.json({ token }).status(201);
+      res.status(201).json({ token });
     });
   } catch (error) {
     console.error(error.message);
@@ -72,16 +79,21 @@ const register = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+interface ICredentialLogin {
+  email: string;
+  password: string;
+}
+
 // login
 const login = async (req: Request, res: Response): Promise<any> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { email, password } = req.body;
+  const { email, password } = req.body as ICredentialLogin;
   try {
     // See if user exists
-    let user: IUser | null = await User.findOne({ email });
+    let user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ errors: [{ msg: "Invalid credentials" }] });
     }
@@ -100,7 +112,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
     jwt.sign(payload, secretJWT, { expiresIn: "1h" }, (err, token) => {
       if (err) throw err;
 
-      res.json({ token }).status(201);
+      res.status(201).json({ token });
       // console.log(token);
     });
   } catch (error) {
@@ -113,7 +125,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
 const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findById(req.userId).select("-password");
-    res.json(user);
+    res.status(200).json(user);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ errors: [{ msg: "Server Error" }] });
