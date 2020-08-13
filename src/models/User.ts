@@ -19,6 +19,7 @@ const userSchema = new Schema<IUser>({
   password: {
     type: String,
     trim: true,
+    unique: true,
   },
   meetings: [
     {
