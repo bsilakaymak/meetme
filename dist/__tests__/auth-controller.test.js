@@ -15,21 +15,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../app"));
 const User_1 = __importDefault(require("../models/User"));
+const db_1 = __importDefault(require("../config/db"));
 const userOne = {
-    name: "Mike",
-    email: "mike@example.com",
-    password: "56what!!",
+    name: "Rab",
+    email: "test@rabtest.com",
+    password: "@#HOI!!",
 };
-beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
-    yield User_1.default.deleteMany({});
-}));
-test("Should sign up a new user", () => __awaiter(void 0, void 0, void 0, function* () {
-    yield supertest_1.default(app_1.default)
-        .post("/register")
-        .send({
-        name: "testRab123",
-        email: "testRab123@test.com",
-        password: "Password2123",
-    })
-        .expect(201);
-}));
+describe("Auth Controller", () => {
+    beforeAll((done) => {
+        db_1.default()
+            .then(done)
+            .catch((err) => {
+            throw err;
+        });
+    });
+    beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
+        yield expect(User_1.default.deleteMany({})).resolves.toBeTruthy();
+        yield new User_1.default(userOne).save();
+    }));
+    test("Should sign up a new user", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield supertest_1.default(app_1.default)
+            .post("/api/auth/register")
+            .send({
+            name: "testRab123",
+            email: "testRab123@test.com",
+            password: "Password2123",
+        })
+            .expect(201);
+    }));
+    test("Should throw 400 without password", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield supertest_1.default(app_1.default)
+            .post("/api/auth/register")
+            .send({
+            name: "testRab123",
+            email: "testRab123@test.com",
+        })
+            .expect(400);
+    }));
+    test("Should not login with bad credentials", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield supertest_1.default(app_1.default)
+            .post("/api/auth/login")
+            .send({
+            email: userOne.email,
+            password: "...",
+        })
+            .expect(401);
+    }));
+});

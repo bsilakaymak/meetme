@@ -1,8 +1,8 @@
 import { validationResult } from "express-validator";
 import { Response, Request } from "express";
 import Meeting from "../models/Meeting";
-import { IMeeting } from "../models/types/meeting";
 import User from "../models/User";
+import { IMeeting } from "../models/types/meeting";
 import { IUser } from "../models/types/user";
 
 const createMeeting: (
@@ -16,7 +16,7 @@ const createMeeting: (
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { title, description, start, end, address } = req.body;
+  const { title, description, start, end, address } = req.body as IMeeting;
 
   const meeting: IMeeting = new Meeting({
     title,

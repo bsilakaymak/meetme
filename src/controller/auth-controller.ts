@@ -112,7 +112,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
     jwt.sign(payload, secretJWT, { expiresIn: "1h" }, (err, token) => {
       if (err) throw err;
 
-      res.json({ token }).status(201);
+      res.status(201).json({ token });
       // console.log(token);
     });
   } catch (error) {
@@ -125,7 +125,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
 const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findById(req.userId).select("-password");
-    res.json(user);
+    res.status(200).json(user);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ errors: [{ msg: "Server Error" }] });
