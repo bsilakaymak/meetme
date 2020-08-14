@@ -13,7 +13,7 @@ const connectDB: () => Promise<void> = async () => {
       useCreateIndex: true,
     });
 
-    console.log("mongoDB connected...!");
+    // console.log("mongoDB connected...!");
   } catch (error) {
     console.log(error.message);
 

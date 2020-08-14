@@ -95,7 +95,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         jsonwebtoken_1.default.sign(payload, secretJWT, { expiresIn: "1h" }, (err, token) => {
             if (err)
                 throw err;
-            res.json({ token }).status(201);
+            res.status(201).json({ token });
             // console.log(token);
         });
     }
@@ -109,7 +109,7 @@ exports.login = login;
 const getCurrentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield User_1.default.findById(req.userId).select("-password");
-        res.json(user);
+        res.status(200).json(user);
     }
     catch (err) {
         console.log(err.message);

@@ -1,7 +1,9 @@
-const config = require("config");
+import dotenv from "dotenv";
+import sgMail from "@sendgrid/mail";
+dotenv.config();
 
-const sendGridApiKey = process.env.SEND_GRID_API_KEY;
-const sgMail = require("@sendgrid/mail");
+const sendGridApiKey = process.env.SEND_GRID_API_KEY!;
+
 sgMail.setApiKey(sendGridApiKey);
 
 export const invitationNotificationEmail = async (
@@ -23,5 +25,3 @@ export const invitationNotificationEmail = async (
     throw error.message;
   }
 };
-
-

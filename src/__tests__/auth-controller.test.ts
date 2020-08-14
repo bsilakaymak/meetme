@@ -10,18 +10,14 @@ import connectDB from "../config/db";
 dotenv.config();
 const secretJWT: string = process.env.jwtSecret!;
 
-const userOneId = new mongoose.Types.ObjectId();
+export const userOneId = new mongoose.Types.ObjectId();
 
-const userOne = {
+export const userOne = {
   _id: userOneId,
   name: "Rab",
   email: "test@rabtest.com",
   password: "@#HOI!!",
-  tokens: [
-    {
-      token: jwt.sign({ _id: userOneId }, secretJWT),
-    },
-  ],
+  token: jwt.sign({ _id: userOneId }, secretJWT),
 };
 
 describe("Auth Controller", () => {
@@ -37,13 +33,6 @@ describe("Auth Controller", () => {
     await expect(User.deleteMany({})).resolves.toBeTruthy();
     await new User(userOne).save(); // keep one user in the DB for extra tests!
   });
-
-  // const timerGame = () => {
-  //   console.log("Ready....go!");
-  //   setTimeout(() => {
-  //     console.log("Time's up -- stop!");
-  //   }, 1000);
-  // };
 
   test("Should sign up a new user", async () => {
     await request(app)
@@ -79,7 +68,7 @@ describe("Auth Controller", () => {
   test("Should get the current user profile", async () => {
     await request(app)
       .get("/api/auth/me")
-      .set("x-auth-token", `${userOne.tokens[0].token}`)
+      .set("x-auth-token", `${userOne.token}`)
       .send()
       .expect(200);
   });

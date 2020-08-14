@@ -33,7 +33,7 @@ const createMeeting: (
   });
 
   await meeting.save();
-  res.json(meeting).status(201);
+  res.status(201).json(meeting);
   try {
   } catch (error) {
     console.error(error.message);
@@ -52,7 +52,7 @@ const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
       })
       .sort({ createdAt: -1 });
 
-    res.json(meetings).status(200);
+    res.status(200).json(meetings);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ errors: [{ msg: "Server Error!" }] });
@@ -70,7 +70,7 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
     }
 
-    res.json(meeting).status(200);
+    res.status(200).json(meeting);
   } catch (error) {
     console.error(error.message);
     if (error.kind === "ObjectId") {
@@ -97,7 +97,7 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
         user !== null &&
         meeting.participants.filter(
           (participant) => participant === user._id.toString()
-        ).length !==0
+        ).length !== 0
       ) {
         user.meetings.push(mId);
         meeting.participants.push(user._id);

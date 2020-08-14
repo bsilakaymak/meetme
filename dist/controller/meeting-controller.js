@@ -36,7 +36,7 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         select: "name email avatar _id",
     });
     yield meeting.save();
-    res.json(meeting).status(201);
+    res.status(201).json(meeting);
     try {
     }
     catch (error) {
@@ -55,7 +55,7 @@ const getAllMeetings = (req, res) => __awaiter(void 0, void 0, void 0, function*
             select: "name email avatar _id",
         })
             .sort({ createdAt: -1 });
-        res.json(meetings).status(200);
+        res.status(200).json(meetings);
     }
     catch (error) {
         console.error(error.message);
@@ -73,7 +73,7 @@ const getMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
-        res.json(meeting).status(200);
+        res.status(200).json(meeting);
     }
     catch (error) {
         console.error(error.message);
