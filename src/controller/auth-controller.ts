@@ -71,7 +71,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
     };
     jwt.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
       if (err) throw err;
-      res.status(201).json({ token });
+      res.status(201).json({ token, user });
     });
   } catch (error) {
     console.error(error.message);
