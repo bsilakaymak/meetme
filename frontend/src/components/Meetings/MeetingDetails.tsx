@@ -19,7 +19,7 @@ import MeetingContext from "../../context/meetingContext/meetingContext";
 
 import NoteContext from "../../context/noteContext/noteContext";
 import NoteItem from "../Note/NoteItem";
-
+import authContext from "../../context/authContext/authContext";
 import alertContext from "context/alert/alertContext";
 const PlusButton = styled.span`
   font-size: 3rem;
@@ -40,7 +40,7 @@ const MeetingDetails = () => {
   const { meeting, getMeeting, deleteMeeting, inviteToMeeting } = useContext(
     MeetingContext
   );
-
+  const { user } = useContext(authContext);
   const [notesOpen, setNotesOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [invitedUsers, setInvitedUsers] = useState<string[]>([]);
@@ -82,60 +82,64 @@ const MeetingDetails = () => {
                   </Text>
                 </SmallContainer>
               </SmallContainer>
-              <SmallContainer width="30%" padding="1rem">
-                <Button
-                  margin="0"
-                  padding="0.35rem"
-                  onClick={() => setInviteOpen(!inviteOpen)}
-                >
-                  Invite
-                </Button>
 
-                {inviteOpen && (
-                  <>
-                    <SmallContainer textAlign="left">
-                      <Form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          setInvitedUsers([...invitedUsers, invitedUser]);
-                        }}
-                      >
-                        <SmallContainer width="100%" mWidth="100%">
-                          <Input
-                            light
-                            mWidth="75%"
-                            placeholder="Add an email"
-                            margin="5% 0"
-                            value={invitedUser}
-                            onChange={(e) => setInvitedUser(e.target.value)}
-                          />{" "}
-                          <PlusButton
-                            onClick={() =>
-                              setInvitedUsers([...invitedUsers, invitedUser])
-                            }
-                          >
-                            +
-                          </PlusButton>
-                        </SmallContainer>
-                      </Form>
-                      {invitedUsers.map((invitedUser) => (
-                        <EmailLabel>{invitedUser}</EmailLabel>
-                      ))}
-                    </SmallContainer>
-                    <SmallContainer textAlign="left">
-                      <Button
-                        background="#F0F0F0"
-                        margin="0"
-                        onClick={() => {
-                          inviteToMeeting(invitedUsers, _id);
-                        }}
-                      >
-                        <SendButton />
-                      </Button>
-                    </SmallContainer>
-                  </>
-                )}
-              </SmallContainer>
+              {user && user._id === meeting.creator && (
+                <SmallContainer width="30%" padding="1rem">
+                  <Button
+                    margin="0"
+                    padding="0.35rem"
+                    onClick={() => setInviteOpen(!inviteOpen)}
+                  >
+                    Invite
+                  </Button>
+
+                  {inviteOpen && (
+                    <>
+                      <SmallContainer textAlign="left">
+                        <Form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            setInvitedUsers([...invitedUsers, invitedUser]);
+                          }}
+                        >
+                          <SmallContainer width="100%" mWidth="100%">
+                            <Input
+                              light
+                              mWidth="75%"
+                              placeholder="Add an email"
+                              margin="5% 0"
+                              value={invitedUser}
+                              onChange={(e) => setInvitedUser(e.target.value)}
+                            />{" "}
+                            <PlusButton
+                              onClick={() =>
+                                setInvitedUsers([...invitedUsers, invitedUser])
+                              }
+                            >
+                              +
+                            </PlusButton>
+                          </SmallContainer>
+                        </Form>
+                        {invitedUsers.map((invitedUser) => (
+                          <EmailLabel>{invitedUser}</EmailLabel>
+                        ))}
+                      </SmallContainer>
+                      <SmallContainer textAlign="left">
+                        <Button
+                          background="#F0F0F0"
+                          margin="0"
+                          onClick={() => {
+                            inviteToMeeting(invitedUsers, _id);
+                            setAlert("Participants Invited");
+                          }}
+                        >
+                          <SendButton />
+                        </Button>
+                      </SmallContainer>
+                    </>
+                  )}
+                </SmallContainer>
+              )}
             </SmallContainer>
 
             <SmallContainer width="100%" margin="1rem 0" padding="1rem">

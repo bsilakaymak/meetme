@@ -47,7 +47,7 @@ const createMeeting: (
 const getAllMeetings = async (req: Request, res: Response): Promise<void> => {
   try {
     const meetings: IMeeting[] = await Meeting.find({
-      creator: req.userId,
+      $or: [{ creator: req.userId }, { participants: req.userId }],
     })
       .populate({
         path: "participants",
@@ -86,9 +86,15 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
 const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: any = req.params.mId;
   try {
+
     const meeting: IMeeting | null = await Meeting.findById(mId);
 
-    const sender: IUser | null = await User.findById(req.userId);
+    const user: IUser | null = await User.findById(req.userId);
+    if (user && meeting && user._id.toString() !== meeting.creator.toString()) {
+      return res.status(401).json({
+        errors: [{ msg: "Only the creator can send an invitation " }],
+      });
+    }
 
     if (!meeting) {
       return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
@@ -96,6 +102,7 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
 
     req.body.participants.map(async (participant: string) => {
       const user: IUser | null = await User.findOne({ email: participant });
+
       if (user !== null) {
         if (
           meeting.participants.includes(user._id) &&
@@ -116,6 +123,7 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
 
           res.status(201).json(meeting.participants);
         }
+
       }
     });
 

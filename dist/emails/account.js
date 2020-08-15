@@ -23,8 +23,9 @@ exports.invitationNotificationEmail = (meetingName, email, sender) => __awaiter(
         to: email,
         from: "bsilakaymak@gmail.com",
         subject: "A new meeting",
-        text: `Hello!\n 
-        You have been invited to the meeting ${meetingName} by ${sender}\n`,
+        text: `
+    Hello!\n 
+    You have been invited to the meeting ${meetingName} by ${sender}\n`,
     };
     try {
         yield mail_1.default.send(mailOptions);
