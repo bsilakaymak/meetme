@@ -90,22 +90,20 @@ exports.getMeeting = getMeeting;
 const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const mId = req.params.mId;
     try {
-
         const meeting = yield Meeting_1.default.findById(mId);
-   
-        const user = yield User_1.default.findById(req.userId);
-        if (user && meeting && user._id.toString() !== meeting.creator.toString()) {
+        const sender = yield User_1.default.findById(req.userId);
+        if (sender &&
+            meeting &&
+            sender._id.toString() !== meeting.creator.toString()) {
             return res.status(401).json({
                 errors: [{ msg: "Only the creator can send an invitation " }],
             });
         }
-
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
-
             if (user !== null) {
                 if (meeting.participants.includes(user._id) && (user === null || user === void 0 ? void 0 : user.meetings.includes(mId)) && (sender === null || sender === void 0 ? void 0 : sender.meetings.includes(mId))) {
                     res.status(400).json({
@@ -121,7 +119,6 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
                     yield user.save();
                     res.status(201).json(meeting.participants);
                 }
-
             }
         }));
         if (sender !== null) {

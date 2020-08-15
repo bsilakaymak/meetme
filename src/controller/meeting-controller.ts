@@ -86,11 +86,14 @@ const getMeeting = async (req: Request, res: Response): Promise<any> => {
 const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
   const mId: any = req.params.mId;
   try {
-
     const meeting: IMeeting | null = await Meeting.findById(mId);
 
-    const user: IUser | null = await User.findById(req.userId);
-    if (user && meeting && user._id.toString() !== meeting.creator.toString()) {
+    const sender: IUser | null = await User.findById(req.userId);
+    if (
+      sender &&
+      meeting &&
+      sender._id.toString() !== meeting.creator.toString()
+    ) {
       return res.status(401).json({
         errors: [{ msg: "Only the creator can send an invitation " }],
       });
@@ -123,7 +126,6 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
 
           res.status(201).json(meeting.participants);
         }
-
       }
     });
 
