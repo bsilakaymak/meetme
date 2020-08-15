@@ -96,7 +96,6 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 throw err;
             res.status(201).json({ token });
-            // console.log(token);
         });
     }
     catch (error) {

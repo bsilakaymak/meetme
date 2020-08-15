@@ -128,7 +128,6 @@ const MeetingDetails = () => {
                         margin="0"
                         onClick={() => {
                           inviteToMeeting(invitedUsers, _id);
-                          setAlert("Participants Invited");
                         }}
                       >
                         <SendButton />
@@ -177,6 +176,7 @@ const MeetingDetails = () => {
                     </Text>
 
                     {participants &&
+                      participants.length > 0 &&
                       participants.map(({ _id, avatar, name }) => (
                         <Avatar
                           key={_id}

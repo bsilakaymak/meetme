@@ -71,7 +71,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
     };
     jwt.sign(payload, secretJWT, { expiresIn: "10d" }, (err, token) => {
       if (err) throw err;
-      res.status(201).json({ token, user });
+      res.status(201).json({ token });
     });
   } catch (error) {
     console.error(error.message);
@@ -113,7 +113,6 @@ const login = async (req: Request, res: Response): Promise<any> => {
       if (err) throw err;
 
       res.status(201).json({ token });
-      // console.log(token);
     });
   } catch (error) {
     console.log(error.message);

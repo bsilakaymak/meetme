@@ -35,6 +35,9 @@ const createMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         path: "participants",
         select: "name email avatar _id",
     });
+    const user = yield User_1.default.findById(req.userId);
+    user === null || user === void 0 ? void 0 : user.meetings.push(meeting._id);
+    yield (user === null || user === void 0 ? void 0 : user.save());
     yield meeting.save();
     res.status(201).json(meeting);
     try {
@@ -87,30 +90,36 @@ exports.getMeeting = getMeeting;
 const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const mId = req.params.mId;
     try {
-        const meeting = yield Meeting_1.default.findById(mId).populate({
-            path: "participants",
-            select: "name email avatar _id",
-        });
-        const user = yield User_1.default.findById(req.userId);
+        const meeting = yield Meeting_1.default.findById(mId);
+        const sender = yield User_1.default.findById(req.userId);
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
-            if (user !== null &&
-                meeting.participants.filter((participant) => participant === user._id.toString()).length !== 0) {
-                user.meetings.push(mId);
-                meeting.participants.push(user._id);
-                yield meeting.save();
-                yield user.save();
+            if (user !== null) {
+                if (meeting.participants.includes(user._id) && (user === null || user === void 0 ? void 0 : user.meetings.includes(mId)) && (sender === null || sender === void 0 ? void 0 : sender.meetings.includes(mId))) {
+                    res.status(400).json({
+                        errors: [
+                            { msg: `The user with this ${user.email} is already invited!` },
+                        ],
+                    });
+                }
+                else {
+                    meeting.participants.push(user._id);
+                    user.meetings.push(mId);
+                    yield meeting.save();
+                    yield user.save();
+                    res.status(201).json(meeting.participants);
+                }
             }
         }));
-        if (user !== null) {
-            account_1.invitationNotificationEmail(meeting.title, req.body.participants, user.name);
+        if (sender !== null) {
+            account_1.invitationNotificationEmail(meeting.title, req.body.participants, sender.name);
         }
-        res.json(meeting.participants).status(200);
     }
     catch (error) {
+        console.error(error.message);
         if (error.kind === "ObjectId") {
             res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
         }
@@ -125,8 +134,16 @@ const deleteMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (!meeting) {
             return res.status(404).json({ errors: [{ msg: "There is no meeting" }] });
         }
+        meeting.participants.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
+            const user = yield User_1.default.findById(p);
+            if (user !== null) {
+                const removeIndex = user === null || user === void 0 ? void 0 : user.meetings.map((meeting) => meeting).indexOf(mId);
+                user.meetings.splice(removeIndex, 1);
+                yield user.save();
+            }
+        }));
         yield meeting.remove();
-        res.json({ msg: `${meeting.title} meeting deleted` }).status(200);
+        res.status(202).json({ msg: `${meeting.title} meeting deleted` });
     }
     catch (error) {
         if (error.kind === "ObjectId") {
@@ -153,13 +170,14 @@ const updateMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
         updates.forEach((update) => (meeting[update] = req.body[update]));
         yield meeting.save();
-        res.json(meeting);
+        res.status(201).json(meeting);
     }
     catch (error) {
         if (error.kind === "ObjectId") {
             res.status(500).json({ errors: [{ msg: "You provide a wrong id" }] });
         }
         res.status(500).json({ errors: [{ msg: "Server Error!" }] });
+        console.error(error.message);
     }
 });
 exports.updateMeeting = updateMeeting;

@@ -23,7 +23,6 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
             useUnifiedTopology: true,
             useCreateIndex: true,
         });
-        // console.log("mongoDB connected...!");
     }
     catch (error) {
         console.log(error.message);

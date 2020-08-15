@@ -19,6 +19,7 @@ const userSchema = new mongoose_1.Schema({
     password: {
         type: String,
         trim: true,
+        unique: true,
     },
     meetings: [
         {

@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const app = express_1.default();
 app.use(cors_1.default());
+// Parse incoming request bodies
 app.use(express_1.default.json());
 //Define Routes
 app.use("/api/auth", require("./routes/api/auth"));
