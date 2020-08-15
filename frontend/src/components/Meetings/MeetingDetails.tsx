@@ -20,7 +20,7 @@ import MeetingContext from "../../context/meetingContext/meetingContext";
 import NoteContext from "../../context/noteContext/noteContext";
 import NoteItem from "../Note/NoteItem";
 import authContext from "../../context/authContext/authContext";
-import alertContext from "context/alert/alertContext";
+
 const PlusButton = styled.span`
   font-size: 3rem;
   font-weight: 600;
@@ -45,7 +45,6 @@ const MeetingDetails = () => {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [invitedUsers, setInvitedUsers] = useState<string[]>([]);
   const [invitedUser, setInvitedUser] = useState("");
-  const { setAlert } = useContext(alertContext);
 
   useEffect(() => {
     getNotes(mid);
@@ -130,7 +129,6 @@ const MeetingDetails = () => {
                           margin="0"
                           onClick={() => {
                             inviteToMeeting(invitedUsers, _id);
-                            setAlert("Participants Invited");
                           }}
                         >
                           <SendButton />
