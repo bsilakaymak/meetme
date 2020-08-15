@@ -82,6 +82,7 @@ const MeetingDetails = () => {
                   </Text>
                 </SmallContainer>
               </SmallContainer>
+
               {user && user._id === meeting.creator && (
                 <SmallContainer width="30%" padding="1rem">
                   <Button
@@ -179,6 +180,7 @@ const MeetingDetails = () => {
                     </Text>
 
                     {participants &&
+                      participants.length > 0 &&
                       participants.map(({ _id, avatar, name }) => (
                         <Avatar
                           key={_id}

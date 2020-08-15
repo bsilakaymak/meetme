@@ -8,12 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.invitationNotificationEmail = void 0;
-const config = require("config");
+const dotenv_1 = __importDefault(require("dotenv"));
+const mail_1 = __importDefault(require("@sendgrid/mail"));
+dotenv_1.default.config();
 const sendGridApiKey = process.env.SEND_GRID_API_KEY;
-const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(sendGridApiKey);
+mail_1.default.setApiKey(sendGridApiKey);
 exports.invitationNotificationEmail = (meetingName, email, sender) => __awaiter(void 0, void 0, void 0, function* () {
     const mailOptions = {
         to: email,
@@ -24,7 +28,7 @@ exports.invitationNotificationEmail = (meetingName, email, sender) => __awaiter(
     You have been invited to the meeting ${meetingName} by ${sender}\n`,
     };
     try {
-        yield sgMail.send(mailOptions);
+        yield mail_1.default.send(mailOptions);
     }
     catch (error) {
         console.log(error);
