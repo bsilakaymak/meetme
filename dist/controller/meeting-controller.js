@@ -104,6 +104,13 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
         }
         req.body.participants.map((participant) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield User_1.default.findOne({ email: participant });
+            if (!user) {
+                return res.status(400).json({
+                    errors: [
+                        { msg: `The user with this ${participant} email is not exists ` },
+                    ],
+                });
+            }
             if (user !== null) {
                 if (meeting.participants.includes(user._id) && (user === null || user === void 0 ? void 0 : user.meetings.includes(mId)) && (sender === null || sender === void 0 ? void 0 : sender.meetings.includes(mId))) {
                     res.status(400).json({
