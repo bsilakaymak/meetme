@@ -20,6 +20,7 @@ interface FormElementProps {
   fontSize?: string;
   mWidth?: string;
   mFont?: string;
+  mMargin?: string;
 }
 
 //Button
@@ -81,6 +82,7 @@ export const Button = styled.button<FormElementProps>`
   @media (max-width: 1200px) {
     padding: ${(props) => (props.sm ? "0.4rem" : "0.75rem")};
     font-size: ${(props) => props.mFont && props.mFont};
+    margin: ${(props) => (props.mMargin ? props.mMargin : "1rem")};
   }
 `;
 
