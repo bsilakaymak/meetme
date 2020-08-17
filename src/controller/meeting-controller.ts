@@ -105,7 +105,13 @@ const inviteToMeeting = async (req: Request, res: Response): Promise<any> => {
 
     req.body.participants.map(async (participant: string) => {
       const user: IUser | null = await User.findOne({ email: participant });
-
+      if (!user) {
+        return res.status(400).json({
+          errors: [
+            { msg: `The user with this ${participant} email is not exists ` },
+          ],
+        });
+      }
       if (user !== null) {
         if (
           meeting.participants.includes(user._id) &&

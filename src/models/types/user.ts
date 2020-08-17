@@ -6,6 +6,6 @@ export interface IUser extends Document {
   email: string;
   password: string;
   companyName: string;
-  meetings: Types.ObjectId[];
+  meetings: string[];
   avatar: string;
 }
