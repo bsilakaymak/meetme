@@ -107,12 +107,14 @@ const inviteToMeeting = (req, res) => __awaiter(void 0, void 0, void 0, function
             if (!user) {
                 return res.status(400).json({
                     errors: [
-                        { msg: `The user with this ${participant} email is not exists ` },
+                        { msg: `The user with this ${participant} email does not exist ` },
                     ],
                 });
             }
-            if (user !== null) {
-                if (meeting.participants.includes(user._id) && (user === null || user === void 0 ? void 0 : user.meetings.includes(mId)) && (sender === null || sender === void 0 ? void 0 : sender.meetings.includes(mId))) {
+            if (user !== null && sender !== null) {
+                if (meeting.participants.includes(user._id) &&
+                    user.meetings.includes(mId) &&
+                    sender.meetings.includes(mId)) {
                     res.status(400).json({
                         errors: [
                             { msg: `The user with this ${user.email} is already invited!` },
