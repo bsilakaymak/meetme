@@ -10,9 +10,8 @@ import {
 } from "./FormElements";
 import { Divider, Card } from "./Layout";
 
-interface Props {}
 //This file is for demonstration purposes
-const SharedElements = (props: Props) => {
+const SharedElements = () => {
   return (
     <div>
       <h3>Button styles</h3>

@@ -7,7 +7,6 @@ import AuthContext from "../../context/authContext/authContext";
 import MeetingContext from "context/meetingContext/meetingContext";
 import NoteContext from "context/noteContext/noteContext";
 
-interface Props {}
 const Div = styled.div`
   height: 100%;
   width: 95%;
@@ -43,7 +42,7 @@ const Logo = styled.div`
   }
 `;
 
-const Navigation = (props: Props) => {
+const Navigation = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const { clearMeetings, clearCurrentMeeting } = useContext(MeetingContext);
   const { clearNotes } = useContext(NoteContext);

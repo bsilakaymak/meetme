@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Text } from "../Shared/Layout";
-interface Props {}
+
 interface BoxPropTypes {
   width?: string;
   darkBlue?: boolean;
@@ -60,7 +60,7 @@ const Box: any = styled.div<BoxPropTypes>`
   }
 `;
 
-const LandingSquares = (props: Props) => {
+const LandingSquares = () => {
   return (
     <Div>
       <Box

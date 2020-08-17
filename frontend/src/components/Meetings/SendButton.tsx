@@ -1,7 +1,5 @@
 import React from "react";
 
-interface Props {}
-
 const SendButton = () => {
   return (
       <svg
