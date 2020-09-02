@@ -1,8 +1,19 @@
 import React from "react";
 import "./App.css";
-import AuthState from "./context/authContext/AuthState";
+import { GlobalStyle } from "./components/Shared/Layout";
+import Routes from "./components/Routes/Routes";
+import setAuthToken from "./utils/setAuthToken";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 const App: React.FC = () => {
-  return <AuthState>Meet me App</AuthState>;
+  return (
+    <>
+      <GlobalStyle />
+      <Routes />
+    </>
+  );
 };
 
 export default App;

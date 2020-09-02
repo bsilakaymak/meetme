@@ -8,15 +8,21 @@ import {
   AUTH_ERROR,
 } from "../types";
 
-export default (state: any, action: any) => {
+import { InitialStateType } from "./AuthState";
+
+interface Actions {
+  type: string;
+  payload: any;
+}
+
+export default (state: InitialStateType, action: Actions) => {
   const { type, payload } = action;
   switch (type) {
     case USER_LOADED:
-      localStorage.setItem("token", payload.token);
       return {
         ...state,
         isAuthenticated: true,
-        loading: false,
+        loading: true,
         user: payload,
       };
     case REGISTER_SUCCESS:
@@ -26,7 +32,7 @@ export default (state: any, action: any) => {
         ...state,
         ...payload,
         isAuthenticated: true,
-        loading: false,
+        loading: true,
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -37,7 +43,7 @@ export default (state: any, action: any) => {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: false,
+        loading: true,
         user: null,
         error: payload,
       };

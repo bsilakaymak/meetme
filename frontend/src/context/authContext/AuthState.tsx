@@ -1,73 +1,108 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import AuthReducer from "./authReducer";
 import AuthContext from "./authContext";
-
+import setAuthToken from "../../utils/setAuthToken";
 import axios from "axios";
 import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+  LOGOUT,
 } from "../types";
 
-interface MyContextType {
-  user?: any;
-  token?: any;
-  loading?: any;
-  error?: any;
-  isAuthenticated?: any;
-  login: (authForm: any) => Promise<void>;
-  register: (FormData: any) => Promise<void>;
+interface AuthType {
+  name?: string;
+  email: string;
+  password: string;
+  company?: string;
 }
-const AuthState = (props) => {
+
+export interface InitialStateType {
+  user: string | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  token?: string | null;
+  error: string[];
+  login?: (FormData: AuthType) => Promise<void>;
+  register?: (FormData: AuthType) => Promise<void>;
+  loadUser?: () => Promise<void>;
+  logout?: () => void;
+}
+
+const AuthState = (props: any) => {
   const initialState = {
     user: null,
     isAuthenticated: false,
     loading: false,
     token: localStorage.getItem("token"),
-    error: null,
+    error: [],
   };
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-  const login = async (authForm) => {
+  const loadUser = useCallback(async () => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+
+    try {
+      const res = await axios.get("http://localhost:5000/api/auth/me");
+      dispatch({ type: USER_LOADED, payload: res.data });
+    } catch (error) {
+      dispatch({ type: AUTH_ERROR, payload: null });
+    }
+  }, []);
+
+  const login = async (FormData: AuthType): Promise<void> => {
     const config = {
       headers: {
         "Type-content": "application/json",
       },
     };
-    const data = await axios.post(
-      "http://localhost:5000/api/auth/signup",
-      config,
-      authForm
-    );
-
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: data.data,
-    });
     try {
+      const data = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        FormData,
+        config
+      );
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: data.data,
+      });
+      loadUser();
     } catch (error) {
       dispatch({
         type: LOGIN_FAIL,
-        payload: error.response.data.errors,
+        payload: error.response.data,
       });
     }
   };
-  const register = async (FormData) => {
+
+  const register = async (signUpForm: AuthType): Promise<void> => {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
-      const res = await axios.post("/api/users", FormData, config);
-
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        signUpForm,
+        config
+      );
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
-      // loadUser();
+      loadUser();
     } catch (error) {
-      dispatch({ type: REGISTER_FAIL, payload: error.response.data.msg });
+      dispatch({ type: REGISTER_FAIL, payload: error.response.data });
     }
   };
+
+  const logout = () => {
+    dispatch({ type: LOGOUT, payload: null });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -77,7 +112,9 @@ const AuthState = (props) => {
         isAuthenticated: state.isAuthenticated,
         error: state.error,
         login,
+        logout,
         register,
+        loadUser,
       }}
     >
       {props.children}
